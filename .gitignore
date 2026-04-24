@@ -400,3 +400,4 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 FilipunkBlog/appsettings.json
+FilipunkBlog.Infrastructure/Persistence/ApplicationDbContextFactory.cs
