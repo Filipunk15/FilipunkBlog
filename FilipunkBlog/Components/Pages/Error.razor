@@ -1,0 +1,25 @@
+﻿@page "/Error"
+@page "/Error/{statusCode:int}"
+
+<PageTitle>Chyba — Filip</PageTitle>
+
+<div class="min-h-screen flex items-center justify-center bg-gray-950 px-6">
+    <div class="text-center">
+        <div class="font-mono text-8xl font-bold text-blue-500 mb-4">@(StatusCode == 404 ? "404" : "500")</div>
+        <div class="font-mono text-xs text-gray-500 uppercase tracking-widest mb-6">
+            @(StatusCode == 404 ? "// stránka nenalezena" : "// něco se pokazilo")
+        </div>
+        <p class="text-gray-400 text-sm mb-10">
+            @(StatusCode == 404 
+                ? "Stránka kterou hledáš neexistuje." 
+                : "Nastala neočekávaná chyba. Zkus to znovu.")
+        </p>
+        <a href="/" class="rounded font-mono text-sm px-6 py-3 bg-blue-600/20 text-blue-500 border border-blue-600/40 hover:bg-blue-600/30 transition">
+            ← Zpět domů
+        </a>
+    </div>
+</div>
+
+@code {
+    [Parameter] public int StatusCode { get; set; } = 500;
+}

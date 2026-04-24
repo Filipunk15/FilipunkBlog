@@ -1,0 +1,67 @@
+﻿@page "/admin/categories"
+@attribute [Authorize(Roles = "Admin")]
+@using FilipunkBlog.Application.Contracts
+@using FilipunkBlog.Application.Models
+@using Microsoft.AspNetCore.Authorization
+@inject ICategoryAdminService CategoryAdminService
+
+<PageTitle>Správa kategorií</PageTitle>
+
+<div class="mx-auto max-w-3xl px-6 py-20 lg:px-8">
+    <div class="mb-12">
+        <span class="inline-block mb-4 rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
+            // ADMIN
+        </span>
+        <h1 class="font-mono text-3xl font-bold text-white">Kategorie</h1>
+    </div>
+
+    <div class="flex gap-4 mb-10">
+        <input @bind="_newName" placeholder="Název kategorie"
+               class="flex-1 rounded border border-gray-700 bg-gray-900 px-4 py-3 text-sm text-white font-mono focus:border-blue-600/50 focus:outline-none" />
+        <button @onclick="AddCategory"
+                class="rounded font-mono text-sm px-6 py-3 bg-blue-600/20 text-blue-500 border border-blue-600/40 hover:bg-blue-600/30 transition">
+            + Přidat
+        </button>
+    </div>
+
+    <div class="flex flex-col divide-y divide-gray-800">
+        @foreach (var cat in _categories)
+        {
+            <div class="flex items-center justify-between py-4">
+                <div>
+                    <div class="font-mono text-sm font-bold text-white">@cat.Name</div>
+                    <div class="font-mono text-xs text-gray-500">@cat.Slug</div>
+                </div>
+                <button @onclick="() => DeleteCategory(cat.Id)"
+                        class="font-mono text-xs px-3 py-1.5 border border-gray-700 text-gray-400 hover:border-red-500/50 hover:text-red-400 transition rounded">
+                    Smazat
+                </button>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private List<CategoryViewModel> _categories = [];
+    private string _newName = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _categories = await CategoryAdminService.GetCategoriesAsync();
+    }
+
+    private async Task AddCategory()
+    {
+        if (string.IsNullOrWhiteSpace(_newName)) return;
+        var slug = _newName.ToLower().Replace(" ", "-");
+        await CategoryAdminService.CreateCategoryAsync(_newName, slug);
+        _newName = string.Empty;
+        _categories = await CategoryAdminService.GetCategoriesAsync();
+    }
+
+    private async Task DeleteCategory(Guid id)
+    {
+        await CategoryAdminService.DeleteCategoryAsync(id);
+        _categories = await CategoryAdminService.GetCategoriesAsync();
+    }
+}

@@ -1,0 +1,134 @@
+﻿@page "/posts"
+@using FilipunkBlog.Application.Contracts
+@using FilipunkBlog.Application.Models
+@inject IBlogPostService BlogPostService
+@inject ITagService TagService
+
+<PageTitle>Blog — Filip</PageTitle>
+
+<HeadContent>
+    <meta name="description" content="Blog o C# a .NET vývoji — všechny příspěvky." />
+    <meta property="og:title" content="Blog — Filip" />
+</HeadContent>
+
+<div class="mx-auto max-w-7xl px-6 py-20 lg:px-8">
+    <div class="mb-12">
+        <span class="inline-block mb-4 rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
+            // BLOG
+        </span>
+        <h1 class="font-mono text-3xl font-bold text-white">Všechny příspěvky</h1>
+    </div>
+
+    <div class="grid gap-12 lg:grid-cols-12">
+        <div class="lg:col-span-8">
+            @if (_posts.Items.Count > 0)
+            {
+                <div class="grid gap-6 sm:grid-cols-2">
+                    @foreach (var post in _posts.Items)
+                    {
+                        <a href="/posts/@post.Slug" class="group flex flex-col rounded-lg border border-gray-700 bg-gray-900 overflow-hidden hover:border-blue-600/50 transition">
+                            @if (!string.IsNullOrEmpty(post.Image))
+                            {
+                                <img src="@post.Image" alt="@post.Title" class="w-full aspect-video object-cover" />
+                            }
+                            else
+                            {
+                                <div class="w-full aspect-video bg-gray-800 flex items-center justify-center">
+                                    <span class="font-mono text-gray-600 text-xs">// no image</span>
+                                </div>
+                            }
+                            <div class="p-6 flex flex-col flex-1">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <span class="font-mono text-xs text-blue-500 bg-blue-600/10 px-2 py-0.5 rounded-sm">@post.CategoryName</span>
+                                    <span class="text-xs text-gray-500">@post.PublishedAtDisplay</span>
+                                </div>
+                                <h2 class="font-mono text-sm font-bold text-white group-hover:text-blue-500 transition mb-3">@post.Title</h2>
+                                <p class="text-sm text-gray-400 leading-relaxed line-clamp-3 flex-1">@post.Introduction</p>
+                                <div class="mt-4 flex items-center justify-between">
+                                    <span class="text-xs text-blue-500 group-hover:text-blue-400 transition font-mono">Číst dál →</span>
+                                    <span class="text-xs text-gray-500">@post.ReadingTime čtení</span>
+                                </div>
+                            </div>
+                        </a>
+                    }
+                </div>
+
+                @if (_posts.TotalPages > 1)
+                {
+                    <div class="mt-12 flex items-center justify-center gap-3">
+                        @if (_posts.HasPreviousPage)
+                        {
+                            <button @onclick="() => LoadPage(_currentPage - 1)"
+                                    class="font-mono text-xs px-4 py-2 border border-gray-700 text-gray-400 hover:border-blue-600/50 hover:text-blue-500 transition rounded">
+                                ← Předchozí
+                            </button>
+                        }
+                        <span class="font-mono text-xs text-gray-500">@_currentPage / @_posts.TotalPages</span>
+                        @if (_posts.HasNextPage)
+                        {
+                            <button @onclick="() => LoadPage(_currentPage + 1)"
+                                    class="font-mono text-xs px-4 py-2 border border-gray-700 text-gray-400 hover:border-blue-600/50 hover:text-blue-500 transition rounded">
+                                Další →
+                            </button>
+                        }
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="text-gray-500 font-mono text-sm">// zatím žádné příspěvky</p>
+            }
+        </div>
+
+        <aside class="lg:col-span-4">
+            <div class="lg:sticky lg:top-24 flex flex-col gap-6">
+                <div class="rounded-lg border border-gray-700 bg-gray-900 p-6">
+                    <h3 class="font-mono text-xs text-blue-500 uppercase tracking-widest mb-4">// Hledat</h3>
+                    <div class="flex gap-2">
+                        <input @bind="_searchQuery" placeholder="Hledat..."
+                               class="flex-1 rounded border border-gray-700 bg-gray-950 px-3 py-2 text-xs text-white font-mono focus:border-blue-600/50 focus:outline-none" />
+                        <a href="/search?Q=@_searchQuery"
+                               class="rounded font-mono text-xs px-3 py-2 bg-blue-600/20 text-blue-500 border border-blue-600/40 hover:bg-blue-600/30 transition">
+                            →
+                        </a>
+                    </div>
+                </div>
+
+                @if (_tags.Count > 0)
+                {
+                    <div class="rounded-lg border border-gray-700 bg-gray-900 p-6">
+                        <h3 class="font-mono text-xs text-blue-500 uppercase tracking-widest mb-4">// Tagy</h3>
+                        <div class="flex flex-wrap gap-2">
+                            @foreach (var tag in _tags)
+                            {
+                                <a href="/tag/@tag.Slug"
+                                       class="font-mono text-xs px-3 py-1.5 rounded-sm border border-gray-700 bg-gray-800 text-gray-400 hover:border-blue-600/50 hover:text-blue-500 transition">
+                                    #@tag.Name
+                                </a>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </aside>
+    </div>
+</div>
+
+@code {
+    private PagedResult<BlogPostViewModel> _posts = new();
+    private List<TagViewModel> _tags = [];
+    private int _currentPage = 1;
+    private string _searchQuery = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadPage(1);
+        _tags = await TagService.GetTagsAsync();
+    }
+
+    private async Task LoadPage(int page)
+    {
+        _currentPage = page;
+        _posts = await BlogPostService.GetPostsAsync(page, 9);
+    }
+}

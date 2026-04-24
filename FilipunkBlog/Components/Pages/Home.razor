@@ -1,0 +1,302 @@
+﻿@page "/"
+@using FilipunkBlog.Application.Contracts
+@using FilipunkBlog.Application.Models
+@inject IBlogPostService BlogPostService
+
+<PageTitle>Filip — Junior Developer</PageTitle>
+
+<HeadContent>
+    <meta name="description" content="Filip — Junior .NET Developer. Portfolio a blog o C# a .NET vývoji." />
+    <meta property="og:title" content="Filip — Junior Developer" />
+    <meta property="og:description" content="Portfolio a blog o C# a .NET vývoji." />
+    <meta property="og:type" content="website" />
+</HeadContent>
+
+<!-- HERO -->
+<section class="bg-gray-950 border-b border-gray-800">
+    <div class="mx-auto max-w-7xl px-6 py-32 lg:px-8">
+        <div class="max-w-3xl">
+            <span class="inline-block mb-6 rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
+                // hello world
+            </span>
+            <h1 class="font-mono text-5xl font-bold leading-tight tracking-tight text-white lg:text-7xl mb-6">
+                Jsem Filip,<br />
+                <span class="text-blue-500">píšu kód</span>
+            </h1>
+            <p class="text-lg text-gray-400 leading-relaxed max-w-xl mb-10">
+                Pracuji s C# a .NET na firemních aplikacích. Zajímám se o to, jak věci fungují uvnitř — a postupně se zlepšuji.
+            </p>
+            <div class="flex flex-wrap gap-4">
+                <a href="#projekty" class="rounded font-mono text-sm font-bold px-7 py-3 bg-blue-600/20 text-blue-500 border border-blue-600/40 hover:bg-blue-600/30 transition">
+                    Moje projekty →
+                </a>
+                <a href="#kontakt" class="rounded font-mono text-sm px-7 py-3 border border-gray-700 text-gray-300 hover:border-gray-500 transition">
+                    Kontakt
+                </a>
+            </div>
+        </div>
+        <div class="mt-20 flex gap-12">
+            @foreach (var stat in new[] { ("4+", "Projekty"), ("2+", "Roky praxe"), ("5", "Technologie") })
+            {
+                <div>
+                    <div class="font-mono text-4xl font-bold text-white">@stat.Item1</div>
+                    <div class="mt-1 text-sm text-gray-500">@stat.Item2</div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- O MNĚ -->
+<section id="o-mne" class="bg-gray-950 border-b border-gray-800">
+    <div class="mx-auto max-w-7xl px-6 py-20 lg:px-8">
+        <div class="grid gap-20 lg:grid-cols-2 items-start">
+            <div>
+                <span class="inline-block mb-6 rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
+                    // O MNĚ
+                </span>
+                <p class="text-gray-400 leading-relaxed text-base mb-4">
+                    Pracuji na reálných firemních aplikacích v C# a .NET. Každý projekt mě něco naučil — ať šel hladce, nebo ne.
+                </p>
+                <p class="text-gray-400 leading-relaxed text-base">
+                    Baví mě rozumět tomu, co píšu. Píšu blog, čtu dokumentaci a čas od času zkusím něco, co jsem ještě neznal.
+                </p>
+            </div>
+            <div class="flex flex-col">
+                @foreach (var item in new[] {
+                    ("Zaměření", ".NET / C# vývoj"),
+                    ("Databáze", "SQL Server, T-SQL"),
+                    ("Frontend", "HTML, CSS, JavaScript"),
+                    ("Nástroje", "Git, Visual Studio"),
+                    ("Jazyk", "Čeština, Angličtina")
+                })
+                {
+                    <div class="flex justify-between py-3 border-b border-gray-800">
+                        <span class="font-mono text-xs text-gray-500 uppercase tracking-wider">@item.Item1</span>
+                        <span class="text-sm text-white font-medium">@item.Item2</span>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PROJEKTY -->
+<section id="projekty" class="bg-gray-900 border-b border-gray-800">
+    <div class="mx-auto max-w-7xl px-6 py-20 lg:px-8">
+        <span class="inline-block mb-12 rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
+            // PROJEKTY
+        </span>
+        <div class="grid gap-6 sm:grid-cols-2">
+            @foreach (var p in _projects)
+            {
+                <div class="rounded-lg border border-gray-700 bg-gray-950 p-8 hover:border-blue-600/50 transition cursor-pointer group"
+                     @onclick="() => _selectedProject = p">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="font-mono text-xs text-blue-500">@p.Year</span>
+                        <span class="font-mono text-xs text-gray-500 group-hover:text-blue-500 transition">detail ↗</span>
+                    </div>
+                    <h3 class="font-mono text-base font-bold text-white mb-3">@p.Name</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed mb-5">@p.Desc</p>
+                    <div class="flex flex-wrap gap-2">
+                        @foreach (var tag in p.Tags)
+                        {
+                            <span class="font-mono text-xs px-3 py-1 rounded-sm bg-gray-800 text-gray-400 border border-gray-700">@tag</span>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+@if (_selectedProject != null)
+{
+    <div class="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/70 backdrop-blur-sm"
+         @onclick="() => _selectedProject = null">
+        <div class="relative bg-gray-900 border border-blue-600/50 rounded-xl p-10 max-w-lg w-full"
+             @onclick:stopPropagation="true">
+            <button class="absolute top-4 right-5 text-gray-500 hover:text-white font-mono text-xl"
+                    @onclick="() => _selectedProject = null">
+                ×
+            </button>
+            <div class="font-mono text-xs text-blue-500 mb-3">@_selectedProject.Year</div>
+            <h3 class="font-mono text-xl font-bold text-white mb-5">@_selectedProject.Name</h3>
+            <p class="text-gray-400 text-sm leading-relaxed mb-7">@_selectedProject.Detail</p>
+            <div class="flex flex-wrap gap-2">
+                @foreach (var tag in _selectedProject.Tags)
+                {
+                    <span class="font-mono text-xs px-3 py-1 bg-gray-800 text-white border border-gray-700 rounded-sm">@tag</span>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+<!-- TECHNOLOGIE -->
+<section id="skills" class="bg-gray-950 border-b border-gray-800">
+    <div class="mx-auto max-w-7xl px-6 py-20 lg:px-8">
+        <span class="inline-block mb-12 rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
+            // TECHNOLOGIE
+        </span>
+        <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+            @foreach (var group in _skillGroups)
+            {
+                <div>
+                    <div class="font-mono text-xs text-blue-500 uppercase tracking-widest mb-4">@group.Group</div>
+                    <div class="flex flex-wrap gap-2">
+                        @foreach (var item in group.Items)
+                        {
+                            <span class="font-mono text-xs px-3 py-1.5 bg-gray-800 text-white border border-gray-700 rounded-sm">@item</span>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- ZKUŠENOSTI -->
+<section class="bg-gray-900 border-b border-gray-800">
+    <div class="mx-auto max-w-3xl px-6 py-20 lg:px-8">
+        <span class="inline-block mb-12 rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
+            // ZKUŠENOSTI
+        </span>
+        <div class="relative pl-8 border-l border-gray-700">
+            @foreach (var (item, i) in _timeline.Select((t, i) => (t, i)))
+            {
+                <div class="relative @(i < _timeline.Count - 1 ? "mb-10" : "")">
+                    <div class="absolute -left-[37px] top-1.5 h-3 w-3 rounded-full bg-blue-500 border-2 border-gray-900"></div>
+                    <div class="font-mono text-xs text-blue-500 mb-1">@item.Year</div>
+                    <h3 class="font-mono text-sm font-bold text-white">@item.Role</h3>
+                    <div class="text-xs text-gray-500 mb-2">@item.Company</div>
+                    <p class="text-sm text-gray-400 leading-relaxed">@item.Desc</p>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- BLOG -->
+<section id="blog" class="bg-gray-950 border-b border-gray-800">
+    <div class="mx-auto max-w-7xl px-6 py-20 lg:px-8">
+        <div class="flex items-end justify-between mb-12">
+            <span class="inline-block rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
+                // BLOG
+            </span>
+            <a href="/posts" class="font-mono text-xs text-blue-500 hover:text-blue-400 transition">Všechny články →</a>
+        </div>
+        <div class="flex flex-col divide-y divide-gray-800">
+            @if (_recentPosts.Count > 0)
+            {
+                @foreach (var post in _recentPosts)
+                {
+                    <a href="/posts/@post.Slug" class="group flex items-center justify-between gap-6 py-6 hover:pl-4 transition-all">
+                        <div>
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="font-mono text-xs text-blue-500 bg-blue-600/10 px-2 py-0.5 rounded-sm">@post.CategoryName</span>
+                                <span class="text-xs text-gray-500">@post.PublishedAtDisplay</span>
+                            </div>
+                            <h3 class="font-mono text-sm font-bold text-white group-hover:text-blue-500 transition">@post.Title</h3>
+                        </div>
+                        <span class="text-xs text-gray-500 whitespace-nowrap">@post.ReadingTime čtení</span>
+                    </a>
+                }
+            }
+            else
+            {
+                <p class="text-gray-500 text-sm py-6">Zatím žádné příspěvky.</p>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- KONTAKT -->
+<section id="kontakt" class="bg-gray-900">
+    <div class="mx-auto max-w-3xl px-6 py-20 lg:px-8">
+        <span class="inline-block mb-4 rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
+            // KONTAKT
+        </span>
+        <p class="text-gray-400 text-sm leading-relaxed mb-12">
+            Pracovní nabídka, spolupráce nebo jen otázka — jsem k dispozici.
+        </p>
+        <div class="grid gap-4 sm:grid-cols-2">
+            <a href="https://github.com" target="_blank"
+                   class="flex items-center gap-5 rounded-lg border border-gray-700 bg-gray-950 px-6 py-5 hover:border-blue-600/50 transition group">
+                <span class="text-gray-500 group-hover:text-blue-500 transition font-mono text-lg">GH</span>
+                <div>
+                    <div class="font-mono text-sm font-bold text-white">GitHub</div>
+                    <div class="text-xs text-gray-500">Zdrojové kódy projektů</div>
+                </div>
+                <span class="ml-auto text-gray-700 group-hover:text-blue-500 transition font-mono">↗</span>
+            </a>
+            <a href="https://linkedin.com" target="_blank"
+                   class="flex items-center gap-5 rounded-lg border border-gray-700 bg-gray-950 px-6 py-5 hover:border-blue-600/50 transition group">
+                <span class="text-gray-500 group-hover:text-blue-500 transition font-mono text-lg">LI</span>
+                <div>
+                    <div class="font-mono text-sm font-bold text-white">LinkedIn</div>
+                    <div class="text-xs text-gray-500">Profesní profil</div>
+                </div>
+                <span class="ml-auto text-gray-700 group-hover:text-blue-500 transition font-mono">↗</span>
+            </a>
+            <a href="mailto:filip@email.cz"
+                   class="flex items-center gap-5 rounded-lg border border-gray-700 bg-gray-950 px-6 py-5 hover:border-blue-600/50 transition group">
+                <span class="text-gray-500 group-hover:text-blue-500 transition font-mono text-lg">@@</span>
+                <div>
+                    <div class="font-mono text-sm font-bold text-white">E-mail</div>
+                    <div class="text-xs text-gray-500">Přímý kontakt</div>
+                </div>
+                <span class="ml-auto text-gray-700 group-hover:text-blue-500 transition font-mono">↗</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+@code {
+    private ProjectItem? _selectedProject;
+    private List<BlogPostViewModel> _recentPosts = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        _recentPosts = await BlogPostService.GetRecentPostsAsync(3);
+    }
+
+    record ProjectItem(string Name, string Desc, string Detail, string[] Tags, string Year);
+    record SkillGroup(string Group, string[] Items);
+    record TimelineItem(string Year, string Role, string Company, string Desc);
+
+    private readonly List<ProjectItem> _projects =
+    [
+        new("Training Management System",
+            "Systém pro správu a evidenci firemních školení, kurzů a certifikátů zaměstnanců.",
+            "Webová aplikace pro správu firemních školení — od plánování kurzů přes evidenci účastníků až po sledování certifikátů a jejich platnosti.",
+            ["C#", "SQL", "ASP.NET"], "2024"),
+        new("Document Management System",
+            "Webová aplikace pro organizaci, verzování a sdílení dokumentů v rámci firmy.",
+            "DMS pro interní firemní dokumenty s podporou verzování, přístupových práv a fulltextového vyhledávání.",
+            ["C#", "SQL", "JavaScript"], "2024"),
+        new("Visitor Management System",
+            "Evidence návštěvníků s automatickým generováním průkazů a notifikacemi.",
+            "Recepční systém pro evidenci návštěvníků — registrace příchodu/odchodu, generování dočasných průkazů a automatické notifikace hostitelům.",
+            ["C#", "CSS/HTML", "SQL"], "2023"),
+        new("Quality System",
+            "Aplikace pro sledování a reportování kvality výroby a procesů.",
+            "Nástroj pro quality management — zadávání neshod, sledování nápravných opatření a generování reportů.",
+            ["C#", "SQL", "JavaScript"], "2023"),
+    ];
+
+    private readonly List<SkillGroup> _skillGroups =
+    [
+        new("Backend", ["C#", ".NET / ASP.NET", "SQL", "T-SQL", "REST API"]),
+        new("Frontend", ["HTML", "CSS", "JavaScript"]),
+        new("Nástroje", ["Git", "Visual Studio", "SQL Server"]),
+        new("Koncepty", ["OOP", "MVC", "CRUD", "Debugging"]),
+    ];
+
+    private readonly List<TimelineItem> _timeline =
+    [
+        new("2024–nyní", "Junior .NET Developer", "Interní projekty", "Vývoj interních podnikových aplikací v C# a ASP.NET."),
+        new("2023", "IT Stáž", "Praxe", "Práce s databázemi SQL, základy webového vývoje."),
+        new("2022", "Začátek programování", "Samostudium", "Průchod základy C#, HTML/CSS, Git."),
+    ];
+}

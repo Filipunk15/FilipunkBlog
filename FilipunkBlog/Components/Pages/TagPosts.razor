@@ -1,0 +1,65 @@
+﻿@page "/tag/{slug}"
+@using FilipunkBlog.Application.Contracts
+@using FilipunkBlog.Application.Models
+@inject IBlogPostService BlogPostService
+
+<PageTitle>@_tagName — Filip</PageTitle>
+
+<HeadContent>
+    <meta name="description" content="Příspěvky označené tagem @_tagName" />
+</HeadContent>
+
+<div class="mx-auto max-w-7xl px-6 py-20 lg:px-8">
+    <div class="mb-12">
+        <span class="inline-block mb-4 rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
+            // TAG
+        </span>
+        <h1 class="font-mono text-3xl font-bold text-white">#@_tagName</h1>
+    </div>
+
+    @if (_posts.Count > 0)
+    {
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            @foreach (var post in _posts)
+            {
+                <a href="/posts/@post.Slug" class="group flex flex-col rounded-lg border border-gray-700 bg-gray-900 overflow-hidden hover:border-blue-600/50 transition">
+                    @if (!string.IsNullOrEmpty(post.Image))
+                    {
+                        <img src="@post.Image" alt="@post.Title" class="w-full aspect-video object-cover" />
+                    }
+                    else
+                    {
+                        <div class="w-full aspect-video bg-gray-800 flex items-center justify-center">
+                            <span class="font-mono text-gray-600 text-xs">// no image</span>
+                        </div>
+                    }
+                    <div class="p-6">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="font-mono text-xs text-blue-500 bg-blue-600/10 px-2 py-0.5 rounded-sm">@post.CategoryName</span>
+                            <span class="text-xs text-gray-500">@post.PublishedAtDisplay</span>
+                        </div>
+                        <h2 class="font-mono text-sm font-bold text-white group-hover:text-blue-500 transition mb-3">@post.Title</h2>
+                        <p class="text-sm text-gray-400 leading-relaxed line-clamp-3">@post.Introduction</p>
+                    </div>
+                </a>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="font-mono text-sm text-gray-500">// žádné příspěvky s tímto tagem</p>
+    }
+</div>
+
+@code {
+    [Parameter] public string Slug { get; set; } = string.Empty;
+
+    private List<BlogPostViewModel> _posts = [];
+    private string _tagName = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _posts = await BlogPostService.GetPostsByTagAsync(Slug);
+        _tagName = _posts.FirstOrDefault()?.Tags.FirstOrDefault() ?? Slug;
+    }
+}

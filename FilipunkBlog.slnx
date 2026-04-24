@@ -1,0 +1,13 @@
+<Solution>
+  <Project Path="FilipunkBlog.Application/FilipunkBlog.Application.csproj">
+    <BuildDependency Project="FilipunkBlog.Domain/FilipunkBlog.Domain.csproj" />
+  </Project>
+  <Project Path="FilipunkBlog.Domain/FilipunkBlog.Domain.csproj" />
+  <Project Path="FilipunkBlog.Infrastructure/FilipunkBlog.Infrastructure.csproj">
+    <BuildDependency Project="FilipunkBlog.Application/FilipunkBlog.Application.csproj" />
+  </Project>
+  <Project Path="FilipunkBlog/FilipunkBlog.csproj">
+    <BuildDependency Project="FilipunkBlog.Application/FilipunkBlog.Application.csproj" />
+    <BuildDependency Project="FilipunkBlog.Infrastructure/FilipunkBlog.Infrastructure.csproj" />
+  </Project>
+</Solution>

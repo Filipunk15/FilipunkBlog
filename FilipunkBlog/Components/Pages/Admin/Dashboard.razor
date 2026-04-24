@@ -1,0 +1,77 @@
+﻿@page "/admin"
+@attribute [Authorize(Roles = "Admin")]
+@using FilipunkBlog.Application.Contracts
+@using FilipunkBlog.Application.Models
+@using Microsoft.AspNetCore.Authorization
+@inject IBlogPostService BlogPostService
+@inject ICategoryService CategoryService
+
+<PageTitle>Admin — Dashboard</PageTitle>
+
+<div class="mx-auto max-w-7xl px-6 py-20 lg:px-8">
+    <div class="mb-12">
+        <span class="inline-block mb-4 rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
+            // ADMIN
+        </span>
+        <h1 class="font-mono text-3xl font-bold text-white">Dashboard</h1>
+    </div>
+
+    <div class="grid gap-6 sm:grid-cols-3 mb-12">
+        <div class="rounded-lg border border-gray-700 bg-gray-900 p-6">
+            <div class="font-mono text-xs text-gray-500 uppercase tracking-wider mb-2">Příspěvky</div>
+            <div class="font-mono text-4xl font-bold text-white">@_postCount</div>
+        </div>
+        <div class="rounded-lg border border-gray-700 bg-gray-900 p-6">
+            <div class="font-mono text-xs text-gray-500 uppercase tracking-wider mb-2">Kategorie</div>
+            <div class="font-mono text-4xl font-bold text-white">@_categoryCount</div>
+        </div>
+    </div>
+
+    <div class="mt-12">
+        <h2 class="font-mono text-xs text-blue-500 uppercase tracking-widest mb-6">// Nejnavštěvovanější</h2>
+        <div class="flex flex-col divide-y divide-gray-800">
+            @foreach (var post in _topPosts)
+            {
+                <div class="flex items-center justify-between py-4">
+                    <a href="/posts/@post.Slug" class="font-mono text-sm text-white hover:text-blue-500 transition">@post.Title</a>
+                    <span class="font-mono text-xs text-gray-500">@post.Views návštěv</span>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="flex flex-wrap gap-4">
+        <a href="/admin/posts/new"
+               class="rounded font-mono text-sm px-6 py-3 bg-blue-600/20 text-blue-500 border border-blue-600/40 hover:bg-blue-600/30 transition">
+            + Nový příspěvek
+        </a>
+        <a href="/admin/posts"
+               class="rounded font-mono text-sm px-6 py-3 border border-gray-700 text-gray-300 hover:border-gray-500 transition">
+            Správa příspěvků
+        </a>
+        <a href="/admin/categories"
+               class="rounded font-mono text-sm px-6 py-3 border border-gray-700 text-gray-300 hover:border-gray-500 transition">
+            Správa kategorií
+        </a>
+        <a href="/admin/tags"
+               class="rounded font-mono text-sm px-6 py-3 border border-gray-700 text-gray-300 hover:border-gray-500 transition">
+            Správa tagů
+        </a>
+    </div>
+</div>
+
+@code {
+    private int _postCount;
+    private int _categoryCount;
+    private List<BlogPostViewModel> _topPosts = [];
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var posts = await BlogPostService.GetPostsAsync(1, 1);
+        _postCount = posts.TotalCount;
+        var categories = await CategoryService.GetCategoriesAsync();
+        _categoryCount = categories.Count;
+        _topPosts = await BlogPostService.GetMostViewedAsync(5);
+    }
+}
