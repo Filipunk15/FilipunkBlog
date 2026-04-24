@@ -1,4 +1,6 @@
 ﻿@inject ICategoryService CategoryService
+@inject IJSRuntime JS
+@inject NavigationManager Navigation
 @using FilipunkBlog.Application.Contracts
 @using FilipunkBlog.Application.Models
 
@@ -6,15 +8,14 @@
     <div class="mx-auto max-w-7xl px-6 lg:px-8">
         <div class="flex h-16 items-center justify-between">
             <a href="/" class="font-mono text-lg font-bold text-white">
-                filip<span class="text-blue-500">.dev</span>
+                filipunk<span class="text-blue-500">.cz</span>
             </a>
             <nav class="hidden items-center gap-8 text-sm sm:flex">
-                <a class="text-gray-400 hover:text-white transition" href="/">Home</a>
-                <a class="text-gray-400 hover:text-white transition" href="/posts">Blog</a>
-                @foreach (var category in _categories)
-                {
-                    <a class="text-gray-400 hover:text-white transition" href="/category/@category.Slug">@category.Name</a>
-                }
+                <a class="text-gray-400 hover:text-white transition" style="cursor:pointer" @onclick="GoHome">Home</a>
+                <a class="text-gray-400 hover:text-white transition" href="#about">O mně</a>
+                <a class="text-gray-400 hover:text-white transition" href="#projects">Projekty</a>
+                <a class="text-gray-400 hover:text-white transition" href="#skills">Zkušenosti</a>
+                <a class="text-gray-400 hover:text-white transition" href="#blog">Blog</a>
                 <a class="text-gray-400 hover:text-white transition" href="/search">Hledat</a>
             </nav>
             <div class="flex items-center gap-3">
@@ -25,14 +26,6 @@
                     </Authorized>
                     <NotAuthorized>
                         <a href="/Account/Login" class="hidden sm:block rounded font-mono text-xs px-3 py-1.5 bg-blue-600/20 text-blue-500 border border-blue-600/40 hover:bg-blue-600/30 transition">Login</a>
-                        <button onclick="toggleTheme()"
-                                class="rounded border border-gray-700 p-2 text-gray-400 hover:text-white transition"
-                                title="Přepnout téma">
-                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364-.707-.707M6.343 6.343l-.707-.707m12.728 0-.707.707M6.343 17.657l-.707.707" />
-                                <circle cx="12" cy="12" r="4" />
-                            </svg>
-                        </button>
                     </NotAuthorized>
                 </AuthorizeView>
                 <button @onclick="ToggleMenu" class="sm:hidden rounded border border-gray-700 p-2 text-gray-400 hover:text-white transition">
@@ -54,12 +47,12 @@
         {
             <div class="border-t border-gray-800 py-4 sm:hidden">
                 <nav class="flex flex-col gap-1">
-                    <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition" href="/">Home</a>
-                    <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition" href="/posts">Blog</a>
-                    @foreach (var category in _categories)
-                    {
-                        <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition" href="/category/@category.Slug">@category.Name</a>
-                    }
+                    <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition" @onclick="GoHome">Home</a>
+                    <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition" href="#about">O mně</a>
+                    <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition" href="#projects">Projekty</a>
+                    <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition" href="#skills">Zkušenosti</a>
+                    <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition" href="#blog">Blog</a>
+                    <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition" href="/search">Hledat</a>
                     <AuthorizeView>
                         <Authorized>
                             <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition" href="/admin">Admin</a>
@@ -67,14 +60,6 @@
                         </Authorized>
                         <NotAuthorized>
                             <a class="rounded px-3 py-2 text-sm text-blue-500 hover:bg-gray-800 transition" href="/Account/Login">Login</a>
-                            <button onclick="toggleTheme()"
-                                    class="rounded border border-gray-700 p-2 text-gray-400 hover:text-white transition"
-                                    title="Přepnout téma">
-                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                    <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364-.707-.707M6.343 6.343l-.707-.707m12.728 0-.707.707M6.343 17.657l-.707.707" />
-                                    <circle cx="12" cy="12" r="4" />
-                                </svg>
-                            </button>
                         </NotAuthorized>
                     </AuthorizeView>
                 </nav>
@@ -90,6 +75,12 @@
     protected override async Task OnInitializedAsync()
     {
         _categories = await CategoryService.GetCategoriesAsync();
+    }
+
+    private async Task GoHome()
+    {
+        Navigation.NavigateTo("/");
+        await JS.InvokeVoidAsync("scrollToTop");
     }
 
     private void ToggleMenu() => _menuOpen = !_menuOpen;

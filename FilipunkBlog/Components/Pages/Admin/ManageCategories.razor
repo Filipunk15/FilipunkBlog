@@ -7,6 +7,7 @@
 
 <PageTitle>Správa kategorií</PageTitle>
 
+
 <div class="mx-auto max-w-3xl px-6 py-20 lg:px-8">
     <div class="mb-12">
         <span class="inline-block mb-4 rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
@@ -41,9 +42,18 @@
     </div>
 </div>
 
+
+@if (!string.IsNullOrEmpty(_error))
+{
+    <div class="mb-6 rounded border border-red-500/30 bg-red-500/10 px-4 py-3">
+        <p class="font-mono text-xs text-red-400">@_error</p>
+    </div>
+}
+
 @code {
     private List<CategoryViewModel> _categories = [];
     private string _newName = string.Empty;
+    private string _error = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -61,7 +71,17 @@
 
     private async Task DeleteCategory(Guid id)
     {
-        await CategoryAdminService.DeleteCategoryAsync(id);
-        _categories = await CategoryAdminService.GetCategoriesAsync();
+        try
+        {
+            _error = string.Empty;
+            var cats = await CategoryAdminService.GetCategoriesAsync();
+            var cat = cats.FirstOrDefault(c => c.Id == id);
+            if (cat != null) await CategoryAdminService.DeleteCategoryAsync(id);
+            _categories = await CategoryAdminService.GetCategoriesAsync();
+        }
+        catch (InvalidOperationException ex)
+        {
+            _error = ex.Message;
+        }
     }
 }

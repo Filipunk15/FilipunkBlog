@@ -32,6 +32,9 @@ public class CategoryRepository(IDbContextFactory<ApplicationDbContext> factory)
     public async Task DeleteAsync(Category category)
     {
         await using var context = await factory.CreateDbContextAsync();
+        var hasposts = await context.BlogPosts.AnyAsync(x => x.CategoryId == category.Id);
+        if (hasposts)
+            throw new InvalidOperationException("Kategorie obsahuje příspěvky a nelze ji smazat.");
         context.Categories.Remove(category);
         await context.SaveChangesAsync();
     }

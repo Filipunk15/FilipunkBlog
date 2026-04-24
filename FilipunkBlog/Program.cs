@@ -27,7 +27,6 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddCascadingAuthenticationState();
-builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
 
 builder.Services.AddAuthentication(options =>
 {
@@ -46,9 +45,6 @@ builder.Services.AddIdentityCore<IdentityUser>(options =>
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddSignInManager()
     .AddDefaultTokenProviders();
-
-builder.Services.AddScoped<IdentityRedirectManager>();
-builder.Services.AddScoped<IdentityUserAccessor>();
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
