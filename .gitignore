@@ -401,3 +401,5 @@ FodyWeavers.xsd
 *.sln.iml
 FilipunkBlog/appsettings.json
 FilipunkBlog.Infrastructure/Persistence/ApplicationDbContextFactory.cs
+FilipunkBlog.Infrastructure/Persistence/ApplicationDbContextFactory.cs
+FilipunkBlog/appsettings.json
