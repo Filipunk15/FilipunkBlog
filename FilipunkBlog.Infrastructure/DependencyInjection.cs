@@ -29,12 +29,15 @@ public static class DependencyInjection
         services.AddScoped<CategoryRepository>();
         services.AddScoped<TagRepository>();
         services.AddScoped<SeedService>();
+        services.AddScoped<CommentRepository>();
+
 
         services.AddScoped<IBlogPostService, BlogPostService>();
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<ITagService, TagAdminService>();
         services.AddScoped<ICategoryAdminService, CategoryAdminService>();
         services.AddScoped<IImageService, ImageService>();
+        services.AddScoped<ICommentService, CommentService>();
 
         return services;
     }

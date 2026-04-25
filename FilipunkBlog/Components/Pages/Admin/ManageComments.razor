@@ -1,0 +1,73 @@
+﻿@page "/admin/comments"
+@attribute [Authorize(Roles = "Admin")]
+@using FilipunkBlog.Application.Contracts
+@using FilipunkBlog.Application.Models
+@using Microsoft.AspNetCore.Authorization
+@inject ICommentService CommentService
+
+<PageTitle>Správa komentářů</PageTitle>
+
+<div class="mx-auto max-w-4xl px-6 py-20 lg:px-8">
+    <div class="mb-12">
+        <span class="inline-block mb-4 rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
+            // ADMIN
+        </span>
+        <h1 class="font-mono text-3xl font-bold text-white">Komentáře ke schválení</h1>
+    </div>
+
+    @if (_comments.Count == 0)
+    {
+        <p class="font-mono text-sm text-gray-500">// žádné komentáře čekající na schválení</p>
+    }
+    else
+    {
+        <div class="flex flex-col divide-y divide-gray-800">
+            @foreach (var comment in _comments)
+            {
+                <div class="py-6">
+                    <div class="flex items-start justify-between gap-6">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="font-mono text-sm font-bold text-white">@comment.Name</span>
+                                <span class="text-xs text-gray-500">@comment.CreatedAtDisplay</span>
+                                <span class="font-mono text-xs text-blue-500 bg-blue-600/10 px-2 py-0.5 rounded-sm">@comment.BlogPostTitle</span>
+                            </div>
+                            <p class="text-sm text-gray-400 leading-relaxed">@comment.Content</p>
+                        </div>
+                        <div class="flex gap-3 shrink-0">
+                            <button @onclick="() => Approve(comment.Id)"
+                                    class="font-mono text-xs px-3 py-1.5 border border-gray-700 text-gray-400 hover:border-blue-500/50 hover:text-blue-400 transition rounded">
+                                ✓ Schválit
+                            </button>
+                            <button @onclick="() => Delete(comment.Id)"
+                                    class="font-mono text-xs px-3 py-1.5 border border-gray-700 text-gray-400 hover:border-red-500/50 hover:text-red-400 transition rounded">
+                                × Smazat
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private List<CommentViewModel> _comments = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        _comments = await CommentService.GetPendingAsync();
+    }
+
+    private async Task Approve(Guid id)
+    {
+        await CommentService.ApproveAsync(id);
+        _comments = await CommentService.GetPendingAsync();
+    }
+
+    private async Task Delete(Guid id)
+    {
+        await CommentService.DeleteAsync(id);
+        _comments = await CommentService.GetPendingAsync();
+    }
+}
