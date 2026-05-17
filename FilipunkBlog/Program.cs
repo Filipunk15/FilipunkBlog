@@ -73,6 +73,11 @@ app.UseAntiforgery();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseStaticFiles(new StaticFileOptions
+{
+    ContentTypeProvider = new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider()
+});
+
 app.MapRazorComponents<FilipunkBlog.Components.App>()
     .AddInteractiveServerRenderMode();
 
