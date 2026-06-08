@@ -13,4 +13,6 @@ public class BlogPost : EntityBase
     public Category Category { get; set; } = null!;
     public ICollection<BlogPostTag> BlogPostTags { get; set; } = [];
     public int Views { get; set; }
+
+    public ICollection<Comment> Comments { get; set; } = [];
 }

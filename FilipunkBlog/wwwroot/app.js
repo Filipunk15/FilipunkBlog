@@ -1,1 +1,9 @@
-﻿window.scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+﻿console.log("app.js loaded");
+
+window.goHome = () => {
+    if (window.location.pathname === '/') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        window.location.href = '/';
+    }
+}

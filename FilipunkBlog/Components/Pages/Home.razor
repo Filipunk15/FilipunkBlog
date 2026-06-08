@@ -72,8 +72,8 @@
                 })
                 {
                     <div class="flex justify-between py-3 border-b border-gray-800">
-                        <span class="font-mono text-xs text-gray-500 uppercase tracking-wider">@item.Item1</span>
-                        <span class="text-sm text-white font-medium">@item.Item2</span>
+                        <span class="font-mono text-xs text-gray-500 uppercase tracking-wider shrink-0">@item.Item1</span>
+                        <span class="text-sm text-white font-medium text-right ml-4">@item.Item2</span>
                     </div>
                 }
             </div>
@@ -139,7 +139,7 @@
         <span class="inline-block mb-12 rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
             // TECHNOLOGIE
         </span>
-        <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="grid gap-10 grid-cols-2 lg:grid-cols-4">
             @foreach (var group in _skillGroups)
             {
                 <div>
@@ -147,7 +147,7 @@
                     <div class="flex flex-wrap gap-2">
                         @foreach (var item in group.Items)
                         {
-                            <span class="font-mono text-xs px-3 py-1.5 bg-gray-800 text-white border border-gray-700 rounded-sm">@item</span>
+                            <span class="font-mono text-xs px-3 py-1.5 bg-gray-800 text-white border border-gray-700 rounded-sm break-all">@item</span>
                         }
                     </div>
                 </div>
@@ -241,10 +241,13 @@
             </a>
             <a href="mailto:f.lafata@filipunk.cz"
                    class="flex items-center gap-5 rounded-lg border border-gray-700 bg-gray-950 px-6 py-5 hover:border-blue-600/50 transition group">
-                <span class="text-gray-500 group-hover:text-blue-500 transition font-mono text-lg"><i class="fa-solid fa-at"></i></span>
+                <span class="text-gray-500 group-hover:text-blue-500 transition font-mono text-lg">
+                    <i class="fa-solid fa-at"></i>
+                </span>
                 <div>
                     <div class="font-mono text-sm font-bold text-white">E-mail</div>
                     <div class="text-xs text-gray-500">Přímý kontakt</div>
+                    <div class="font-mono text-xs text-blue-500 mt-1">f.lafata@filipunk.cz</div>
                 </div>
                 <span class="ml-auto text-gray-700 group-hover:text-blue-500 transition font-mono">↗</span>
             </a>

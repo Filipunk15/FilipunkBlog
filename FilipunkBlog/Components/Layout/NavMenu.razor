@@ -11,7 +11,9 @@
                 filipunk<span class="text-blue-500">.cz</span>
             </a>
             <nav class="hidden items-center gap-8 text-sm sm:flex">
-                <a class="text-gray-400 hover:text-white transition" style="cursor:pointer" @onclick="GoHome">Home</a>
+                <a class="text-gray-400 hover:text-white transition"
+                   style="cursor:pointer"
+                   onclick="goHome()">Home</a>
                 <a class="text-gray-400 hover:text-white transition" href="#about">O mně</a>
                 <a class="text-gray-400 hover:text-white transition" href="#projects">Projekty</a>
                 <a class="text-gray-400 hover:text-white transition" href="#skills">Zkušenosti</a>
@@ -47,19 +49,29 @@
         {
             <div class="border-t border-gray-800 py-4 sm:hidden">
                 <nav class="flex flex-col gap-1">
-                    <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition" @onclick="GoHome">Home</a>
-                    <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition" href="#about">O mně</a>
-                    <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition" href="#projects">Projekty</a>
-                    <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition" href="#skills">Zkušenosti</a>
-                    <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition" href="#blog">Blog</a>
-                    <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition" href="/search">Hledat</a>
+                    <a class="text-gray-400 hover:text-white transition"
+                       style="cursor:pointer"
+                       onclick="goHome()">Home</a>
+                    <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition"
+                       href="#about" @onclick="() => _menuOpen = false">O mně</a>
+                    <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition"
+                       href="#projects" @onclick="() => _menuOpen = false">Projekty</a>
+                    <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition"
+                       href="#skills" @onclick="() => _menuOpen = false">Zkušenosti</a>
+                    <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition"
+                       href="/posts" @onclick="() => _menuOpen = false">Blog</a>
+                    <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition"
+                       href="/search" @onclick="() => _menuOpen = false">Hledat</a>
                     <AuthorizeView>
                         <Authorized>
-                            <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition" href="/admin">Admin</a>
-                            <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition" href="/Account/Logout">Logout</a>
+                            <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition"
+                               href="/admin" @onclick="() => _menuOpen = false">Admin</a>
+                            <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition"
+                               href="/Account/Logout" @onclick="() => _menuOpen = false">Logout</a>
                         </Authorized>
                         <NotAuthorized>
-                            <a class="rounded px-3 py-2 text-sm text-blue-500 hover:bg-gray-800 transition" href="/Account/Login">Login</a>
+                            <a class="rounded px-3 py-2 text-sm text-blue-500 hover:bg-gray-800 transition"
+                               href="/Account/Login" @onclick="() => _menuOpen = false">Login</a>
                         </NotAuthorized>
                     </AuthorizeView>
                 </nav>
@@ -79,8 +91,15 @@
 
     private async Task GoHome()
     {
-        Navigation.NavigateTo("/");
-        await JS.InvokeVoidAsync("scrollToTop");
+        if (Navigation.Uri.TrimEnd('/') == Navigation.BaseUri.TrimEnd('/'))
+        {
+            await JS.InvokeVoidAsync("scrollToTop");
+        }
+        else
+        {
+            Navigation.NavigateTo("/");
+        }
+        _menuOpen = false;
     }
 
     private void ToggleMenu() => _menuOpen = !_menuOpen;

@@ -1,0 +1,159 @@
+﻿@page "/cv"
+
+<PageTitle>CV — Filip Lafata</PageTitle>
+
+<HeadContent>
+    <style>
+        @@media print {
+            nav, header, footer, .no-print { display: none !important; }
+            body { background: white !important; color: black !important; }
+            .cv-container { max-width: 100% !important; padding: 0 !important; }
+            a { color: black !important; }
+        }
+    </style>
+</HeadContent>
+
+<div class="cv-container mx-auto max-w-3xl px-6 py-12 lg:px-8">
+    <!-- Hlavička -->
+    <div class="flex items-start justify-between mb-10 pb-8 border-b border-gray-800">
+        <div>
+            <h1 class="font-mono text-4xl font-bold text-white mb-1">Filip Lafata</h1>
+            <p class="font-mono text-sm text-blue-500">IT Technik — Junior .NET Developer</p>
+            <div class="flex gap-4 mt-3">
+                <a href="mailto:f.lafata@filipunk.cz" class="font-mono text-xs text-gray-400 hover:text-blue-500 transition">f.lafata@filipunk.cz</a>
+                <a href="https://filipunk.cz" class="font-mono text-xs text-gray-400 hover:text-blue-500 transition">filipunk.cz</a>
+                <a href="https://github.com/filipunk15" class="font-mono text-xs text-gray-400 hover:text-blue-500 transition">github.com/filipunk15</a>
+                <a href="https://linkedin.com/in/filip-lafata" class="font-mono text-xs text-gray-400 hover:text-blue-500 transition">linkedin.com/in/filip-lafata</a>
+            </div>
+        </div>
+        <button onclick="window.print()" class="no-print rounded font-mono text-xs px-4 py-2 bg-blue-600/20 text-blue-500 border border-blue-600/40 hover:bg-blue-600/30 transition">
+            ↓ Stáhnout PDF
+        </button>
+    </div>
+
+    <!-- O mně -->
+    <div class="mb-10">
+        <h2 class="font-mono text-xs text-blue-500 uppercase tracking-widest mb-4">// O MNĚ</h2>
+        <p class="text-sm text-gray-400 leading-relaxed">
+            K programování jsem se dostal již na základní škole, kdy jsem s kamarády tvořil Minecraft servery s vlastními pluginy. 
+            Na střední škole jsme Minecraft vyměnili za FiveM modifikaci do GTA V. Nyní se věnuji čistě C# programování, 
+            nejčastěji webovému vývoji a vývoji interních aplikací.
+        </p>
+    </div>
+
+    <!-- Zkušenosti -->
+    <div class="mb-10">
+        <h2 class="font-mono text-xs text-blue-500 uppercase tracking-widest mb-6">// ZKUŠENOSTI</h2>
+        <div class="flex flex-col gap-6">
+            <div class="border-l-2 border-blue-500/30 pl-4">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <h3 class="font-mono text-sm font-bold text-white">IT Technik — Vývojář interních aplikací</h3>
+                        <div class="font-mono text-xs text-blue-500 mt-1">KDK Automotive Czech</div>
+                    </div>
+                    <span class="font-mono text-xs text-gray-500">2024–nyní</span>
+                </div>
+                <p class="text-xs text-gray-400 leading-relaxed mt-2">
+                    Programování interních aplikací v C# (Blazor, MAUI) a JavaScript (Node.js). 
+                    Práce s databázemi MSSQL, Informix, Oracle. Microsoft Azure, Microsoft Office. 
+                    Zpracovávání dat z MES a ERP systému.
+                </p>
+            </div>
+            <div class="border-l-2 border-blue-500/30 pl-4">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <h3 class="font-mono text-sm font-bold text-white">IT Stáž</h3>
+                        <div class="font-mono text-xs text-blue-500 mt-1">SUSPA CZ</div>
+                    </div>
+                    <span class="font-mono text-xs text-gray-500">2023</span>
+                </div>
+                <p class="text-xs text-gray-400 leading-relaxed mt-2">
+                    Programování maker v Microsoft Excel. Instalace síťové infrastruktury. 
+                    Instalace a konfigurace čteček čárových kódů, tvorba systémů pro generování čárových kódů.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vzdělání -->
+    <div class="mb-10">
+        <h2 class="font-mono text-xs text-blue-500 uppercase tracking-widest mb-6">// VZDĚLÁNÍ</h2>
+        <div class="border-l-2 border-blue-500/30 pl-4">
+            <div class="flex items-start justify-between">
+                <div>
+                    <h3 class="font-mono text-sm font-bold text-white">SPŠ Tachov, Světce 1</h3>
+                    <div class="font-mono text-xs text-blue-500 mt-1">Střední vzdělání s maturitou — Informační technologie</div>
+                </div>
+                <span class="font-mono text-xs text-gray-500">2019–2023</span>
+            </div>
+            <p class="text-xs text-gray-400 leading-relaxed mt-2">
+                Programování a vývoj aplikací v Javě, instalace a správa operačních systémů.
+            </p>
+        </div>
+    </div>
+
+    <!-- Technologie -->
+    <div class="mb-10">
+        <h2 class="font-mono text-xs text-blue-500 uppercase tracking-widest mb-6">// TECHNOLOGIE</h2>
+        <div class="grid grid-cols-2 gap-6">
+            <div>
+                <div class="font-mono text-xs text-gray-500 uppercase tracking-wider mb-3">Backend</div>
+                <div class="flex flex-wrap gap-2">
+                    @foreach (var skill in new[] { "C#", ".NET", "Blazor", "MAUI", "MSSQL", "MySQL", "REST API" })
+                    {
+                        <span class="font-mono text-xs px-2 py-1 bg-gray-800 text-gray-300 border border-gray-700 rounded-sm">@skill</span>
+                    }
+                </div>
+            </div>
+            <div>
+                <div class="font-mono text-xs text-gray-500 uppercase tracking-wider mb-3">Frontend</div>
+                <div class="flex flex-wrap gap-2">
+                    @foreach (var skill in new[] { "HTML", "CSS", "JavaScript", "Bootstrap" })
+                    {
+                        <span class="font-mono text-xs px-2 py-1 bg-gray-800 text-gray-300 border border-gray-700 rounded-sm">@skill</span>
+                    }
+                </div>
+            </div>
+            <div>
+                <div class="font-mono text-xs text-gray-500 uppercase tracking-wider mb-3">Nástroje</div>
+                <div class="flex flex-wrap gap-2">
+                    @foreach (var skill in new[] { "Git", "Visual Studio", "VS Code", "Notion", "Jira" })
+                    {
+                        <span class="font-mono text-xs px-2 py-1 bg-gray-800 text-gray-300 border border-gray-700 rounded-sm">@skill</span>
+                    }
+                </div>
+            </div>
+            <div>
+                <div class="font-mono text-xs text-gray-500 uppercase tracking-wider mb-3">Jazyky</div>
+                <div class="flex flex-wrap gap-2">
+                    @foreach (var skill in new[] { "Čeština", "Angličtina" })
+                    {
+                        <span class="font-mono text-xs px-2 py-1 bg-gray-800 text-gray-300 border border-gray-700 rounded-sm">@skill</span>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Projekty -->
+    <div>
+        <h2 class="font-mono text-xs text-blue-500 uppercase tracking-widest mb-6">// VYBRANÉ PROJEKTY</h2>
+        <div class="flex flex-col gap-4">
+            @foreach (var p in new[] {
+                ("Internal Training Management System", "2026", "Systém pro správu firemních školení v C#, Blazor, MSSQL."),
+                ("Inventory Management Application", "2025", "Android aplikace pro inventuru ve výrobě v C#, MAUI."),
+                ("Runity", "2025", "Indie hra vytvořená za víkend v C#, Unity."),
+                ("Smart Stopwatch", "2023", "Maturitní projekt na platformě Arduino ESP32 s Android aplikací.")
+            })
+            {
+                <div class="flex items-start gap-4">
+                    <span class="font-mono text-xs text-blue-500 whitespace-nowrap mt-0.5">@p.Item2</span>
+                    <div>
+                        <h3 class="font-mono text-xs font-bold text-white">@p.Item1</h3>
+                        <p class="text-xs text-gray-400 mt-1">@p.Item3</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

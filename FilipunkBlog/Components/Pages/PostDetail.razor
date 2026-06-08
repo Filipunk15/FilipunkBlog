@@ -3,6 +3,7 @@
 @using FilipunkBlog.Application.Models
 @inject IBlogPostService BlogPostService
 @inject NavigationManager Navigation
+@inject ICommentService CommentService
 
 <PageTitle>Filip Lafata - @(_post?.Title ?? "Post")</PageTitle>
 
@@ -63,6 +64,64 @@ else
             <a href="/posts" class="font-mono text-xs text-blue-500 hover:text-blue-400 transition">← Zpět na blog</a>
         </div>
     </article>
+
+    <div class="mt-16 pt-10 border-t border-gray-800">
+        <h2 class="font-mono text-xs text-blue-500 uppercase tracking-widest mb-8">// KOMENTÁŘE</h2>
+
+        @if (_comments.Count > 0)
+        {
+            <div class="flex flex-col gap-6 mb-12">
+                @foreach (var comment in _comments)
+                {
+                    <div class="rounded-lg border border-gray-700 bg-gray-900 p-6">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="font-mono text-sm font-bold text-white">@comment.Name</span>
+                            <span class="text-xs text-gray-500">@comment.CreatedAtDisplay</span>
+                        </div>
+                        <p class="text-sm text-gray-400 leading-relaxed">@comment.Content</p>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <p class="text-gray-500 text-sm mb-12">// zatím žádné komentáře</p>
+        }
+
+        <div class="rounded-lg border border-gray-700 bg-gray-900 p-6">
+            <h3 class="font-mono text-xs text-blue-500 uppercase tracking-widest mb-6">// PŘIDAT KOMENTÁŘ</h3>
+
+            @if (_submitted)
+            {
+                <div class="rounded border border-blue-500/30 bg-blue-500/10 px-4 py-3">
+                    <p class="font-mono text-xs text-blue-400">Komentář odeslán — čeká na schválení. Díky! 😊</p>
+                </div>
+            }
+            else
+            {
+                <div class="flex flex-col gap-4">
+                    <div>
+                        <label class="font-mono text-xs text-gray-500 uppercase tracking-wider mb-2 block">Jméno</label>
+                        <input @bind="_name" placeholder="Tvoje jméno"
+                               class="w-full rounded border border-gray-700 bg-gray-950 px-4 py-3 text-sm text-white font-mono focus:border-blue-500/50 focus:outline-none" />
+                    </div>
+                    <div>
+                        <label class="font-mono text-xs text-gray-500 uppercase tracking-wider mb-2 block">Komentář</label>
+                        <textarea @bind="_content" rows="4" placeholder="Napiš komentář..."
+                                  class="w-full rounded border border-gray-700 bg-gray-950 px-4 py-3 text-sm text-white font-mono focus:border-blue-500/50 focus:outline-none resize-none"></textarea>
+                    </div>
+                    @if (!string.IsNullOrEmpty(_error))
+                    {
+                        <p class="font-mono text-xs text-red-400">@_error</p>
+                    }
+                    <button @onclick="SubmitComment"
+                            class="rounded font-mono text-sm px-6 py-3 bg-blue-600/20 text-blue-500 border border-blue-600/40 hover:bg-blue-600/30 transition self-start">
+                        Odeslat komentář →
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
 }
 
 @code {
@@ -70,10 +129,29 @@ else
 
     private BlogPostViewModel? _post;
 
+    private List<CommentViewModel> _comments = [];
+    private string _name = string.Empty;
+    private string _content = string.Empty;
+    private string _error = string.Empty;
+    private bool _submitted = false;
+
+
     protected override async Task OnInitializedAsync()
     {
         _post = await BlogPostService.GetPostBySlugAsync(Slug);
         if (_post == null) Navigation.NavigateTo("/posts");
         if (_post != null) await BlogPostService.IncrementViewsAsync(_post.Id);
+        if (_post != null) _comments = await CommentService.GetApprovedByPostAsync(_post.Id);
+    }
+
+    private async Task SubmitComment()
+    {
+        _error = string.Empty;
+        if (string.IsNullOrWhiteSpace(_name)) { _error = "Zadej jméno."; return; }
+        if (string.IsNullOrWhiteSpace(_content)) { _error = "Zadej komentář."; return; }
+        if (_content.Length > 1000) { _error = "Komentář je příliš dlouhý."; return; }
+
+        await CommentService.AddAsync(_post!.Id, _name, _content);
+        _submitted = true;
     }
 }
