@@ -12,7 +12,7 @@ public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<Applicati
     public ApplicationDbContext CreateDbContext(string[] args)
     {
         var builder = new DbContextOptionsBuilder<ApplicationDbContext>();
-        builder.UseSqlServer("Server=Server;Database=Database;User Id=UserId;Password=Paswrt;Encrypt=True;TrustServerCertificate=True;");
+        builder.UseSqlServer("Server=185.150.25.53;Database=FilipunkBlog_DEV;User Id=appjoin;Password=M@minka284415;Encrypt=True;TrustServerCertificate=True;");
         return new ApplicationDbContext(builder.Options);
     }
 }

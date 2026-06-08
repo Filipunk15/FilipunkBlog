@@ -18,10 +18,11 @@ public class TagAdminService(TagRepository repository) : ITagService
         }).ToList();
     }
 
-    public async Task CreateTagAsync(string name, string slug)
+    public async Task<TagViewModel> CreateTagAsync(string name, string slug)
     {
         var tag = new Tag { Name = name, Slug = slug };
         await repository.AddAsync(tag);
+        return new TagViewModel { Id = tag.Id, Name = tag.Name, Slug = tag.Slug };
     }
 
     public async Task DeleteTagAsync(Guid id)

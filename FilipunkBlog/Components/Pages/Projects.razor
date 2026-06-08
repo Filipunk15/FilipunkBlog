@@ -1,0 +1,122 @@
+﻿@page "/projects"
+@using FilipunkBlog.Application.Contracts
+@using FilipunkBlog.Application.Models
+@inject IProjectService ProjectService
+@inject ITagService TagService
+
+<PageTitle>Filip Lafata - Projekty</PageTitle>
+
+<HeadContent>
+    <meta name="description" content="Všechny moje projekty." />
+    <meta property="og:title" content="Projekty — Filip" />
+</HeadContent>
+
+<div class="mx-auto max-w-7xl px-6 py-20 lg:px-8">
+    <div class="mb-12">
+        <span class="inline-block mb-4 rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
+            // PROJEKTY
+        </span>
+        <h1 class="font-mono text-3xl font-bold text-white">Všechny projekty</h1>
+    </div>
+
+    <div class="grid gap-12 lg:grid-cols-12">
+        <div class="lg:col-span-8">
+            @if (_projects.Items.Count > 0)
+            {
+                <div class="grid gap-6 sm:grid-cols-2">
+                    @foreach (var p in _projects.Items)
+                    {
+                        <a href="/project/@p.Slug" class="group flex flex-col rounded-lg border border-gray-700 bg-gray-950 overflow-hidden hover:border-blue-600/50 transition">
+                            @if (!string.IsNullOrEmpty(p.MainImage))
+                            {
+                                <img src="@p.MainImage" alt="@p.Title" class="w-full aspect-video object-cover" />
+                            }
+                            else
+                            {
+                                <div class="w-full aspect-video bg-gray-800 flex items-center justify-center">
+                                    <span class="font-mono text-gray-600 text-xs">// no image</span>
+                                </div>
+                            }
+                            <div class="p-6 flex flex-col flex-1">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <span class="font-mono text-xs text-blue-500">@p.YearDisplay</span>
+                                </div>
+                                <h2 class="font-mono text-sm font-bold text-white group-hover:text-blue-500 transition mb-3">@p.Title</h2>
+                                <p class="text-sm text-gray-400 leading-relaxed line-clamp-3 flex-1">@p.Description</p>
+                                <div class="mt-4 flex flex-wrap gap-2">
+                                    @foreach (var tag in p.Tags)
+                                    {
+                                        <span class="font-mono text-xs px-2 py-0.5 bg-gray-800 text-gray-400 border border-gray-700 rounded-sm">@tag</span>
+                                    }
+                                </div>
+                            </div>
+                        </a>
+                    }
+                </div>
+
+                @if (_projects.TotalPages > 1)
+                {
+                    <div class="mt-12 flex items-center justify-center gap-3">
+                        @if (_projects.HasPreviousPage)
+                        {
+                            <button @onclick="() => LoadPage(_currentPage - 1)"
+                                    class="font-mono text-xs px-4 py-2 border border-gray-700 text-gray-400 hover:border-blue-600/50 hover:text-blue-500 transition rounded">
+                                ← Předchozí
+                            </button>
+                        }
+                        <span class="font-mono text-xs text-gray-500">@_currentPage / @_projects.TotalPages</span>
+                        @if (_projects.HasNextPage)
+                        {
+                            <button @onclick="() => LoadPage(_currentPage + 1)"
+                                    class="font-mono text-xs px-4 py-2 border border-gray-700 text-gray-400 hover:border-blue-600/50 hover:text-blue-500 transition rounded">
+                                Další →
+                            </button>
+                        }
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="text-gray-500 font-mono text-sm">// zatím žádné projekty</p>
+            }
+        </div>
+
+        <aside class="lg:col-span-4">
+            <div class="lg:sticky lg:top-24 flex flex-col gap-6">
+                @if (_tags.Count > 0)
+                {
+                    <div class="rounded-lg border border-gray-700 bg-gray-900 p-6">
+                        <h3 class="font-mono text-xs text-blue-500 uppercase tracking-widest mb-4">// Tagy</h3>
+                        <div class="flex flex-wrap gap-2">
+                            @foreach (var tag in _tags)
+                            {
+                                <a href="/tag/@tag.Slug"
+                                   class="font-mono text-xs px-3 py-1.5 rounded-sm border border-gray-700 bg-gray-800 text-gray-400 hover:border-blue-600/50 hover:text-blue-500 transition">
+                                    #@tag.Name
+                                </a>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </aside>
+    </div>
+</div>
+
+@code {
+    private PagedResult<ProjectViewModel> _projects = new();
+    private List<TagViewModel> _tags = [];
+    private int _currentPage = 1;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadPage(1);
+        _tags = await TagService.GetTagsAsync();
+    }
+
+    private async Task LoadPage(int page)
+    {
+        _currentPage = page;
+        _projects = await ProjectService.GetProjectsAsync(page, 9);
+    }
+}

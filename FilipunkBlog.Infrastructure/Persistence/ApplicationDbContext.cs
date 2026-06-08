@@ -13,6 +13,12 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Tag> Tags { get; set; }
     public DbSet<BlogPostTag> BlogPostTags { get; set; }
 
+    public DbSet<Project> Projects { get; set; }
+    public DbSet<ProjectTag> ProjectTags { get; set; }
+    public DbSet<ProjectImage> ProjectImages { get; set; }
+
+
+
     public DbSet<Comment> Comments { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
