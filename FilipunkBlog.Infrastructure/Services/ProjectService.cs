@@ -59,7 +59,7 @@ public class ProjectService(ProjectRepository repository, ApplicationDbContext c
         if (vm.MainImage != null)
             project.Images.Add(new Domain.Entities.ProjectImage { ImageUrl = vm.MainImage, IsMain = true });
 
-        foreach (var url in vm.Images)
+        foreach (var url in vm.Images.Where(x => x != vm.MainImage))
             project.Images.Add(new Domain.Entities.ProjectImage { ImageUrl = url, IsMain = false });
 
         await repository.AddAsync(project);
@@ -84,7 +84,7 @@ public class ProjectService(ProjectRepository repository, ApplicationDbContext c
         if (vm.MainImage != null)
             project.Images.Add(new Domain.Entities.ProjectImage { ImageUrl = vm.MainImage, IsMain = true });
 
-        foreach (var url in vm.Images)
+        foreach (var url in vm.Images.Where(x => x != vm.MainImage))
             project.Images.Add(new Domain.Entities.ProjectImage { ImageUrl = url, IsMain = false });
 
         await repository.UpdateAsync(project);
@@ -119,8 +119,8 @@ public class ProjectService(ProjectRepository repository, ApplicationDbContext c
         Detail = project.Detail,
         StartYear = project.StartYear,
         EndYear = project.EndYear,
-        MainImage = project.Images.FirstOrDefault(x => x.IsMain)?.ImageUrl,
-        Images = project.Images.Select(x => x.ImageUrl).ToList(),
+        MainImage = project.Images.FirstOrDefault(x => x.IsMain)?.ImageUrl, 
+        Images = project.Images.Where(x => !x.IsMain).Select(x => x.ImageUrl).ToList(),
         IsPublished = project.IsPublished,
         Tags = project.ProjectTags.Select(t => t.Tag.Name).ToList(),
         TagIds = project.ProjectTags.Select(t => t.TagId).ToList()

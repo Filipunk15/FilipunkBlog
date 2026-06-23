@@ -1,31 +1,60 @@
 ﻿<script type="module" src="@Assets["Components/Layout/ReconnectModal.razor.js"]"></script>
 
 <dialog id="components-reconnect-modal" data-nosnippet>
-    <div class="components-reconnect-container">
+    <div class="components-reconnect-container" style="
+        background: #030712;
+        border: 1px solid #374151;
+        border-radius: 0.5rem;
+        padding: 2rem;
+        font-family: monospace;
+        color: #9ca3af;
+        text-align: center;
+        min-width: 280px;
+        ">
         <div class="components-rejoining-animation" aria-hidden="true">
             <div></div>
             <div></div>
         </div>
         <p class="components-reconnect-first-attempt-visible">
-            Rejoining the server...
+            // připojuji se...
         </p>
         <p class="components-reconnect-repeated-attempt-visible">
-            Rejoin failed... trying again in <span id="components-seconds-to-next-attempt"></span> seconds.
+            // připojení selhalo — zkouším znovu za <span id="components-seconds-to-next-attempt"></span>s
         </p>
         <p class="components-reconnect-failed-visible">
-            Failed to rejoin.<br />Please retry or reload the page.
+            // připojení selhalo<br />Zkus to znovu nebo obnov stránku.
         </p>
-        <button id="components-reconnect-button" class="components-reconnect-failed-visible">
-            Retry
+        <button id="components-reconnect-button" class="components-reconnect-failed-visible" style="
+            margin-top: 1rem;
+            font-family: monospace;
+            font-size: 0.75rem;
+            padding: 0.5rem 1.5rem;
+            background: rgba(37,99,235,0.2);
+            color: #3b82f6;
+            border: 1px solid rgba(37,99,235,0.4);
+            border-radius: 0.25rem;
+            cursor: pointer;
+            ">
+            Zkusit znovu
         </button>
         <p class="components-pause-visible">
-            The session has been paused by the server.
+            // relace pozastavena serverem
         </p>
         <p class="components-resume-failed-visible">
-            Failed to resume the session.<br />Please retry or reload the page.
+            // obnovení relace selhalo<br />Zkus to znovu nebo obnov stránku.
         </p>
-        <button id="components-resume-button" class="components-pause-visible components-resume-failed-visible">
-            Resume
+        <button id="components-resume-button" class="components-pause-visible components-resume-failed-visible" style="
+            margin-top: 1rem;
+            font-family: monospace;
+            font-size: 0.75rem;
+            padding: 0.5rem 1.5rem;
+            background: rgba(37,99,235,0.2);
+            color: #3b82f6;
+            border: 1px solid rgba(37,99,235,0.4);
+            border-radius: 0.25rem;
+            cursor: pointer;
+            ">
+            Obnovit
         </button>
     </div>
 </dialog>

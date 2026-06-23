@@ -24,6 +24,20 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        foreach (var entityType in builder.Model.GetEntityTypes())
+        {
+            if (typeof(EntityBase).IsAssignableFrom(entityType.ClrType))
+            {
+                builder.Entity(entityType.ClrType)
+                    .Property(nameof(EntityBase.UpdatedAt))
+                    .IsConcurrencyToken(false);
+                builder.Entity(entityType.ClrType)
+                    .Property(nameof(EntityBase.CreatedAt))
+                    .IsConcurrencyToken(false);
+            }
+        }
+
         builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
     }
 }

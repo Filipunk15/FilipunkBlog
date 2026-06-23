@@ -17,8 +17,5 @@ public class ProjectTagConfiguration : IEntityTypeConfiguration<ProjectTag>
             .WithMany(x => x.ProjectTags)
             .HasForeignKey(x => x.TagId)
             .OnDelete(DeleteBehavior.Cascade);
-
-
-
     }
 }

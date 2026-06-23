@@ -149,8 +149,8 @@
             if (found != null)
             {
                 _project = found;
-                _selectedTagIds = _project.TagIds;
-                _additionalImages = _project.Images;
+                _selectedTagIds = _project.TagIds.ToList();
+                _additionalImages = _project.Images.ToList();
             }
         }
     }
@@ -176,29 +176,58 @@
         _project.TagIds = _selectedTagIds;
         _project.Images = _additionalImages;
 
-        if (_isNew) await ProjectService.CreateProjectAsync(_project);
-        else await ProjectService.UpdateProjectAsync(_project);
+        try
+        {
+            if (_isNew) await ProjectService.CreateProjectAsync(_project);
+            else await ProjectService.UpdateProjectAsync(_project);
 
-        Navigation.NavigateTo("/admin/projects");
+            Navigation.NavigateTo("/admin/projects");
+        }
+        catch (Exception ex)
+        {
+            _error = $"Chyba při ukládání: {ex.Message}";
+        }
     }
 
     private async Task UploadMainImage(InputFileChangeEventArgs e)
     {
         _uploading = true;
-        var file = e.File;
-        using var stream = file.OpenReadStream(maxAllowedSize: 5 * 1024 * 1024);
-        _project.MainImage = await ImageService.UploadAsync(stream, file.Name);
-        _uploading = false;
+        _error = string.Empty;
+        try
+        {
+            var file = e.File;
+            using var stream = file.OpenReadStream(maxAllowedSize: 5 * 1024 * 1024);
+            _project.MainImage = await ImageService.UploadAsync(stream, file.Name);
+        }
+        catch (Exception ex)
+        {
+            _error = $"Chyba při nahrávání obrázku: {ex.Message}";
+        }
+        finally
+        {
+            _uploading = false;
+        }
     }
 
     private async Task UploadAdditionalImage(InputFileChangeEventArgs e)
     {
         _uploading = true;
-        var file = e.File;
-        using var stream = file.OpenReadStream(maxAllowedSize: 5 * 1024 * 1024);
-        var url = await ImageService.UploadAsync(stream, file.Name);
-        _additionalImages.Add(url);
-        _uploading = false;
+        _error = string.Empty;
+        try
+        {
+            var file = e.File;
+            using var stream = file.OpenReadStream(maxAllowedSize: 5 * 1024 * 1024);
+            var url = await ImageService.UploadAsync(stream, file.Name);
+            _additionalImages.Add(url);
+        }
+        catch (Exception ex)
+        {
+            _error = $"Chyba při nahrávání obrázku: {ex.Message}";
+        }
+        finally
+        {
+            _uploading = false;
+        }
     }
 
     private void ToggleTag(Guid id)
@@ -210,14 +239,21 @@
     private async Task AddNewTag()
     {
         if (string.IsNullOrWhiteSpace(_newTagName)) return;
-        var slug = _newTagName.ToLower()
-            .Replace(" ", "-")
-            .Replace("á", "a").Replace("č", "c")
-            .Replace("š", "s").Replace("ž", "z");
-        var newTag = await TagAdminService.CreateTagAsync(_newTagName, slug);
-        _allTags.Add(newTag);
-        _selectedTagIds.Add(newTag.Id);
-        _newTagName = string.Empty;
+        try
+        {
+            var slug = _newTagName.ToLower()
+                .Replace(" ", "-")
+                .Replace("á", "a").Replace("č", "c")
+                .Replace("š", "s").Replace("ž", "z");
+            var newTag = await TagAdminService.CreateTagAsync(_newTagName, slug);
+            _allTags.Add(newTag);
+            _selectedTagIds.Add(newTag.Id);
+            _newTagName = string.Empty;
+        }
+        catch (Exception ex)
+        {
+            _error = $"Chyba při vytváření tagu: {ex.Message}";
+        }
     }
 
     private void RemoveMainImage() => _project.MainImage = null;

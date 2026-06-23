@@ -23,5 +23,8 @@ public class BlogPostConfiguration : IEntityTypeConfiguration<BlogPost>
             .WithMany(x => x.BlogPosts)
             .HasForeignKey(x => x.CategoryId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.Property(x => x.UpdatedAt).IsConcurrencyToken(false);
+        builder.Property(x => x.CreatedAt).IsConcurrencyToken(false);
     }
 }

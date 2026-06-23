@@ -89,6 +89,10 @@ else
     protected override async Task OnInitializedAsync()
     {
         _project = await ProjectService.GetProjectBySlugAsync(Slug);
-        if (_project == null) Navigation.NavigateTo("/projects");
+        if (_project == null)
+        {
+            Navigation.NavigateTo("/projects");
+            return;
+        }
     }
 }

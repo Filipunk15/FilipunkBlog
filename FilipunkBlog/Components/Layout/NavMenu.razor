@@ -18,6 +18,7 @@
                 <a class="text-gray-400 hover:text-white transition" href="#projects">Projekty</a>
                 <a class="text-gray-400 hover:text-white transition" href="#skills">Zkušenosti</a>
                 <a class="text-gray-400 hover:text-white transition" href="#blog">Blog</a>
+                <a class="text-gray-400 hover:text-white transition" href="#kontakt">Kontakt</a>
             </nav>
             <div class="flex items-center gap-3">
                 <AuthorizeView>
@@ -56,6 +57,8 @@
                        href="#skills" @onclick="() => _menuOpen = false">Zkušenosti</a>
                     <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition"
                        href="/posts" @onclick="() => _menuOpen = false">Blog</a>
+                    <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition"
+                       href="#kontakt" @onclick="() => _menuOpen = false">Kontakt</a>
                     <AuthorizeView>
                         <Authorized>
                             <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition"

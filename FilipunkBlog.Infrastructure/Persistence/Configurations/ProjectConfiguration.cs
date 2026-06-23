@@ -39,6 +39,10 @@ namespace FilipunkBlog.Infrastructure.Persistence.Configurations
             .WithOne(x => x.Project)
             .HasForeignKey(x => x.ProjectId)
             .OnDelete(DeleteBehavior.Cascade);
+
+
+            builder.Property(x => x.UpdatedAt).IsConcurrencyToken(false);
+            builder.Property(x => x.CreatedAt).IsConcurrencyToken(false);
         }
     }
 }

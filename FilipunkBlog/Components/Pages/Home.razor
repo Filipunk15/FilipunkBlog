@@ -96,7 +96,7 @@
                         + Přidat projekt
                     </a>
                 }
-                @if (_projects.Count() <= 0)
+                @if (_projects.Count() >= maxProjects)
                 {
                     <a href="/projects" class="font-mono text-xs text-blue-500 hover:text-blue-400 transition">Všechny projekty →</a>
                 }
@@ -270,6 +270,35 @@
                 </div>
                 <span class="ml-auto text-gray-700 group-hover:text-blue-500 transition font-mono">↗</span>
             </a>
+            <div class="relative group/cv">
+                <button @onclick="() => _showDropdown = !_showDropdown"
+                        class="w-full flex items-center gap-5 rounded-lg border border-gray-700 bg-gray-950 px-6 py-5 hover:border-blue-600/50 transition group">
+                    <span class="text-gray-500 group-hover:text-blue-500 transition font-mono text-lg">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </span>
+                    <div class="text-left">
+                        <div class="font-mono text-sm font-bold text-white">Životopis (CV)</div>
+                        <div class="text-xs text-gray-500">Stáhnout životopis</div>
+                    </div>
+                    <span class="ml-auto text-gray-700 group-hover:text-blue-500 transition font-mono">
+                        @(_showDropdown ? "↑" : "↓")
+                    </span>
+                </button>
+
+                @if (_showDropdown)
+                {
+                    <div class="absolute z-10 mt-1 w-full rounded-lg border border-gray-700 bg-gray-950 overflow-hidden">
+                        <a href="/files/cv-cz.pdf" target="_blank"
+                           class="flex items-center gap-3 px-6 py-4 hover:bg-gray-800 transition font-mono text-sm text-white">
+                            <span class="fi fi-cz"></span> CZ verze
+                        </a>
+                        <div class="flex items-center gap-3 px-6 py-4 border-t border-gray-800 font-mono text-sm text-gray-600 cursor-not-allowed">
+                            <span class="fi fi-gb"></span> EU verze
+                            <span class="ml-auto text-xs text-gray-700">// připravuji</span>
+                        </div>
+                    </div>
+                }
+            </div>
         </div>
     </div>
 </section>
@@ -278,7 +307,10 @@
     private List<BlogPostViewModel> _recentPosts = [];
     private List<ProjectViewModel> _projects = [];
 
-    private int maxProjects = 3;
+
+    private bool _showDropdown = false;
+
+    private int maxProjects = 4;
 
     [CascadingParameter] private Task<AuthenticationState>? AuthState { get; set; }
     private bool _isAdmin = false;

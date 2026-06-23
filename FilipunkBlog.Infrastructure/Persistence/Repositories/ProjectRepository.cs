@@ -13,7 +13,7 @@ public class ProjectRepository(IDbContextFactory<ApplicationDbContext> factory)
             .Include(x => x.ProjectTags).ThenInclude(x => x.Tag)
             .Include(x => x.Images)
             .Where(x => x.IsPublished)
-            .OrderByDescending(x => x.CreatedAt)
+            .OrderByDescending(x => x.StartYear)
             .Skip(skip).Take(take)
             .ToListAsync();
     }
@@ -81,6 +81,17 @@ public class ProjectRepository(IDbContextFactory<ApplicationDbContext> factory)
 
         if (existing == null) return;
 
+        context.ProjectTags.RemoveRange(existing.ProjectTags);
+        context.ProjectImages.RemoveRange(existing.Images);
+        await context.SaveChangesAsync();
+
+        context.ChangeTracker.Clear();
+
+        existing = await context.Projects
+            .FirstOrDefaultAsync(x => x.Id == project.Id);
+
+        if (existing == null) return;
+
         existing.Title = project.Title;
         existing.Slug = project.Slug;
         existing.Description = project.Description;
@@ -90,24 +101,9 @@ public class ProjectRepository(IDbContextFactory<ApplicationDbContext> factory)
         existing.IsPublished = project.IsPublished;
         existing.UpdatedAt = DateTime.UtcNow;
 
-        // Přímý SQL delete
-        await context.ProjectTags
-            .Where(x => x.ProjectId == existing.Id)
-            .ExecuteDeleteAsync();
-
-        await context.ProjectImages
-            .Where(x => x.ProjectId == existing.Id)
-            .ExecuteDeleteAsync();
-
-        existing.ProjectTags.Clear();
-        existing.Images.Clear();
-        context.ChangeTracker.Clear();
-
-        // Znovu attachni projekt
-        context.Projects.Attach(existing);
-
         foreach (var tag in project.ProjectTags)
             context.ProjectTags.Add(new ProjectTag { ProjectId = existing.Id, TagId = tag.TagId });
+
         foreach (var img in project.Images)
             context.ProjectImages.Add(new ProjectImage { ProjectId = existing.Id, ImageUrl = img.ImageUrl, IsMain = img.IsMain });
 
