@@ -1,0 +1,77 @@
+﻿@page "/setup"
+@layout WithoutNavMenuLayout
+
+<PageTitle>Filip Lafata - Setup / EDC</PageTitle>
+
+<div class="mx-auto max-w-7xl px-6 py-20 lg:px-8">
+    <div class="mb-12">
+        <span class="inline-block mb-4 rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
+            // SETUP
+        </span>
+        <h1 class="font-mono text-3xl font-bold text-white">Můj stack</h1>
+    </div>
+
+    <div class="grid gap-12 lg:grid-cols-12">
+        <div class="lg:col-span-12">
+            @if (_edcItems.Count > 0)
+            {
+                <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    @foreach (var item in _edcItems)
+                    {
+                        <a href="@item.Url"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           class="group flex flex-col rounded-lg border border-gray-700 bg-gray-950 overflow-hidden hover:border-blue-600/50 transition p-6">
+                            <div class="flex items-center gap-3 mb-3">
+                                <span class="font-mono text-xs px-2 py-0.5 bg-gray-800 text-gray-400 border border-gray-700 rounded-sm">
+                                    @item.Category
+                                </span>
+                            </div>
+                            <h2 class="font-mono text-sm font-bold text-white group-hover:text-blue-500 transition mb-3">
+                                @item.Name
+                            </h2>
+                            <p class="text-sm text-gray-400 leading-relaxed flex-1">
+                                @item.Description
+                            </p>
+                        </a>
+                    }
+                </div>
+            }
+            else
+            {
+                <p class="text-gray-500 font-mono text-sm">// zatím žádné položky</p>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    record EdcItem(string Name, string Category, string Description, string Url);
+
+    private readonly List<EdcItem> _edcItems =
+    [
+        new EdcItem(
+            "Victorinox Cadet",
+            "Nářadí",
+            "Malý multitool, který nosím všude. Vystačí na 90 % denních drobností.",
+            "https://www.victorinox.com/"),
+
+        new EdcItem(
+            "iPhone",
+            "Elektronika",
+            "Telefon, fotoaparát, poznámky, platby – prostě všechno v jednom.",
+            "https://www.apple.com/"),
+
+        new EdcItem(
+            "Moleskine zápisník",
+            "Poznámky",
+            "Pro rychlé nápady a skicování, když nechci sahat po telefonu.",
+            "https://www.moleskine.com/"),
+
+        new EdcItem(
+            "Anker powerbanka",
+            "Elektronika",
+            "10 000 mAh, aby mi telefon nikdy neumřel uprostřed dne.",
+            "https://www.anker.com/"),
+    ];
+}
