@@ -1,0 +1,260 @@
+﻿@page "/admin/projects/new"
+@page "/admin/projects/edit/{id:guid}"
+@attribute [Authorize(Roles = "Admin")]
+@using FilipunkBlog.Application.Contracts
+@using FilipunkBlog.Application.Models
+@using Microsoft.AspNetCore.Authorization
+@inject IProjectService ProjectService
+@inject IImageService ImageService
+@inject ITagService TagAdminService
+@inject NavigationManager Navigation
+
+<PageTitle>@(_isNew ? "Nový projekt" : "Upravit projekt")</PageTitle>
+
+<div class="mx-auto max-w-3xl px-6 py-20 lg:px-8">
+    <div class="mb-12">
+        <span class="inline-block mb-4 rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
+            // ADMIN
+        </span>
+        <h1 class="font-mono text-3xl font-bold text-white">@(_isNew ? "Nový projekt" : "Upravit projekt")</h1>
+    </div>
+
+    <div class="flex flex-col gap-6">
+        <div>
+            <label class="font-mono text-xs text-gray-500 uppercase tracking-wider mb-2 block">Název</label>
+            <input @bind="_project.Title" @bind:event="oninput" @onchange="GenerateSlug"
+                   class="w-full rounded border border-gray-700 bg-gray-900 px-4 py-3 text-sm text-white font-mono focus:border-blue-600/50 focus:outline-none" />
+        </div>
+        <div>
+            <label class="font-mono text-xs text-gray-500 uppercase tracking-wider mb-2 block">Slug</label>
+            <input @bind="_project.Slug"
+                   class="w-full rounded border border-gray-700 bg-gray-900 px-4 py-3 text-sm text-white font-mono focus:border-blue-600/50 focus:outline-none" />
+        </div>
+        <div class="flex gap-4">
+            <div class="flex-1">
+                <label class="font-mono text-xs text-gray-500 uppercase tracking-wider mb-2 block">Rok začátku</label>
+                <input type="number" @bind="_project.StartYear"
+                       class="w-full rounded border border-gray-700 bg-gray-900 px-4 py-3 text-sm text-white font-mono focus:border-blue-600/50 focus:outline-none" />
+            </div>
+            <div class="flex-1">
+                <label class="font-mono text-xs text-gray-500 uppercase tracking-wider mb-2 block">Rok konce (nepovinné)</label>
+                <input type="number" @bind="_project.EndYear"
+                       class="w-full rounded border border-gray-700 bg-gray-900 px-4 py-3 text-sm text-white font-mono focus:border-blue-600/50 focus:outline-none" />
+            </div>
+        </div>
+        <div>
+            <label class="font-mono text-xs text-gray-500 uppercase tracking-wider mb-2 block">Tagy</label>
+            <div class="flex flex-wrap gap-2">
+                @foreach (var tag in _allTags)
+                {
+                    var isSelected = _selectedTagIds.Contains(tag.Id);
+                    <button type="button" @onclick="() => ToggleTag(tag.Id)"
+                            class="font-mono text-xs px-3 py-1.5 rounded-sm border transition @(isSelected ? "border-blue-600/50 bg-blue-600/20 text-blue-500" : "border-gray-700 bg-gray-800 text-gray-400 hover:border-blue-600/30")">
+                        @tag.Name
+                    </button>
+                }
+            </div>
+            <div class="flex gap-2 mt-3">
+                <input @bind="_newTagName" placeholder="Nový tag..."
+                       class="flex-1 rounded border border-gray-700 bg-gray-900 px-4 py-2 text-sm text-white font-mono focus:border-blue-600/50 focus:outline-none" />
+                <button type="button" @onclick="AddNewTag"
+                        class="font-mono text-xs px-4 py-2 bg-blue-600/20 text-blue-500 border border-blue-600/40 rounded hover:bg-blue-600/30 transition">
+                    + Přidat tag
+                </button>
+            </div>
+        </div>
+        <div>
+            <label class="font-mono text-xs text-gray-500 uppercase tracking-wider mb-2 block">Popis</label>
+            <textarea @bind="_project.Description" rows="3"
+                      class="w-full rounded border border-gray-700 bg-gray-900 px-4 py-3 text-sm text-white font-mono focus:border-blue-600/50 focus:outline-none resize-none"></textarea>
+        </div>
+        <div>
+            <label class="font-mono text-xs text-gray-500 uppercase tracking-wider mb-2 block">Detail (HTML)</label>
+            <textarea @bind="_project.Detail" rows="15"
+                      class="w-full rounded border border-gray-700 bg-gray-900 px-4 py-3 text-sm text-white font-mono focus:border-blue-600/50 focus:outline-none resize-y"></textarea>
+        </div>
+        <div>
+            <label class="font-mono text-xs text-gray-500 uppercase tracking-wider mb-2 block">Hlavní obrázek</label>
+            @if (!string.IsNullOrEmpty(_project.MainImage))
+            {
+                <div class="mb-3">
+                    <img src="@_project.MainImage" class="h-32 rounded border border-gray-700 object-cover" />
+                    <button @onclick="RemoveMainImage" class="mt-2 font-mono text-xs text-red-400 hover:text-red-300 transition">× Odebrat</button>
+                </div>
+            }
+            <InputFile OnChange="UploadMainImage" accept="image/*"
+                       class="w-full rounded border border-gray-700 bg-gray-900 px-4 py-3 text-sm text-gray-400 font-mono file:mr-4 file:rounded file:border-0 file:bg-blue-600/20 file:px-3 file:py-1 file:font-mono file:text-xs file:text-blue-500 cursor-pointer" />
+        </div>
+        <div>
+            <label class="font-mono text-xs text-gray-500 uppercase tracking-wider mb-2 block">Další obrázky</label>
+            @foreach (var img in _additionalImages)
+            {
+                <div class="mb-2 flex items-center gap-3">
+                    <img src="@img" class="h-16 rounded border border-gray-700 object-cover" />
+                    <button @onclick="() => _additionalImages.Remove(img)"
+                            class="font-mono text-xs text-red-400 hover:text-red-300 transition">
+                        × Odebrat
+                    </button>
+                </div>
+            }
+            <InputFile OnChange="UploadAdditionalImage" accept="image/*"
+                       class="w-full rounded border border-gray-700 bg-gray-900 px-4 py-3 text-sm text-gray-400 font-mono file:mr-4 file:rounded file:border-0 file:bg-blue-600/20 file:px-3 file:py-1 file:font-mono file:text-xs file:text-blue-500 cursor-pointer" />
+            @if (_uploading)
+            {
+                <p class="font-mono text-xs text-gray-500 mt-2">// nahrávám...</p>
+            }
+        </div>
+        <div class="flex items-center gap-3">
+            <input type="checkbox" @bind="_project.IsPublished" id="published" class="rounded border-gray-700" />
+            <label for="published" class="font-mono text-xs text-gray-400">Publikovat</label>
+        </div>
+
+        @if (!string.IsNullOrEmpty(_error))
+        {
+            <p class="font-mono text-xs text-red-400">@_error</p>
+        }
+
+        <div class="flex gap-4">
+            <button @onclick="Save"
+                    class="rounded font-mono text-sm px-6 py-3 bg-blue-600/20 text-blue-500 border border-blue-600/40 hover:bg-blue-600/30 transition">
+                @(_isNew ? "Vytvořit" : "Uložit")
+            </button>
+            <a href="/admin/projects"
+               class="rounded font-mono text-sm px-6 py-3 border border-gray-700 text-gray-400 hover:border-gray-500 transition">
+                Zrušit
+            </a>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public Guid? Id { get; set; }
+
+    private ProjectViewModel _project = new();
+    private bool _isNew => Id == null;
+    private string _error = string.Empty;
+    private bool _uploading = false;
+    private List<TagViewModel> _allTags = [];
+    private List<Guid> _selectedTagIds = [];
+    private List<string> _additionalImages = [];
+    private string _newTagName = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _allTags = await TagAdminService.GetTagsAsync();
+        if (!_isNew)
+        {
+            var existing = await ProjectService.GetAllProjectsAsync();
+            var found = existing.FirstOrDefault(x => x.Id == Id);
+            if (found != null)
+            {
+                _project = found;
+                _selectedTagIds = _project.TagIds.ToList();
+                _additionalImages = _project.Images.ToList();
+            }
+        }
+    }
+
+    private void GenerateSlug()
+    {
+        if (_isNew)
+            _project.Slug = _project.Title.ToLower()
+                .Replace(" ", "-")
+                .Replace("á", "a").Replace("č", "c").Replace("ď", "d")
+                .Replace("é", "e").Replace("ě", "e").Replace("í", "i")
+                .Replace("ň", "n").Replace("ó", "o").Replace("ř", "r")
+                .Replace("š", "s").Replace("ť", "t").Replace("ú", "u")
+                .Replace("ů", "u").Replace("ý", "y").Replace("ž", "z");
+    }
+
+    private async Task Save()
+    {
+        if (string.IsNullOrEmpty(_project.Title)) { _error = "Název je povinný."; return; }
+        if (string.IsNullOrEmpty(_project.Slug)) { _error = "Slug je povinný."; return; }
+        if (_project.StartYear == 0) { _error = "Rok začátku je povinný."; return; }
+
+        _project.TagIds = _selectedTagIds;
+        _project.Images = _additionalImages;
+
+        try
+        {
+            if (_isNew) await ProjectService.CreateProjectAsync(_project);
+            else await ProjectService.UpdateProjectAsync(_project);
+
+            Navigation.NavigateTo("/admin/projects");
+        }
+        catch (Exception ex)
+        {
+            _error = $"Chyba při ukládání: {ex.Message}";
+        }
+    }
+
+    private async Task UploadMainImage(InputFileChangeEventArgs e)
+    {
+        _uploading = true;
+        _error = string.Empty;
+        try
+        {
+            var file = e.File;
+            using var stream = file.OpenReadStream(maxAllowedSize: 5 * 1024 * 1024);
+            _project.MainImage = await ImageService.UploadAsync(stream, file.Name);
+        }
+        catch (Exception ex)
+        {
+            _error = $"Chyba při nahrávání obrázku: {ex.Message}";
+        }
+        finally
+        {
+            _uploading = false;
+        }
+    }
+
+    private async Task UploadAdditionalImage(InputFileChangeEventArgs e)
+    {
+        _uploading = true;
+        _error = string.Empty;
+        try
+        {
+            var file = e.File;
+            using var stream = file.OpenReadStream(maxAllowedSize: 5 * 1024 * 1024);
+            var url = await ImageService.UploadAsync(stream, file.Name);
+            _additionalImages.Add(url);
+        }
+        catch (Exception ex)
+        {
+            _error = $"Chyba při nahrávání obrázku: {ex.Message}";
+        }
+        finally
+        {
+            _uploading = false;
+        }
+    }
+
+    private void ToggleTag(Guid id)
+    {
+        if (_selectedTagIds.Contains(id)) _selectedTagIds.Remove(id);
+        else _selectedTagIds.Add(id);
+    }
+
+    private async Task AddNewTag()
+    {
+        if (string.IsNullOrWhiteSpace(_newTagName)) return;
+        try
+        {
+            var slug = _newTagName.ToLower()
+                .Replace(" ", "-")
+                .Replace("á", "a").Replace("č", "c")
+                .Replace("š", "s").Replace("ž", "z");
+            var newTag = await TagAdminService.CreateTagAsync(_newTagName, slug);
+            _allTags.Add(newTag);
+            _selectedTagIds.Add(newTag.Id);
+            _newTagName = string.Empty;
+        }
+        catch (Exception ex)
+        {
+            _error = $"Chyba při vytváření tagu: {ex.Message}";
+        }
+    }
+
+    private void RemoveMainImage() => _project.MainImage = null;
+}

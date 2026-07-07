@@ -9,6 +9,6 @@ namespace FilipunkBlog.Application.Contracts;
 public interface ITagService
 {
     Task<List<TagViewModel>> GetTagsAsync();
-    Task CreateTagAsync(string name, string slug);
+    Task<TagViewModel> CreateTagAsync(string name, string slug);
     Task DeleteTagAsync(Guid id);
 }

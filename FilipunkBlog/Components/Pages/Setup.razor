@@ -1,0 +1,462 @@
+﻿@page "/setup"
+@using System.Linq
+
+<PageTitle>Filip Lafata - Setup / EDC</PageTitle>
+
+<div class="mx-auto max-w-7xl px-6 py-20 lg:px-8">
+    <div class="mb-12">
+        <span class="inline-block mb-4 rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
+            // SETUP
+        </span>
+        <h1 class="font-mono text-3xl font-bold text-white">Můj stack</h1>
+    </div>
+
+    <div class="grid gap-12 lg:grid-cols-12">
+        <div class="lg:col-span-12">
+            @if (_edcItems.Count > 0)
+            {
+                <table class="w-full border-collapse font-mono text-sm">
+                    <tbody>
+                        @foreach (var group in GroupedItems)
+                        {
+                            
+                            <tr class="bg-gray-800/50">
+                                <td colspan="3" class="px-4 py-2 text-xs text-blue-500 uppercase tracking-widest border-b border-gray-700">
+                                    @group.Key.ToString().Replace("_", " ")
+                                </td>
+                            </tr>
+
+                            @foreach (var item in group)
+                            {
+                                <tr class="border-b border-gray-800 hover:bg-gray-900/50 transition">
+                                    <td class="px-4 py-3 text-white font-bold whitespace-nowrap">
+                                        @item.Item
+                                    </td>
+                                    <td class="px-4 py-3 text-gray-400 leading-relaxed">
+                                        @item.Type
+                                    </td>
+                                    <td class="px-4 py-3 text-right whitespace-nowrap">
+                                        <a href="@item.Url"
+                                           target="_blank"
+                                           rel="noopener noreferrer"
+                                           class="text-blue-500 hover:text-blue-400 transition">
+                                            @item.UrlTitle.ToString()
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+                <small>Poslední update: @lastUpdateDate</small>
+            }
+            else
+            {
+                <p class="text-gray-500 font-mono text-sm">// zatím žádné položky</p>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    enum Category
+    {
+        Setup,
+        Práce,
+        Every_Day_Carry,
+        Herní_PC,
+        Software,
+    }
+
+    enum URL
+    {
+        Neznámý,
+        Alza,
+        Mironet,
+        Samsung,
+        Microsoft,
+        JetBrains,
+        GitHub,
+        ZAPHosting,
+        Notion,
+        GoodNotes,
+        Firefox,
+        Brave,
+        Discord,
+        Bitwarden,
+        Apple,
+        Spotify,
+    }
+
+
+    record EdcItem(string Item, Category Category, string Type, string Url, URL UrlTitle);
+
+    private readonly List<EdcItem> _edcItems =
+    [
+
+        /* == Setup == */
+
+        new EdcItem
+        (
+        "Myš",
+        Category.Setup,
+        "Logitech G305",
+        "https://www.alza.cz/logitech-g305-recoil-cerna-d5285988.htm",
+        URL.Alza
+        ),
+
+        new EdcItem
+        (
+        "Sluchátka",
+        Category.Setup,
+        "Logitech Lightspeed G435",
+        "https://www.alza.cz/logitech-g435-lightspeed-wless-gaming-headset-cerna-d6710561.htm",
+        URL.Alza
+        ),
+
+        new EdcItem
+        (
+        "Klávesnice",
+        Category.Setup,
+        "Eternico K800",
+        "https://www.alza.cz/eternico-k800-wireless-seda-cz-sk-d13135874.htm",
+        URL.Alza
+        ),
+
+        new EdcItem
+        (
+        "Monitor #1 - Hlavní",
+        Category.Setup,
+        "27\" Samsung Odyssey G30D",
+        "https://www.alza.cz/27-samsung-odyssey-g30d-d12489737.htm?o=2",
+        URL.Alza
+        ),
+
+        new EdcItem
+        (
+        "Monitor #2",
+        Category.Setup,
+        "24\" Samsung Business monitor S31C",
+        "https://www.samsung.com/cz/monitors/business/essential-monitor-s3-24-inch-borderless-design-ips-panel-fhd-freesync-ls24c310eauxen/",
+        URL.Samsung
+        ),
+
+        new EdcItem
+        (
+        "Podložka",
+        Category.Setup,
+        "Rapture RESPAWN 3XL šedá",
+        "https://www.alza.cz/rapture-respawn-seda?dq=7855270",
+        URL.Alza
+        ),
+
+
+        /* == Práce == */
+
+        new EdcItem
+        (
+        "Osobní notebook",
+        Category.Práce,
+        "Apple Macbook Air M1 - 16GB / 256 GB",
+        "https://www.alza.cz/macbook-air-13-m1-cz-vesmirne-sedy-2020-bazar-d6632320.htm",
+        URL.Alza
+        ),
+
+        new EdcItem
+        (
+        "Pracovní notebook",
+        Category.Práce,
+        "HP PROBOOK 460 G11",
+        "https://www.alza.cz/hp-probook-46x-g11?dq=12604467&evt=ac&pos=1&sqid=LuigisBox_6454dd40-5694-4c66-90c6-2f5ca03c5c42",
+        URL.Alza
+        ),
+
+        new EdcItem
+        (
+        "Batoh",
+        Category.Práce,
+        "Kingsons Laptop Backpack Dark Grey",
+        "https://www.alza.cz/sport/kingsons-laptop-backpack-dark-grey-15-6-d12533861.htm",
+        URL.Alza
+        ),
+
+
+       /* == EDC == */
+
+        new EdcItem
+        (
+        "Telefon",
+        Category.Every_Day_Carry,
+        "Apple iPhone 15",
+        "https://www.alza.cz/iphone-15?dq=7927612",
+        URL.Alza
+        ),
+
+        new EdcItem
+        (
+        "Sluchátka",
+        Category.Every_Day_Carry,
+        "Apple AirPods Pro 2. generace",
+        "https://www.alza.cz/apple-airpods-pro-2-generace-s-magsafe-usb-c-2022-d7927651.htm?evt=re&exps=apple+airpods+pro+2",
+        URL.Alza
+        ),
+
+        new EdcItem
+        (
+        "Hodinky",
+        Category.Every_Day_Carry,
+        "Apple Watch Series 11",
+        "https://www.alza.cz/apple-watch-series-11-46mm-vesmirne-sedy-hlinik-s-cernym-sportovnim-reminkem-m-l-d13079764.htm?invalidGroups=36363",
+        URL.Alza
+        ),
+
+       new EdcItem
+       (
+        "Tablet",
+        Category.Every_Day_Carry,
+        "Apple iPad Air 11\" M3 128GB",
+        "https://www.alza.cz/ipad-air-11-m3-128gb-wifi-vesmirne-seda-2025-d12828081.htm",
+        URL.Alza
+       ),
+
+        new EdcItem
+        (
+        "Peněženka",
+        Category.Every_Day_Carry,
+        "PanzerGlass CARE",
+        "https://www.alza.cz/panzerglass-care-apple-magsafe-rfid-cardholder-cerne-pouzdro-na-platebni-karty-d12693360.htm?o=30",
+        URL.Alza
+        ),
+
+        /* == Herní PC == */
+
+        new EdcItem
+        (
+        "Základní deska",
+        Category.Herní_PC,
+        "GIGABYTE A520M K V2",
+        "https://www.alza.cz/gigabyte-a520m-k-v2-d7772144.htm",
+        URL.Alza
+        ),
+
+       new EdcItem
+       (
+        "CPU",
+        Category.Herní_PC,
+        "AMD Ryzen 5 4500",
+        "https://www.alza.cz/amd-ryzen-5-4500-d7082016.htm",
+        URL.Alza
+       ),
+
+        new EdcItem
+        (
+        "RAM",
+        Category.Herní_PC,
+        "Patriot Viper Steel 32GB KIT DDR4 3200Mhz CL16",
+        "https://www.alza.cz/patriot-viper-steel-32gb-kit-ddr4-3200mhz-cl16-d6275912.htm",
+        URL.Alza
+        ),
+
+        new EdcItem
+        (
+        "Disk #1",
+        Category.Herní_PC,
+        "Verbatim Vi3000 1TB",
+        "https://www.alza.cz/verbatim-vi3000-1tb-d7689353.htm",
+        URL.Alza
+        ),
+
+        new EdcItem
+        (
+        "Disk #2",
+        Category.Herní_PC,
+        "ADATA Ultimate SU650 1TB",
+        "https://www.alza.cz/adata-ultimate-su650-1tb-d7875104.htm",
+        URL.Alza
+        ),
+    
+        new EdcItem
+        (
+        "Grafická karta",
+        Category.Herní_PC,
+        "GAINWARD GeForce RTX 3050 Pegasus 6G",
+        "https://www.alza.cz/gainward-geforce-rtx-3050-pegasus-6g-d9910890.htm",
+        URL.Alza
+        ),
+
+
+        new EdcItem
+        (
+        "Zdroj",
+        Category.Herní_PC,
+        "ENERMAX 625W MODU82+",
+        "https://www.mironet.cz/enermax-625w-modu82-zdroj-emd625awt-120-mm+dp89930/",
+        URL.Mironet
+        ),
+
+
+        new EdcItem
+        (
+        "Skříň",
+        Category.Herní_PC,
+        "Cooler Master Force 500",
+        "https://www.alza.cz/cooler-master-force-500-d401901.htm",
+        URL.Alza
+        ),
+
+
+        /* == Software == */
+
+        new EdcItem
+        (
+        "IDE - WINDOWS",
+        Category.Software,
+        "Visual Studio",
+        "https://visualstudio.microsoft.com/",
+        URL.Microsoft
+        ),
+
+        new EdcItem
+        (
+        "IDE - MACOS",
+        Category.Software,
+        "JetBrains Rider",
+        "https://www.jetbrains.com/rider/",
+        URL.JetBrains
+        ),
+
+        new EdcItem
+        (
+        "Code editor",
+        Category.Software,
+        "Visual Studio Code",
+        "https://code.visualstudio.com/",
+        URL.JetBrains
+        ),
+
+        new EdcItem
+        (
+        "Task Management",
+        Category.Software,
+        "Notion",
+        "https://www.notion.so/",
+        URL.Notion
+        ),
+
+        new EdcItem
+        (
+        "Produktivita / Design",
+        Category.Software,
+        "GoodNotes",
+        "https://www.goodnotes.com/",
+        URL.GoodNotes
+        ),
+
+        new EdcItem
+        (
+        "SQL Client - WINDOWS",
+        Category.Software,
+        "SQL Server Management Studio",
+        "https://learn.microsoft.com/cs-cz/ssms/sql-server-management-studio-ssms",
+        URL.Microsoft
+        ),
+
+        new EdcItem
+        (
+        "SQL Client - MACOS",
+        Category.Software,
+        "JetBrains DataGrip",
+        "https://www.jetbrains.com/datagrip/",
+        URL.JetBrains
+        ),
+
+        new EdcItem
+        (
+        "Git Client",
+        Category.Software,
+        "GitHub Desktop",
+        "https://desktop.github.com/",
+        URL.GitHub
+        ),
+
+        new EdcItem
+        (
+        "VPS Hosting",
+        Category.Software,
+        "ZAP Hosting",
+        "https://www.zaphosting.com/",
+        URL.ZAPHosting
+        ),
+
+        new EdcItem
+        (
+        "Cloud Hosting",
+        Category.Software,
+        "Microsoft Azure",
+        "https://azure.microsoft.com/",
+        URL.Microsoft
+        ),
+
+                
+        new EdcItem
+        (
+        "Prohlížeč - Hlavní",
+        Category.Software,
+        "Brave",
+        "https://brave.com/",
+        URL.Brave
+        ),
+
+        new EdcItem
+        (
+        "Prohlížeč - Alternativní",
+        Category.Software,
+        "Firefox",
+        "https://www.mozilla.org/cs/firefox/",
+        URL.Firefox
+        ),
+
+       new EdcItem
+       (
+        "Komunikace",
+        Category.Software,
+        "Teams",
+        "https://www.microsoft.com/cs-cz/microsoft-teams/",
+        URL.Microsoft
+       ),
+
+        new EdcItem
+        (
+        "Password Manager",
+        Category.Software,
+        "Bitwarden",
+        "https://bitwarden.com/",
+        URL.Bitwarden
+        ),
+
+        new EdcItem
+        (
+        "Password Manager",
+        Category.Software,
+        "Apple Passwords",
+        "https://support.apple.com/en-us/104955",
+        URL.Apple
+        ),
+
+        new EdcItem
+        (
+        "Hudba",
+        Category.Software,
+        "Spotify",
+        "https://www.spotify.com/",
+        URL.Spotify
+        ),
+
+    ];
+
+    private IEnumerable<IGrouping<Category, EdcItem>> GroupedItems =>
+    _edcItems.GroupBy(i => i.Category);
+
+    string lastUpdateDate = "07.07.2026 08:50";
+
+}

@@ -1,0 +1,98 @@
+﻿@page "/project/{slug}"
+@using FilipunkBlog.Application.Contracts
+@using FilipunkBlog.Application.Models
+@inject IProjectService ProjectService
+@inject NavigationManager Navigation
+
+<PageTitle>Filip Lafata - @(_project?.Title ?? "Projekt")</PageTitle>
+
+<HeadContent>
+    <meta name="description" content="@_project?.Description" />
+    <meta property="og:title" content="@_project?.Title" />
+    <meta property="og:description" content="@_project?.Description" />
+    <meta property="og:image" content="@_project?.MainImage" />
+    <meta property="og:url" content="https://filipunk.cz/project/@_project?.Slug" />
+    <meta property="og:type" content="article" />
+    <meta name="twitter:card" content="summary_large_image" />
+</HeadContent>
+
+@if (_project == null)
+{
+    <div class="mx-auto max-w-3xl px-6 py-20 lg:px-8">
+        <p class="font-mono text-gray-500 text-sm">// načítám...</p>
+    </div>
+}
+else
+{
+    <!-- HERO -->
+    <div class="border-b border-gray-800 bg-gray-950">
+        <div class="mx-auto max-w-3xl px-6 py-16 lg:px-8">
+            <a href="/" class="inline-flex items-center gap-2 font-mono text-xs text-gray-500 hover:text-blue-500 transition mb-8">
+                ← Zpět na hlavní stránku
+            </a>
+            <div class="flex flex-wrap items-center gap-3 mb-4">
+                <span class="font-mono text-xs px-3 py-1 rounded-sm bg-blue-600/10 border border-blue-600/40 text-blue-500">
+                    @_project.YearDisplay
+                </span>
+                @foreach (var tag in _project.Tags)
+                {
+                    <span class="font-mono text-xs px-3 py-1 rounded-sm bg-gray-800 border border-gray-700 text-gray-400">
+                        @tag
+                    </span>
+                }
+            </div>
+            <h1 class="font-mono text-4xl font-bold text-white leading-tight mb-4">@_project.Title</h1>
+            <p class="text-gray-400 text-lg leading-relaxed max-w-2xl">@_project.Description</p>
+        </div>
+    </div>
+
+    <!-- OBSAH -->
+    <article class="mx-auto max-w-3xl px-6 py-16 lg:px-8">
+
+        @if (!string.IsNullOrEmpty(_project.MainImage))
+        {
+            <img src="@_project.MainImage" alt="@_project.Title"
+                 class="w-full rounded-lg mb-12 border border-gray-800 shadow-lg" />
+        }
+
+        <div class="prose prose-invert prose-green max-w-none text-gray-300 leading-relaxed mb-12">
+            @((MarkupString)_project.Detail)
+        </div>
+
+        @if (_project.Images.Any(x => x != _project.MainImage))
+        {
+            <div class="mt-12 pt-8 border-t border-gray-800">
+                <span class="inline-block mb-6 font-mono text-xs text-blue-500 uppercase tracking-widest">// Galerie</span>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    @foreach (var img in _project.Images.Where(x => x != _project.MainImage))
+                    {
+                        <img src="@img" alt="@_project.Title"
+                             class="w-full rounded-lg border border-gray-800 object-cover aspect-video hover:border-blue-600/50 hover:scale-[1.02] transition-all cursor-pointer" />
+                    }
+                </div>
+            </div>
+        }
+
+        <div class="mt-12 pt-8 border-t border-gray-800">
+            <a href="/" class="font-mono text-xs text-blue-500 hover:text-blue-400 transition">
+                ← Zpět na hlavní stránku
+            </a>
+        </div>
+    </article>
+}
+
+@code {
+    [Parameter] public string Slug { get; set; } = string.Empty;
+
+    private ProjectViewModel? _project;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _project = await ProjectService.GetProjectBySlugAsync(Slug);
+        if (_project == null)
+        {
+            Navigation.NavigateTo("/projects");
+            return;
+        }
+    }
+}

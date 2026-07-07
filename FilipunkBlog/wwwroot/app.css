@@ -43,3 +43,24 @@ h1:focus {
     text-align: start;
 }
 
+#components-reconnect-modal {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    top: auto;
+    left: auto;
+    width: auto;
+    border: none;
+    background: transparent;
+    padding: 0;
+}
+
+    #components-reconnect-modal::backdrop {
+        display: none;
+    }
+
+dialog {
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+}

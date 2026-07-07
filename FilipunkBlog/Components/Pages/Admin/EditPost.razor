@@ -151,19 +151,37 @@
 
         _post.TagIds = _selectedTagIds;
 
-        if (_isNew) await BlogPostService.CreatePostAsync(_post);
-        else await BlogPostService.UpdatePostAsync(_post);
+        try
+        {
+            if (_isNew) await BlogPostService.CreatePostAsync(_post);
+            else await BlogPostService.UpdatePostAsync(_post);
 
-        Navigation.NavigateTo("/admin/posts");
+            Navigation.NavigateTo("/admin/posts");
+        }
+        catch (Exception ex)
+        {
+            _error = $"Chyba při ukládání: {ex.Message}";
+        }
     }
 
     private async Task UploadImage(InputFileChangeEventArgs e)
     {
         _uploading = true;
-        var file = e.File;
-        using var stream = file.OpenReadStream(maxAllowedSize: 5 * 1024 * 1024);
-        _post.Image = await ImageService.UploadAsync(stream, file.Name);
-        _uploading = false;
+        _error = string.Empty;
+        try
+        {
+            var file = e.File;
+            using var stream = file.OpenReadStream(maxAllowedSize: 5 * 1024 * 1024);
+            _post.Image = await ImageService.UploadAsync(stream, file.Name);
+        }
+        catch (Exception ex)
+        {
+            _error = $"Chyba při nahrávání obrázku: {ex.Message}";
+        }
+        finally
+        {
+            _uploading = false;
+        }
     }
 
     private void ToggleTag(Guid id)

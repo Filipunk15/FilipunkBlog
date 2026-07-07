@@ -2,6 +2,7 @@
 @using FilipunkBlog.Application.Contracts
 @using FilipunkBlog.Application.Models
 @inject IBlogPostService BlogPostService
+@inject IProjectService ProjectService  
 
 <PageTitle>Filip Lafata - Osobní portfolio</PageTitle>
 
@@ -36,7 +37,7 @@
             </div>
         </div>
         <div class="mt-20 flex gap-12">
-            @foreach (var stat in new[] { ("6+", "Projekty"), ("2+", "Roky praxe"), ("6", "Technologií") })
+            @foreach (var stat in new[] { ("6+", "Projekty"), ("2+", "Roky komerční praxe")})
             {
                 <div>
                     <div class="font-mono text-4xl font-bold text-white">@stat.Item1</div>
@@ -67,7 +68,7 @@
                     ("Zaměření", ".NET / C# "),
                     ("Databáze", "MSSQL, MySQL"),
                     ("Frontend", "HTML, CSS, JavaScript"),
-                    ("Nástroje", "Git, Visual Studio, Visual Studio Code, Notion, Jira"),
+                    ("Nástroje", "Git, Visual Studio, Visual Studio Code, Notion"),
                     ("Jazyk", "Čeština, Angličtina")
                 })
                 {
@@ -84,53 +85,52 @@
 <!-- PROJEKTY -->
 <section id="projects" class="bg-gray-900 border-b border-gray-800">
     <div class="mx-auto max-w-7xl px-6 py-20 lg:px-8">
-        <span class="inline-block mb-12 rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
-            // PROJEKTY
-        </span>
-        <div class="grid gap-6 sm:grid-cols-2">
-            @foreach (var p in _projects)
-            {
-                <div class="rounded-lg border border-gray-700 bg-gray-950 p-8 hover:border-blue-600/50 transition cursor-pointer group"
-                     @onclick="() => _selectedProject = p">
-                    <div class="flex justify-between items-start mb-4">
-                        <span class="font-mono text-xs text-blue-500">@p.Year</span>
-                        <span class="font-mono text-xs text-gray-500 group-hover:text-blue-500 transition">detail ↗</span>
-                    </div>
-                    <h3 class="font-mono text-base font-bold text-white mb-3">@p.Name</h3>
-                    <p class="text-sm text-gray-400 leading-relaxed mb-5">@p.Desc</p>
-                    <div class="flex flex-wrap gap-2">
-                        @foreach (var tag in p.Tags)
-                        {
-                            <span class="font-mono text-xs px-3 py-1 rounded-sm bg-gray-800 text-gray-400 border border-gray-700">@tag</span>
-                        }
-                    </div>
-                </div>
-            }
-        </div>
-    </div>
-</section>
-@if (_selectedProject != null)
-{
-    <div class="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/70 backdrop-blur-sm"
-         @onclick="() => _selectedProject = null">
-        <div class="relative bg-gray-900 border border-blue-600/50 rounded-xl p-10 max-w-lg w-full"
-             @onclick:stopPropagation="true">
-            <button class="absolute top-4 right-5 text-gray-500 hover:text-white font-mono text-xl"
-                    @onclick="() => _selectedProject = null">
-                ×
-            </button>
-            <div class="font-mono text-xs text-blue-500 mb-3">@_selectedProject.Year</div>
-            <h3 class="font-mono text-xl font-bold text-white mb-5">@_selectedProject.Name</h3>
-            <p class="text-gray-400 text-sm leading-relaxed mb-7">@_selectedProject.Detail</p>
-            <div class="flex flex-wrap gap-2">
-                @foreach (var tag in _selectedProject.Tags)
+        <div class="flex items-end justify-between mb-12">
+            <span class="inline-block rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
+                // PROJEKTY
+            </span>
+            <div class="flex items-center gap-3">
+                @if (_isAdmin)
                 {
-                    <span class="font-mono text-xs px-3 py-1 bg-gray-800 text-white border border-gray-700 rounded-sm">@tag</span>
+                    <a href="/admin/projects/new" class="font-mono text-xs px-3 py-1.5 bg-blue-600/20 text-blue-500 border border-blue-600/40 rounded hover:bg-blue-600/30 transition">
+                        + Přidat projekt
+                    </a>
+                }
+                @if (_projects.Count() >= maxProjects)
+                {
+                    <a href="/projects" class="font-mono text-xs text-blue-500 hover:text-blue-400 transition">Všechny projekty →</a>
                 }
             </div>
         </div>
+        <div class="grid gap-6 sm:grid-cols-2">
+                @foreach (var p in _projects)
+                {
+                    <a href="/project/@p.Slug" class="rounded-lg border border-gray-700 bg-gray-950 p-8 hover:border-blue-600/50 transition cursor-pointer group block">
+                            <div class="flex justify-between items-start mb-4">
+                                <span class="font-mono text-xs text-blue-500">@p.YearDisplay</span>
+                                <div class="flex items-center gap-2">
+                                @if (_isAdmin)
+                                {
+                                    <a href="/admin/projects/edit/@p.Id" @onclick:stopPropagation="true" class="font-mono text-xs px-2 py-0.5 border border-gray-700 text-gray-500 hover:border-blue-600/50 hover:text-blue-500 transition rounded">
+                                        ✎
+                                    </a>
+                                }
+            <span class="font-mono text-xs text-gray-500 group-hover:text-blue-500 transition">detail ↗</span>
+        </div>
     </div>
-}
+                        <h3 class="font-mono text-base font-bold text-white mb-3">@p.Title</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed mb-5">@p.Description</p>
+                        <div class="flex flex-wrap gap-2">
+                            @foreach (var tag in p.Tags)
+                            {
+                                <span class="font-mono text-xs px-3 py-1 rounded-sm bg-gray-800 text-gray-400 border border-gray-700">@tag</span>
+                            }
+                        </div>
+                    </a>
+                }
+        </div>
+    </div>
+</section>
 
 
 <!-- TECHNOLOGIE -->
@@ -184,7 +184,17 @@
             <span class="inline-block rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
                 // BLOG
             </span>
-            <a href="/posts" class="font-mono text-xs text-blue-500 hover:text-blue-400 transition">Všechny články →</a>
+            <div class="flex items-center gap-3">
+                @if (_isAdmin)
+                {
+                    <a href="/admin/posts/new" class="font-mono text-xs px-3 py-1.5 bg-blue-600/20 text-blue-500 border border-blue-600/40 rounded hover:bg-blue-600/30 transition">
+                        + Nový článek
+                    </a>
+                }
+                @if (_recentPosts.Count > 0){
+                    <a href="/posts" class="font-mono text-xs text-blue-500 hover:text-blue-400 transition">Všechny články →</a>
+                }
+            </div>
         </div>
         <div class="flex flex-col divide-y divide-gray-800">
             @if (_recentPosts.Count > 0)
@@ -260,65 +270,66 @@
                 </div>
                 <span class="ml-auto text-gray-700 group-hover:text-blue-500 transition font-mono">↗</span>
             </a>
+            <div class="relative group/cv">
+                <button @onclick="() => _showDropdown = !_showDropdown"
+                        class="w-full flex items-center gap-5 rounded-lg border border-gray-700 bg-gray-950 px-6 py-5 hover:border-blue-600/50 transition group">
+                    <span class="text-gray-500 group-hover:text-blue-500 transition font-mono text-lg">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </span>
+                    <div class="text-left">
+                        <div class="font-mono text-sm font-bold text-white">Životopis (CV)</div>
+                        <div class="text-xs text-gray-500">Stáhnout životopis</div>
+                    </div>
+                    <span class="ml-auto text-gray-700 group-hover:text-blue-500 transition font-mono">
+                        @(_showDropdown ? "↑" : "↓")
+                    </span>
+                </button>
+
+                @if (_showDropdown)
+                {
+                    <div class="absolute z-10 mt-1 w-full rounded-lg border border-gray-700 bg-gray-950 overflow-hidden">
+                        <a href="/files/lafata_cv-cz.pdf" target="_blank"
+                           class="flex items-center gap-3 px-6 py-4 hover:bg-gray-800 transition font-mono text-sm text-white">
+                            <span class="fi fi-cz"></span> CZ verze
+                        </a>
+                        <div class="flex items-center gap-3 px-6 py-4 border-t border-gray-800 font-mono text-sm text-gray-600 cursor-not-allowed">
+                            <span class="fi fi-gb"></span> EU verze
+                            <span class="ml-auto text-xs text-gray-700">// připravuji</span>
+                        </div>
+                    </div>
+                }
+            </div>
         </div>
     </div>
 </section>
 
 @code {
-    private ProjectItem? _selectedProject;
     private List<BlogPostViewModel> _recentPosts = [];
+    private List<ProjectViewModel> _projects = [];
+
+
+    private bool _showDropdown = false;
+
+    private int maxProjects = 4;
+
+    [CascadingParameter] private Task<AuthenticationState>? AuthState { get; set; }
+    private bool _isAdmin = false;
 
     protected override async Task OnInitializedAsync()
     {
         _recentPosts = await BlogPostService.GetRecentPostsAsync(3);
+        PagedResult<ProjectViewModel> pagedResult = await ProjectService.GetProjectsAsync(1, maxProjects);
+        _projects = pagedResult.Items;
+
+        if (AuthState != null)
+        {
+            var auth = await AuthState;
+            _isAdmin = auth.User.IsInRole("Admin");
+        }
     }
 
-    record ProjectItem(string Name, string Desc, string Detail, string[] Tags, string Year);
     record SkillGroup(string Group, string[] Items);
     record TimelineItem(string Year, string Role, string Company, string Desc);
-
-    private readonly List<ProjectItem> _projects =
-    [
-            new("Internal Training Management System",
-            "Systém pro správu a evidenci firemních školení a kurzů.",
-            "Webová aplikace pro správu firemních školení — od plánování kurzů přes evidenci účastníků až po sledování certifikátů a jejich platnosti.",
-            ["C#", "SQL", "Blazor"], "2026"),
-        
-            new("Internal Visitor Management System",
-            "Interní systém pro evidenci vozů / osob pohybujících se po aréálu firmy",
-            "Recepční systém pro evidenci návštěvníků - plánování návštěv, automatické notifikace hostitelům.",
-            ["C#", "Blazor", "Graph API", "HTML/CSS", "Graph API", "Entra ID", "MSSQL"], "2025"),
-            
-            new("Runity",
-            "Můj první vydaný indie herní projekt",
-            "Minimalistický endless runner, ve kterém se hráč snaží překonat své vlastní maximální skóre. Hru jsem si dal za úkol vytvořit za jediný vikend, od nápadu až po dokončení.",
-            ["C#", "Unity"], "2025"),
-
-            new("Inventory Management Application",
-            "Inventurní aplikace pro snadnější kontrolu položek ve výrobě",
-            "Jednoduchá aplikace pro Android mobilní skener, která usnadňuje kontrolu určitého úseku ve firmě (výroba). Naskenováním etikety, napočítání položek, zadání do aplikace, pokud není etiketa, je možnost zapsat položku manuálně. Aplikace data ukládá do databáze a zasílá Excel report, kde kterýkoliv uživatel může s daty pracovat.",
-            ["C#", "MAUI"], "2025"),
-
-            new("Internal Document Management System",
-            "Webová aplikace pro tvoření požadavků na nákup, zpracovávání faktur s procesem schválení.",
-            "IDMS je aplikace, pro tvorbu požadavků na nákup, následného vytvoření objednávky a párování žádanky + objednávky + faktury. Každá část z tohoto má vlastní proces schválení, který musí projít.",
-            ["C#", "MSSQL", "ARES API", "Blazor"], "2024-2025"),
-            
-            new("Internal Quality System",
-            "Interní systém pro evidenci kontrol daného dílu putující přes kontrolu quality wall.",
-            "Aplikace byla ovládána pomocí čtečky čárových kódu, které byly připojeny k TV pro následnou prezentaci vad daných dílů.",
-            ["Node.js", "MSSQL", "C#", "REST API", "Informix SQL", "Oracle"], "2024"),
-        
-            new("Smartparking System",
-            "Aplikace pro pronájem parkovacích míst.",
-            "Webová aplikace pro vylepšení svých dovedností v jazyce Java a frameworku Spring Boot. Jedná se o aplikaci pro pronajímání soukromých parkovacích míst na delší dobu, využitelné ve větších městech.",
-            ["Java", "MySQL", "HTML/CSS"], "2024"),
-            
-            new("Smart Stopwatch - Maturitní projekt",
-            "Maturitní projekt, který sloužil ke složení praktické maturitní zkoušky",
-            "Maturitní projekt, který sloužil ke složení praktické maturitní zkoušky. Projekt byl postaven na platformě Arduino, konkrétně ESP32 a Wemos D1. Zkouška se dále skládala z vlastní Android aplikace, webové stránky a ukládání veškerého zdrojového kódu na GitHub.",
-            ["C++ (Arduino)", "HTML/CSS/Javascript", "Java (Android)"], "2023"),
-    ];
 
     private readonly List<SkillGroup> _skillGroups =
     [

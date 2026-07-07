@@ -65,7 +65,7 @@ else
         </div>
     </article>
 
-    <div class="mt-16 pt-10 border-t border-gray-800">
+    <div class="mx-auto max-w-3xl px-6 lg:px-8 mt-16 pt-10 border-t border-gray-800">
         <h2 class="font-mono text-xs text-blue-500 uppercase tracking-widest mb-8">// KOMENTÁŘE</h2>
 
         @if (_comments.Count > 0)
@@ -139,9 +139,13 @@ else
     protected override async Task OnInitializedAsync()
     {
         _post = await BlogPostService.GetPostBySlugAsync(Slug);
-        if (_post == null) Navigation.NavigateTo("/posts");
-        if (_post != null) await BlogPostService.IncrementViewsAsync(_post.Id);
-        if (_post != null) _comments = await CommentService.GetApprovedByPostAsync(_post.Id);
+        if (_post == null)
+        {
+            Navigation.NavigateTo("/posts");
+            return;
+        }
+        await BlogPostService.IncrementViewsAsync(_post.Id);
+        _comments = await CommentService.GetApprovedByPostAsync(_post.Id);
     }
 
     private async Task SubmitComment()
@@ -151,7 +155,14 @@ else
         if (string.IsNullOrWhiteSpace(_content)) { _error = "Zadej komentář."; return; }
         if (_content.Length > 1000) { _error = "Komentář je příliš dlouhý."; return; }
 
-        await CommentService.AddAsync(_post!.Id, _name, _content);
-        _submitted = true;
+        try
+        {
+            await CommentService.AddAsync(_post!.Id, _name, _content);
+            _submitted = true;
+        }
+        catch (Exception ex)
+        {
+            _error = $"Chyba při odesílání komentáře: {ex.Message}";
+        }
     }
 }

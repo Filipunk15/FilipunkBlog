@@ -30,6 +30,7 @@ public static class DependencyInjection
         services.AddScoped<TagRepository>();
         services.AddScoped<SeedService>();
         services.AddScoped<CommentRepository>();
+        services.AddScoped<ProjectRepository>();
 
 
         services.AddScoped<IBlogPostService, BlogPostService>();
@@ -38,6 +39,7 @@ public static class DependencyInjection
         services.AddScoped<ICategoryAdminService, CategoryAdminService>();
         services.AddScoped<IImageService, ImageService>();
         services.AddScoped<ICommentService, CommentService>();
+        services.AddScoped<IProjectService, ProjectService>();
 
         return services;
     }

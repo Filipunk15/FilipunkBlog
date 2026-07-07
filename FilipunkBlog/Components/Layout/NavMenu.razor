@@ -18,7 +18,8 @@
                 <a class="text-gray-400 hover:text-white transition" href="#projects">Projekty</a>
                 <a class="text-gray-400 hover:text-white transition" href="#skills">Zkušenosti</a>
                 <a class="text-gray-400 hover:text-white transition" href="#blog">Blog</a>
-                <a class="text-gray-400 hover:text-white transition" href="/search">Hledat</a>
+                <a class="text-gray-400 hover:text-white transition" href="/setup">Vybavení</a>
+                <a class="text-gray-400 hover:text-white transition" href="#kontakt">Kontakt</a>
             </nav>
             <div class="flex items-center gap-3">
                 <AuthorizeView>
@@ -26,9 +27,6 @@
                         <a href="/admin" class="hidden sm:block rounded font-mono text-xs px-3 py-1.5 bg-gray-800 text-white hover:bg-gray-700 transition">Admin</a>
                         <a href="/Account/Logout" class="hidden sm:block rounded font-mono text-xs px-3 py-1.5 border border-gray-700 text-gray-400 hover:text-white transition">Logout</a>
                     </Authorized>
-                    <NotAuthorized>
-                        <a href="/Account/Login" class="hidden sm:block rounded font-mono text-xs px-3 py-1.5 bg-blue-600/20 text-blue-500 border border-blue-600/40 hover:bg-blue-600/30 transition">Login</a>
-                    </NotAuthorized>
                 </AuthorizeView>
                 <button @onclick="ToggleMenu" class="sm:hidden rounded border border-gray-700 p-2 text-gray-400 hover:text-white transition">
                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -61,7 +59,9 @@
                     <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition"
                        href="/posts" @onclick="() => _menuOpen = false">Blog</a>
                     <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition"
-                       href="/search" @onclick="() => _menuOpen = false">Hledat</a>
+                       href="/setup" @onclick="() => _menuOpen = false">Vybavení</a>
+                    <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition"
+                       href="#kontakt" @onclick="() => _menuOpen = false">Kontakt</a>
                     <AuthorizeView>
                         <Authorized>
                             <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition"
@@ -69,10 +69,6 @@
                             <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition"
                                href="/Account/Logout" @onclick="() => _menuOpen = false">Logout</a>
                         </Authorized>
-                        <NotAuthorized>
-                            <a class="rounded px-3 py-2 text-sm text-blue-500 hover:bg-gray-800 transition"
-                               href="/Account/Login" @onclick="() => _menuOpen = false">Login</a>
-                        </NotAuthorized>
                     </AuthorizeView>
                 </nav>
             </div>
