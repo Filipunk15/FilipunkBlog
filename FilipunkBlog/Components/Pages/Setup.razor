@@ -1,61 +1,65 @@
-﻿@page "/setup"
+@page "/setup"
 @using System.Linq
+@inject IStringLocalizer<SharedResource> L
 
-<PageTitle>Filip Lafata - Setup / EDC</PageTitle>
+<PageTitle>@L["PageTitle_Setup"]</PageTitle>
 
 <div class="mx-auto max-w-7xl px-6 py-20 lg:px-8">
-    <div class="mb-12">
-        <span class="inline-block mb-4 rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
-            // SETUP
+    <div class="mb-10 flex flex-wrap items-start justify-between gap-4">
+        <div>
+            <h1 class="font-mono text-3xl font-bold text-white">@L["Setup_Title"]</h1>
+            <p class="mt-3 max-w-xl text-sm text-gray-400 leading-relaxed">
+                @L["Setup_Subtitle"]
+            </p>
+        </div>
+        <span class="font-mono text-xs text-gray-400 border border-gray-800 rounded px-3 py-1.5 whitespace-nowrap">
+            @L["Setup_LastUpdate"] @lastUpdateDate
         </span>
-        <h1 class="font-mono text-3xl font-bold text-white">Můj stack</h1>
     </div>
 
-    <div class="grid gap-12 lg:grid-cols-12">
-        <div class="lg:col-span-12">
-            @if (_edcItems.Count > 0)
+    @if (_edcItems.Count > 0)
+    {
+        <div class="flex flex-col gap-16">
+            @foreach (var group in GroupedItems)
             {
-                <table class="w-full border-collapse font-mono text-sm">
-                    <tbody>
-                        @foreach (var group in GroupedItems)
-                        {
-                            
-                            <tr class="bg-gray-800/50">
-                                <td colspan="3" class="px-4 py-2 text-xs text-blue-500 uppercase tracking-widest border-b border-gray-700">
-                                    @group.Key.ToString().Replace("_", " ")
-                                </td>
-                            </tr>
+                <section id="@Anchor(group.Key)" class="scroll-mt-24">
+                    <div class="mb-6 flex items-center gap-3 border-b border-gray-800 pb-3">
+                        <span class="text-blue-500 text-lg"><i class="@CategoryIcon(group.Key)"></i></span>
+                        <h2 class="font-mono text-sm font-bold text-white uppercase tracking-widest">
+                            @CategoryName(group.Key)
+                        </h2>
+                        <span class="font-mono text-xs text-gray-500">@ItemCount(group.Count())</span>
+                    </div>
 
-                            @foreach (var item in group)
-                            {
-                                <tr class="border-b border-gray-800 hover:bg-gray-900/50 transition">
-                                    <td class="px-4 py-3 text-white font-bold whitespace-nowrap">
-                                        @item.Item
-                                    </td>
-                                    <td class="px-4 py-3 text-gray-400 leading-relaxed">
-                                        @item.Type
-                                    </td>
-                                    <td class="px-4 py-3 text-right whitespace-nowrap">
-                                        <a href="@item.Url"
-                                           target="_blank"
-                                           rel="noopener noreferrer"
-                                           class="text-blue-500 hover:text-blue-400 transition">
-                                            @item.UrlTitle.ToString()
-                                        </a>
-                                    </td>
-                                </tr>
-                            }
+                    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                        @foreach (var item in group)
+                        {
+                            <div class="flex flex-col rounded-lg border border-gray-700 bg-gray-950 p-5 hover:border-blue-600/50 transition">
+                                <div class="font-mono text-xs text-blue-500 uppercase tracking-wider mb-1.5">
+                                    @ItemLabel(item.Item)
+                                </div>
+                                <div class="text-sm font-bold text-white leading-snug mb-4">
+                                    @item.Type
+                                </div>
+                                <a href="@item.Url"
+                                   target="_blank"
+                                   rel="noopener noreferrer"
+                                   aria-label="@item.Type – @item.UrlTitle.ToString()"
+                                   class="mt-auto inline-flex items-center gap-1.5 self-start font-mono text-xs px-2.5 py-1 rounded-sm bg-gray-800 text-gray-400 border border-gray-700 hover:text-blue-500 hover:border-blue-600/50 transition">
+                                    @item.UrlTitle.ToString()
+                                    <span aria-hidden="true">↗</span>
+                                </a>
+                            </div>
                         }
-                    </tbody>
-                </table>
-                <small>Poslední update: @lastUpdateDate</small>
-            }
-            else
-            {
-                <p class="text-gray-500 font-mono text-sm">// zatím žádné položky</p>
+                    </div>
+                </section>
             }
         </div>
-    </div>
+    }
+    else
+    {
+        <p class="text-gray-400 font-mono text-sm">@L["Setup_Empty"]</p>
+    }
 </div>
 
 @code {
@@ -274,7 +278,7 @@
         "https://www.alza.cz/adata-ultimate-su650-1tb-d7875104.htm",
         URL.Alza
         ),
-    
+
         new EdcItem
         (
         "Grafická karta",
@@ -331,7 +335,7 @@
         Category.Software,
         "Visual Studio Code",
         "https://code.visualstudio.com/",
-        URL.JetBrains
+        URL.Microsoft
         ),
 
         new EdcItem
@@ -397,7 +401,7 @@
         URL.Microsoft
         ),
 
-                
+
         new EdcItem
         (
         "Prohlížeč - Hlavní",
@@ -456,6 +460,77 @@
 
     private IEnumerable<IGrouping<Category, EdcItem>> GroupedItems =>
     _edcItems.GroupBy(i => i.Category);
+
+    private string CategoryName(Category c) => c switch
+    {
+        Category.Setup => L["Setup_Cat_Setup"],
+        Category.Práce => L["Setup_Cat_Work"],
+        Category.Every_Day_Carry => L["Setup_Cat_EDC"],
+        Category.Herní_PC => L["Setup_Cat_GamingPC"],
+        Category.Software => L["Setup_Cat_Software"],
+        _ => c.ToString().Replace("_", " "),
+    };
+
+    private static string Anchor(Category c) => c.ToString().Replace("_", "-").ToLowerInvariant();
+
+    private string ItemCount(int n) => n switch
+    {
+        1 => L["Setup_Count_1"],
+        >= 2 and <= 4 => L["Setup_Count_2_4", n],
+        _ => L["Setup_Count_5", n],
+    };
+
+    private readonly Dictionary<string, string> _itemKeys = new()
+    {
+        ["Myš"] = "Setup_Item_Mouse",
+        ["Sluchátka"] = "Setup_Item_Headphones",
+        ["Klávesnice"] = "Setup_Item_Keyboard",
+        ["Monitor #1 - Hlavní"] = "Setup_Item_Monitor1",
+        ["Monitor #2"] = "Setup_Item_Monitor2",
+        ["Podložka"] = "Setup_Item_Mousepad",
+        ["Osobní notebook"] = "Setup_Item_PersonalLaptop",
+        ["Pracovní notebook"] = "Setup_Item_WorkLaptop",
+        ["Batoh"] = "Setup_Item_Backpack",
+        ["Telefon"] = "Setup_Item_Phone",
+        ["Hodinky"] = "Setup_Item_Watch",
+        ["Tablet"] = "Setup_Item_Tablet",
+        ["Peněženka"] = "Setup_Item_Wallet",
+        ["Základní deska"] = "Setup_Item_Motherboard",
+        ["CPU"] = "Setup_Item_Cpu",
+        ["RAM"] = "Setup_Item_Ram",
+        ["Disk #1"] = "Setup_Item_Drive1",
+        ["Disk #2"] = "Setup_Item_Drive2",
+        ["Grafická karta"] = "Setup_Item_Gpu",
+        ["Zdroj"] = "Setup_Item_Psu",
+        ["Skříň"] = "Setup_Item_Case",
+        ["IDE - WINDOWS"] = "Setup_Item_IdeWin",
+        ["IDE - MACOS"] = "Setup_Item_IdeMac",
+        ["Code editor"] = "Setup_Item_CodeEditor",
+        ["Task Management"] = "Setup_Item_TaskMgmt",
+        ["Produktivita / Design"] = "Setup_Item_Productivity",
+        ["SQL Client - WINDOWS"] = "Setup_Item_SqlWin",
+        ["SQL Client - MACOS"] = "Setup_Item_SqlMac",
+        ["Git Client"] = "Setup_Item_GitClient",
+        ["VPS Hosting"] = "Setup_Item_VpsHosting",
+        ["Cloud Hosting"] = "Setup_Item_CloudHosting",
+        ["Prohlížeč - Hlavní"] = "Setup_Item_BrowserMain",
+        ["Prohlížeč - Alternativní"] = "Setup_Item_BrowserAlt",
+        ["Komunikace"] = "Setup_Item_Communication",
+        ["Password Manager"] = "Setup_Item_PasswordManager",
+        ["Hudba"] = "Setup_Item_Music",
+    };
+
+    private string ItemLabel(string raw) => _itemKeys.TryGetValue(raw, out var key) ? L[key].Value : raw;
+
+    private static string CategoryIcon(Category c) => c switch
+    {
+        Category.Setup => "fa-solid fa-desktop",
+        Category.Práce => "fa-solid fa-briefcase",
+        Category.Every_Day_Carry => "fa-solid fa-wallet",
+        Category.Herní_PC => "fa-solid fa-microchip",
+        Category.Software => "fa-solid fa-code",
+        _ => "fa-solid fa-box",
+    };
 
     string lastUpdateDate = "07.07.2026 08:50";
 

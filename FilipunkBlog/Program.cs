@@ -4,12 +4,16 @@ using FilipunkBlog.Components.Account;
 using FilipunkBlog.Infrastructure;
 using FilipunkBlog.Infrastructure.Persistence;
 using FilipunkBlog.Infrastructure.Services;
+using FilipunkBlog.Localization;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
-using FilipunkBlog.Components.Account;
+
+// QuestPDF Community licence – zdarma pro jednotlivce a malé firmy (obrat < 1 mil. USD).
+QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Debug()
@@ -26,6 +30,10 @@ builder.Host.UseSerilog();
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+// Marker třída FilipunkBlog.SharedResource leží vedle Resources/SharedResource.resx,
+// takže manifest je "FilipunkBlog.SharedResource" – ResourcesPath se nenastavuje.
+builder.Services.AddLocalization();
+
 builder.Services.AddCascadingAuthenticationState();
 
 builder.Services.AddAuthentication(options =>
@@ -40,6 +48,8 @@ builder.Services.AddIdentityCore<IdentityUser>(options =>
     options.SignIn.RequireConfirmedAccount = false;
     options.Password.RequireDigit = true;
     options.Password.RequiredLength = 8;
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
 })
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -68,15 +78,27 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
-app.UseAntiforgery();
-app.UseAuthentication();
-app.UseAuthorization();
+
+// /en prefix → anglická verze; bez prefixu čeština.
+// Musí běžet PŘED routingem – explicitní UseRouting níže potlačí automatické vložení na začátek pipeline.
+app.UseLanguagePath();
 
 app.UseStaticFiles(new StaticFileOptions
 {
-    ContentTypeProvider = new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider()
+    OnPrepareResponse = ctx =>
+    {
+        // app.css/app.js nemají obsahový hash v URL – ať prohlížeč po nasazení
+        // vždy ověří aktuálnost (levné 304 díky ETag).
+        var name = ctx.File.Name;
+        if (name is "app.css" or "app.js")
+            ctx.Context.Response.Headers.CacheControl = "no-cache";
+    }
 });
+
+app.UseRouting();
+app.UseAntiforgery();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapRazorComponents<FilipunkBlog.Components.App>()
     .AddInteractiveServerRenderMode();
@@ -87,71 +109,125 @@ app.MapPost("/Account/LoginPost", async (
     [FromForm] string email,
     [FromForm] string password) =>
 {
-    var result = await signInManager.PasswordSignInAsync(email, password, false, false);
+    var result = await signInManager.PasswordSignInAsync(email, password, isPersistent: false, lockoutOnFailure: true);
     if (result.Succeeded)
         return Results.Redirect("/admin");
+    if (result.IsLockedOut)
+        return Results.Redirect("/Account/Login?error=locked");
     return Results.Redirect("/Account/Login?error=1");
-}).DisableAntiforgery();
+});
 
-app.MapGet("/rss", async (IBlogPostService blogPostService, HttpContext httpContext) =>
+var siteBaseUrl = app.Configuration["Site:BaseUrl"]?.TrimEnd('/') ?? "https://filipunk.cz";
+
+// Spustí async operaci pod danou kulturou (kvůli lokalizovanému mapování v službách).
+static async Task<T> UnderCulture<T>(string culture, Func<Task<T>> action)
 {
-    var posts = await blogPostService.GetPostsAsync(1, 20);
+    var original = System.Globalization.CultureInfo.CurrentUICulture;
+    System.Globalization.CultureInfo.CurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo(culture);
+    try { return await action(); }
+    finally { System.Globalization.CultureInfo.CurrentUICulture = original; }
+}
+
+static string RssFeed(string title, string description, string language, string baseUrl, string prefix,
+    IEnumerable<FilipunkBlog.Application.Models.BlogPostViewModel> posts)
+{
     var sb = new System.Text.StringBuilder();
     sb.AppendLine("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
     sb.AppendLine("<rss version=\"2.0\">");
     sb.AppendLine("<channel>");
-    sb.AppendLine("<title>Filip — Blog</title>");
-    sb.AppendLine("<link>https://filipunk.cz</link>");
-    sb.AppendLine("<description>Blog o C# a .NET vývoji</description>");
-    sb.AppendLine("<language>cs</language>");
+    sb.AppendLine($"<title>{System.Security.SecurityElement.Escape(title)}</title>");
+    sb.AppendLine($"<link>{baseUrl}{prefix}</link>");
+    sb.AppendLine($"<description>{System.Security.SecurityElement.Escape(description)}</description>");
+    sb.AppendLine($"<language>{language}</language>");
 
-    foreach (var post in posts.Items)
+    foreach (var post in posts)
     {
         sb.AppendLine("<item>");
         sb.AppendLine($"<title>{System.Security.SecurityElement.Escape(post.Title)}</title>");
-        sb.AppendLine($"<link>https://filipunk.cz/posts/{post.Slug}</link>");
+        sb.AppendLine($"<link>{baseUrl}{prefix}/posts/{post.Slug}</link>");
         sb.AppendLine($"<description>{System.Security.SecurityElement.Escape(post.Introduction)}</description>");
         sb.AppendLine($"<pubDate>{post.PublishedAt:R}</pubDate>");
-        sb.AppendLine($"<guid>https://filipunk.cz/posts/{post.Slug}</guid>");
+        sb.AppendLine($"<guid>{baseUrl}{prefix}/posts/{post.Slug}</guid>");
         sb.AppendLine("</item>");
     }
 
     sb.AppendLine("</channel>");
     sb.AppendLine("</rss>");
+    return sb.ToString();
+}
 
+// Feed pro CZ i EN. Jazyk určuje middleware podle prefixu /en (nastaví CurrentUICulture),
+// takže /rss = čeština a /en/rss = angličtina (prefix middleware přepíše cestu na /rss).
+app.MapGet("/rss", async (IBlogPostService blogPostService, HttpContext httpContext) =>
+{
+    var isEn = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "en";
+    var posts = await blogPostService.GetPostsAsync(1, 20);
     httpContext.Response.ContentType = "application/rss+xml; charset=utf-8";
-    await httpContext.Response.WriteAsync(sb.ToString());
+    await httpContext.Response.WriteAsync(isEn
+        ? RssFeed("Filip — Blog", "A blog about C# and .NET development", "en", siteBaseUrl, "/en", posts.Items)
+        : RssFeed("Filip — Blog", "Blog o C# a .NET vývoji", "cs", siteBaseUrl, "", posts.Items));
 });
 
 
-app.MapGet("/sitemap.xml", async (IBlogPostService blogPostService, HttpContext httpContext) =>
+app.MapGet("/sitemap.xml", async (
+    IBlogPostService blogPostService,
+    IProjectService projectService,
+    HttpContext httpContext) =>
 {
-    var posts = await blogPostService.GetPostsAsync(1, 1000);
+    var postsCs = await blogPostService.GetPostsAsync(1, 1000);
+    var projectsCs = await projectService.GetProjectsAsync(1, 1000);
+    var postsEn = await UnderCulture("en", () => blogPostService.GetPostsAsync(1, 1000));
+    var projectsEn = await UnderCulture("en", () => projectService.GetProjectsAsync(1, 1000));
+
+    var enPostSlug = postsEn.Items.ToDictionary(p => p.Id, p => p.Slug);
+    var enProjectSlug = projectsEn.Items.ToDictionary(p => p.Id, p => p.Slug);
+
     var sb = new System.Text.StringBuilder();
     sb.AppendLine("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-    sb.AppendLine("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">");
+    sb.AppendLine("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\" xmlns:xhtml=\"http://www.w3.org/1999/xhtml\">");
 
-    foreach (var url in new[] { "", "posts", "search" })
+    // Vypíše dvojici CZ + EN URL se vzájemnými hreflang odkazy.
+    void Pair(string csPath, string enPath, string changefreq, string? lastmod = null)
     {
-        sb.AppendLine("<url>");
-        sb.AppendLine($"<loc>https://filipunk.cz/{url}</loc>");
-        sb.AppendLine("<changefreq>weekly</changefreq>");
-        sb.AppendLine("</url>");
+        var csLoc = $"{siteBaseUrl}/{csPath}".TrimEnd('/');
+        var enLoc = $"{siteBaseUrl}/en/{enPath}".TrimEnd('/');
+        foreach (var self in new[] { csLoc, enLoc })
+        {
+            sb.AppendLine("<url>");
+            sb.AppendLine($"<loc>{self}</loc>");
+            if (lastmod is not null) sb.AppendLine($"<lastmod>{lastmod}</lastmod>");
+            sb.AppendLine($"<changefreq>{changefreq}</changefreq>");
+            sb.AppendLine($"<xhtml:link rel=\"alternate\" hreflang=\"cs\" href=\"{csLoc}\" />");
+            sb.AppendLine($"<xhtml:link rel=\"alternate\" hreflang=\"en\" href=\"{enLoc}\" />");
+            sb.AppendLine($"<xhtml:link rel=\"alternate\" hreflang=\"x-default\" href=\"{csLoc}\" />");
+            sb.AppendLine("</url>");
+        }
     }
 
-    foreach (var post in posts.Items)
-    {
-        sb.AppendLine("<url>");
-        sb.AppendLine($"<loc>https://filipunk.cz/posts/{post.Slug}</loc>");
-        sb.AppendLine($"<lastmod>{post.PublishedAt:yyyy-MM-dd}</lastmod>");
-        sb.AppendLine("<changefreq>monthly</changefreq>");
-        sb.AppendLine("</url>");
-    }
+    foreach (var path in new[] { "", "posts", "projects", "setup", "search" })
+        Pair(path, path, "weekly");
+
+    foreach (var post in postsCs.Items)
+        Pair($"posts/{post.Slug}", $"posts/{enPostSlug.GetValueOrDefault(post.Id, post.Slug)}", "monthly", post.PublishedAt?.ToString("yyyy-MM-dd"));
+
+    foreach (var project in projectsCs.Items)
+        Pair($"project/{project.Slug}", $"project/{enProjectSlug.GetValueOrDefault(project.Id, project.Slug)}", "monthly", project.PublishedAt?.ToString("yyyy-MM-dd"));
 
     sb.AppendLine("</urlset>");
     httpContext.Response.ContentType = "application/xml; charset=utf-8";
     await httpContext.Response.WriteAsync(sb.ToString());
 });
+
+// Životopis – generuje se živě z CMS dat při každém požadavku (žádný „export" krok).
+app.MapGet("/cv.pdf", async (ICvService cv, ICvPdfRenderer renderer) =>
+{
+    var model = await cv.BuildAsync();
+    var bytes = renderer.Render(model);
+    return Results.File(bytes, "application/pdf", "Filip-Lafata-CV.pdf");
+});
+
+// Přesměrování ze starého (rozbitého) odkazu.
+app.MapGet("/files/lafata_cv-cz.pdf", () => Results.Redirect("/cv.pdf"));
 
 try
 {

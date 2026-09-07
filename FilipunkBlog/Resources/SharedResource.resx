@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <data name="Nav_Home" xml:space="preserve"><value>Domů</value></data>
+  <data name="Nav_About" xml:space="preserve"><value>O mně</value></data>
+  <data name="Nav_Projects" xml:space="preserve"><value>Projekty</value></data>
+  <data name="Nav_Experience" xml:space="preserve"><value>Zkušenosti</value></data>
+  <data name="Nav_Blog" xml:space="preserve"><value>Blog</value></data>
+  <data name="Nav_Gear" xml:space="preserve"><value>Vybavení</value></data>
+  <data name="Nav_Contact" xml:space="preserve"><value>Kontakt</value></data>
+  <data name="Nav_Admin" xml:space="preserve"><value>Admin</value></data>
+  <data name="Nav_Logout" xml:space="preserve"><value>Odhlásit</value></data>
+  <data name="Nav_MenuOpen" xml:space="preserve"><value>Otevřít menu</value></data>
+  <data name="Nav_MenuClose" xml:space="preserve"><value>Zavřít menu</value></data>
+  <data name="Lang_Switch" xml:space="preserve"><value>Přepnout jazyk</value></data>
+
+  <data name="PageTitle_Home" xml:space="preserve"><value>Filip Lafata – Osobní portfolio</value></data>
+
+  <data name="Hero_TitleLine1" xml:space="preserve"><value>Jsem Filip,</value></data>
+  <data name="Hero_TitleLine2" xml:space="preserve"><value>juniorní vývojář</value></data>
+  <data name="Hero_Subtitle" xml:space="preserve"><value>Pracuji v C# a .NET na firemních interních aplikacích. Zajímám se o to, jak věci fungují uvnitř a postupně se zlepšuji.</value></data>
+  <data name="Hero_CtaProjects" xml:space="preserve"><value>Moje projekty →</value></data>
+  <data name="Hero_CtaContact" xml:space="preserve"><value>Kontakt</value></data>
+  <data name="Stat_Projects" xml:space="preserve"><value>Projekty</value></data>
+  <data name="Stat_Experience" xml:space="preserve"><value>Roky komerční praxe</value></data>
+
+  <data name="Avail_Available" xml:space="preserve"><value>K dispozici pro nové projekty</value></data>
+  <data name="Avail_Busy" xml:space="preserve"><value>Momentálně vytížen</value></data>
+  <data name="Avail_Unavailable" xml:space="preserve"><value>Nepřijímám nové projekty</value></data>
+
+  <data name="Contact_Eyebrow" xml:space="preserve"><value>KONTAKT</value></data>
+  <data name="Contact_Intro" xml:space="preserve"><value>Neváhejte mě kontaktovat ohledně nabídky práce, nabídky spolupráce nebo s dotazy.</value></data>
+  <data name="Contact_FormTitle" xml:space="preserve"><value>Napište mi</value></data>
+  <data name="Contact_Name" xml:space="preserve"><value>Jméno</value></data>
+  <data name="Contact_NamePlaceholder" xml:space="preserve"><value>Vaše jméno</value></data>
+  <data name="Contact_Email" xml:space="preserve"><value>E-mail</value></data>
+  <data name="Contact_EmailPlaceholder" xml:space="preserve"><value>vas@email.cz</value></data>
+  <data name="Contact_Message" xml:space="preserve"><value>Zpráva</value></data>
+  <data name="Contact_MessagePlaceholder" xml:space="preserve"><value>S čím vám můžu pomoct?</value></data>
+  <data name="Contact_Send" xml:space="preserve"><value>Odeslat zprávu →</value></data>
+  <data name="Contact_Sending" xml:space="preserve"><value>Odesílám…</value></data>
+  <data name="Contact_Success" xml:space="preserve"><value>Zpráva odeslána. Ozvu se co nejdřív. Díky! 😊</value></data>
+  <data name="Contact_ErrName" xml:space="preserve"><value>Zadejte jméno.</value></data>
+  <data name="Contact_ErrEmail" xml:space="preserve"><value>Zadejte platný e-mail.</value></data>
+  <data name="Contact_ErrMessage" xml:space="preserve"><value>Napište zprávu.</value></data>
+  <data name="Contact_ErrTooLong" xml:space="preserve"><value>Zpráva je příliš dlouhá (max 2000 znaků).</value></data>
+  <data name="Contact_ErrSend" xml:space="preserve"><value>Zprávu se nepodařilo odeslat. Zkuste to prosím e-mailem.</value></data>
+
+  <data name="Contact_Card_Github" xml:space="preserve"><value>Zdrojové kódy projektů</value></data>
+  <data name="Contact_Card_LinkedIn" xml:space="preserve"><value>Profesní profil</value></data>
+  <data name="Contact_Card_Email" xml:space="preserve"><value>Přímý kontakt</value></data>
+  <data name="Contact_Card_Instagram" xml:space="preserve"><value>Osobní profil</value></data>
+  <data name="Contact_Card_CvTitle" xml:space="preserve"><value>Životopis (CV)</value></data>
+  <data name="Contact_Card_CvSub" xml:space="preserve"><value>Stáhnout životopis</value></data>
+  <data name="Contact_Card_CvCz" xml:space="preserve"><value>CZ verze</value></data>
+  <data name="Contact_Card_CvEu" xml:space="preserve"><value>EU verze</value></data>
+  <data name="Contact_Card_CvPrep" xml:space="preserve"><value>// připravuji</value></data>
+
+  <data name="Login_Subtitle" xml:space="preserve"><value>Admin přihlášení</value></data>
+  <data name="Login_Email" xml:space="preserve"><value>E-mail</value></data>
+  <data name="Login_Password" xml:space="preserve"><value>Heslo</value></data>
+  <data name="Login_Submit" xml:space="preserve"><value>Přihlásit se →</value></data>
+  <data name="Login_ErrCredentials" xml:space="preserve"><value>Nesprávný e-mail nebo heslo.</value></data>
+  <data name="Login_ErrLocked" xml:space="preserve"><value>Účet je dočasně zablokován kvůli příliš mnoha pokusům. Zkuste to za 15 minut.</value></data>
+
+  <!-- ===== Společné ===== -->
+  <data name="Common_Edit" xml:space="preserve"><value>Upravit</value></data>
+  <data name="Common_Delete" xml:space="preserve"><value>Smazat</value></data>
+  <data name="Common_Save" xml:space="preserve"><value>Uložit</value></data>
+  <data name="Common_Create" xml:space="preserve"><value>Vytvořit</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>Zrušit</value></data>
+  <data name="Common_Add" xml:space="preserve"><value>+ Přidat</value></data>
+  <data name="Common_BackHome" xml:space="preserve"><value>← Zpět domů</value></data>
+  <data name="Common_Loading" xml:space="preserve"><value>// načítám…</value></data>
+  <data name="Common_ReadMore" xml:space="preserve"><value>Číst dál →</value></data>
+  <data name="Common_Prev" xml:space="preserve"><value>← Předchozí</value></data>
+  <data name="Common_Next" xml:space="preserve"><value>Další →</value></data>
+  <data name="Common_Reading" xml:space="preserve"><value>čtení</value></data>
+  <data name="Common_AllProjects" xml:space="preserve"><value>Všechny projekty →</value></data>
+  <data name="Common_AllPosts" xml:space="preserve"><value>Všechny články →</value></data>
+  <data name="Common_Published" xml:space="preserve"><value>● publikováno</value></data>
+  <data name="Common_Draft" xml:space="preserve"><value>○ draft</value></data>
+  <data name="Common_NoImage" xml:space="preserve"><value>// bez obrázku</value></data>
+  <data name="Common_Detail" xml:space="preserve"><value>detail</value></data>
+  <data name="Common_Uploading" xml:space="preserve"><value>// nahrávám…</value></data>
+  <data name="Common_Remove" xml:space="preserve"><value>× Odebrat</value></data>
+  <data name="Common_Preview" xml:space="preserve"><value>Náhled</value></data>
+  <data name="Common_PreviewHide" xml:space="preserve"><value>Skrýt náhled</value></data>
+
+  <!-- ===== Home ===== -->
+  <data name="Home_Meta_Description" xml:space="preserve"><value>Filip — Junior .NET Developer. Portfolio a blog o C# a .NET vývoji.</value></data>
+  <data name="Home_About_Eyebrow" xml:space="preserve"><value>O MNĚ</value></data>
+  <data name="Home_About_P1" xml:space="preserve"><value>K programování jsem se dostal již na základní škole, kdy jsem s kamarády tvořil svoje Minecraft servery s vlastními pluginy, na střední škole jsme Minecraft vyměnili za FiveM modifikaci do GTA V, kde jsme si upravovali vlastní LUA scripty.</value></data>
+  <data name="Home_About_P2" xml:space="preserve"><value>Nyní se věnuji čistě C# programování, nejčastěji webovému vývoji a vývoji interních aplikací.</value></data>
+  <data name="Home_About_Focus" xml:space="preserve"><value>Zaměření</value></data>
+  <data name="Home_About_Database" xml:space="preserve"><value>Databáze</value></data>
+  <data name="Home_About_Frontend" xml:space="preserve"><value>Frontend</value></data>
+  <data name="Home_About_Tools" xml:space="preserve"><value>Nástroje</value></data>
+  <data name="Home_About_Lang" xml:space="preserve"><value>Jazyk</value></data>
+  <data name="Home_About_LangValue" xml:space="preserve"><value>Čeština, Angličtina</value></data>
+  <data name="Home_Section_Projects" xml:space="preserve"><value>PROJEKTY</value></data>
+  <data name="Home_AddProject" xml:space="preserve"><value>+ Přidat projekt</value></data>
+  <data name="Home_EditProjectAria" xml:space="preserve"><value>Upravit projekt {0}</value></data>
+  <data name="Home_Section_Tech" xml:space="preserve"><value>TECHNOLOGIE</value></data>
+  <data name="Home_Skills_Tools" xml:space="preserve"><value>Nástroje</value></data>
+  <data name="Home_Skills_Concepts" xml:space="preserve"><value>Koncepty</value></data>
+  <data name="Home_Section_Experience" xml:space="preserve"><value>ZKUŠENOSTI</value></data>
+  <data name="Home_Section_Blog" xml:space="preserve"><value>BLOG</value></data>
+  <data name="Home_NewArticle" xml:space="preserve"><value>+ Nový článek</value></data>
+  <data name="Home_NoPosts" xml:space="preserve"><value>Zatím žádné příspěvky.</value></data>
+  <data name="Home_Tl1_Year" xml:space="preserve"><value>2024–nyní</value></data>
+  <data name="Home_Tl1_Role" xml:space="preserve"><value>IT Technik – Vývojář interních aplikací</value></data>
+  <data name="Home_Tl1_Company" xml:space="preserve"><value>KDK Automotive Czech</value></data>
+  <data name="Home_Tl1_Desc" xml:space="preserve"><value>Programování interních aplikací v jazycích C# (Blazor, MAUI) nebo Javascript (Node.js).&#10;Práce s databází Microsoft SQL, Informix, Oracle. Práce s Microsoft Azure, Microsoft Office.&#10;Zpracovávání dat z MES a ERP systému.</value></data>
+  <data name="Home_Tl2_Year" xml:space="preserve"><value>2023</value></data>
+  <data name="Home_Tl2_Role" xml:space="preserve"><value>IT Stáž</value></data>
+  <data name="Home_Tl2_Company" xml:space="preserve"><value>SUSPA CZ</value></data>
+  <data name="Home_Tl2_Desc" xml:space="preserve"><value>Programování maker v Microsoft Excel, instalace síťové infrastruktury a příprava kabelových rozvodů pro nové kanceláře.&#10;Instalace a konfigurace čteček čárových kódů, tvorba a správa systémů pro generování čárových kódů.</value></data>
+  <data name="Home_Tl3_Year" xml:space="preserve"><value>2019–2023</value></data>
+  <data name="Home_Tl3_Role" xml:space="preserve"><value>SPŠ Tachov, Světce 1</value></data>
+  <data name="Home_Tl3_Company" xml:space="preserve"><value>Střední vzdělání s maturitou (obor: Informační technologie)</value></data>
+  <data name="Home_Tl3_Desc" xml:space="preserve"><value>Programování a vývoj aplikací v Javě, instalace a správa operačních systémů, systémů i aplikačního programového vybavení.</value></data>
+
+  <!-- ===== Blog / Posts ===== -->
+  <data name="PageTitle_Blog" xml:space="preserve"><value>Filip Lafata – Blog</value></data>
+  <data name="Posts_Title" xml:space="preserve"><value>Všechny příspěvky</value></data>
+  <data name="Posts_Eyebrow" xml:space="preserve"><value>BLOG</value></data>
+  <data name="Posts_Search" xml:space="preserve"><value>Hledat</value></data>
+  <data name="Posts_SearchPlaceholder" xml:space="preserve"><value>Hledat…</value></data>
+  <data name="Posts_TagsTitle" xml:space="preserve"><value>Tagy</value></data>
+  <data name="Posts_NoPosts" xml:space="preserve"><value>// zatím žádné příspěvky</value></data>
+  <data name="PostDetail_BackBlog" xml:space="preserve"><value>← Zpět na blog</value></data>
+  <data name="PostDetail_Comments" xml:space="preserve"><value>KOMENTÁŘE</value></data>
+  <data name="PostDetail_NoComments" xml:space="preserve"><value>// zatím žádné komentáře</value></data>
+  <data name="PostDetail_AddComment" xml:space="preserve"><value>PŘIDAT KOMENTÁŘ</value></data>
+  <data name="PostDetail_CommentSubmitted" xml:space="preserve"><value>Komentář odeslán — čeká na schválení. Díky! 😊</value></data>
+  <data name="PostDetail_CommentName" xml:space="preserve"><value>Jméno</value></data>
+  <data name="PostDetail_CommentNamePlaceholder" xml:space="preserve"><value>Tvoje jméno</value></data>
+  <data name="PostDetail_CommentText" xml:space="preserve"><value>Komentář</value></data>
+  <data name="PostDetail_CommentPlaceholder" xml:space="preserve"><value>Napiš komentář…</value></data>
+  <data name="PostDetail_CommentSend" xml:space="preserve"><value>Odeslat komentář →</value></data>
+  <data name="PostDetail_ErrName" xml:space="preserve"><value>Zadej jméno.</value></data>
+  <data name="PostDetail_ErrText" xml:space="preserve"><value>Zadej komentář.</value></data>
+  <data name="PostDetail_ErrTooLong" xml:space="preserve"><value>Komentář je příliš dlouhý.</value></data>
+  <data name="Category_Eyebrow" xml:space="preserve"><value>KATEGORIE</value></data>
+  <data name="Category_NoPosts" xml:space="preserve"><value>// žádné příspěvky v této kategorii</value></data>
+  <data name="Tag_Eyebrow" xml:space="preserve"><value>TAG</value></data>
+  <data name="Tag_NoPosts" xml:space="preserve"><value>// žádné příspěvky s tímto tagem</value></data>
+  <data name="Tag_Meta" xml:space="preserve"><value>Příspěvky označené tagem {0}</value></data>
+
+  <!-- ===== Projekty ===== -->
+  <data name="PageTitle_Projects" xml:space="preserve"><value>Filip Lafata – Projekty</value></data>
+  <data name="Projects_Title" xml:space="preserve"><value>Všechny projekty</value></data>
+  <data name="Projects_Eyebrow" xml:space="preserve"><value>PROJEKTY</value></data>
+  <data name="Projects_NoProjects" xml:space="preserve"><value>// zatím žádné projekty</value></data>
+  <data name="Projects_Featured" xml:space="preserve"><value>★ Vybraný</value></data>
+  <data name="ProjectDetail_BackHome" xml:space="preserve"><value>← Zpět na hlavní stránku</value></data>
+  <data name="ProjectDetail_LiveDemo" xml:space="preserve"><value>Živé demo</value></data>
+  <data name="ProjectDetail_Gallery" xml:space="preserve"><value>Galerie</value></data>
+
+  <!-- ===== Hledání ===== -->
+  <data name="PageTitle_Search" xml:space="preserve"><value>Filip Lafata – Hledání</value></data>
+  <data name="Search_Eyebrow" xml:space="preserve"><value>HLEDÁNÍ</value></data>
+  <data name="Search_Placeholder" xml:space="preserve"><value>Hledat články a projekty…</value></data>
+  <data name="Search_Button" xml:space="preserve"><value>Hledat →</value></data>
+  <data name="Search_Articles" xml:space="preserve"><value>Články</value></data>
+  <data name="Search_Projects" xml:space="preserve"><value>Projekty</value></data>
+  <data name="Search_NoResults" xml:space="preserve"><value>// žádné výsledky pro „{0}“</value></data>
+
+  <!-- ===== Vybavení / Setup ===== -->
+  <data name="PageTitle_Setup" xml:space="preserve"><value>Filip Lafata – Setup / EDC</value></data>
+  <data name="Setup_Eyebrow" xml:space="preserve"><value>SETUP</value></data>
+  <data name="Setup_Title" xml:space="preserve"><value>Můj stack</value></data>
+  <data name="Setup_Subtitle" xml:space="preserve"><value>Hardware a software, se kterým pracuji každý den – doma, v práci i po kapsách.</value></data>
+  <data name="Setup_LastUpdate" xml:space="preserve"><value>poslední update:</value></data>
+  <data name="Setup_Empty" xml:space="preserve"><value>// zatím žádné položky</value></data>
+  <data name="Setup_Count_1" xml:space="preserve"><value>1 položka</value></data>
+  <data name="Setup_Count_2_4" xml:space="preserve"><value>{0} položky</value></data>
+  <data name="Setup_Count_5" xml:space="preserve"><value>{0} položek</value></data>
+  <data name="Setup_Cat_Setup" xml:space="preserve"><value>Setup</value></data>
+  <data name="Setup_Cat_Work" xml:space="preserve"><value>Práce</value></data>
+  <data name="Setup_Cat_EDC" xml:space="preserve"><value>Every Day Carry</value></data>
+  <data name="Setup_Cat_GamingPC" xml:space="preserve"><value>Herní PC</value></data>
+  <data name="Setup_Cat_Software" xml:space="preserve"><value>Software</value></data>
+  <data name="Setup_Item_Mouse" xml:space="preserve"><value>Myš</value></data>
+  <data name="Setup_Item_Headphones" xml:space="preserve"><value>Sluchátka</value></data>
+  <data name="Setup_Item_Keyboard" xml:space="preserve"><value>Klávesnice</value></data>
+  <data name="Setup_Item_Monitor1" xml:space="preserve"><value>Monitor #1 – hlavní</value></data>
+  <data name="Setup_Item_Monitor2" xml:space="preserve"><value>Monitor #2</value></data>
+  <data name="Setup_Item_Mousepad" xml:space="preserve"><value>Podložka</value></data>
+  <data name="Setup_Item_PersonalLaptop" xml:space="preserve"><value>Osobní notebook</value></data>
+  <data name="Setup_Item_WorkLaptop" xml:space="preserve"><value>Pracovní notebook</value></data>
+  <data name="Setup_Item_Backpack" xml:space="preserve"><value>Batoh</value></data>
+  <data name="Setup_Item_Phone" xml:space="preserve"><value>Telefon</value></data>
+  <data name="Setup_Item_Watch" xml:space="preserve"><value>Hodinky</value></data>
+  <data name="Setup_Item_Tablet" xml:space="preserve"><value>Tablet</value></data>
+  <data name="Setup_Item_Wallet" xml:space="preserve"><value>Peněženka</value></data>
+  <data name="Setup_Item_Motherboard" xml:space="preserve"><value>Základní deska</value></data>
+  <data name="Setup_Item_Cpu" xml:space="preserve"><value>CPU</value></data>
+  <data name="Setup_Item_Ram" xml:space="preserve"><value>RAM</value></data>
+  <data name="Setup_Item_Drive1" xml:space="preserve"><value>Disk #1</value></data>
+  <data name="Setup_Item_Drive2" xml:space="preserve"><value>Disk #2</value></data>
+  <data name="Setup_Item_Gpu" xml:space="preserve"><value>Grafická karta</value></data>
+  <data name="Setup_Item_Psu" xml:space="preserve"><value>Zdroj</value></data>
+  <data name="Setup_Item_Case" xml:space="preserve"><value>Skříň</value></data>
+  <data name="Setup_Item_IdeWin" xml:space="preserve"><value>IDE – Windows</value></data>
+  <data name="Setup_Item_IdeMac" xml:space="preserve"><value>IDE – macOS</value></data>
+  <data name="Setup_Item_CodeEditor" xml:space="preserve"><value>Editor kódu</value></data>
+  <data name="Setup_Item_TaskMgmt" xml:space="preserve"><value>Správa úkolů</value></data>
+  <data name="Setup_Item_Productivity" xml:space="preserve"><value>Produktivita / design</value></data>
+  <data name="Setup_Item_SqlWin" xml:space="preserve"><value>SQL klient – Windows</value></data>
+  <data name="Setup_Item_SqlMac" xml:space="preserve"><value>SQL klient – macOS</value></data>
+  <data name="Setup_Item_GitClient" xml:space="preserve"><value>Git klient</value></data>
+  <data name="Setup_Item_VpsHosting" xml:space="preserve"><value>VPS hosting</value></data>
+  <data name="Setup_Item_CloudHosting" xml:space="preserve"><value>Cloud hosting</value></data>
+  <data name="Setup_Item_BrowserMain" xml:space="preserve"><value>Prohlížeč – hlavní</value></data>
+  <data name="Setup_Item_BrowserAlt" xml:space="preserve"><value>Prohlížeč – alternativní</value></data>
+  <data name="Setup_Item_Communication" xml:space="preserve"><value>Komunikace</value></data>
+  <data name="Setup_Item_PasswordManager" xml:space="preserve"><value>Správce hesel</value></data>
+  <data name="Setup_Item_Music" xml:space="preserve"><value>Hudba</value></data>
+
+  <!-- ===== Chybové / systémové ===== -->
+  <data name="PageTitle_Error" xml:space="preserve"><value>Chyba — Filip</value></data>
+  <data name="Error_404_Label" xml:space="preserve"><value>// stránka nenalezena</value></data>
+  <data name="Error_500_Label" xml:space="preserve"><value>// něco se pokazilo</value></data>
+  <data name="Error_404_Text" xml:space="preserve"><value>Stránka, kterou hledáš, neexistuje.</value></data>
+  <data name="Error_500_Text" xml:space="preserve"><value>Nastala neočekávaná chyba. Zkus to znovu.</value></data>
+  <data name="NotFound_Title" xml:space="preserve"><value>Nenalezeno</value></data>
+  <data name="NotFound_Text" xml:space="preserve"><value>Obsah, který hledáš, neexistuje.</value></data>
+  <data name="AccessDenied_Title" xml:space="preserve"><value>Přístup odepřen</value></data>
+  <data name="AccessDenied_Text" xml:space="preserve"><value>K tomuto zdroji nemáš přístup.</value></data>
+  <data name="Reconnect_Connecting" xml:space="preserve"><value>// připojuji se…</value></data>
+  <data name="Reconnect_RetryPrefix" xml:space="preserve"><value>// připojení selhalo — zkouším znovu za </value></data>
+  <data name="Reconnect_Failed" xml:space="preserve"><value>// připojení selhalo</value></data>
+  <data name="Reconnect_FailedHint" xml:space="preserve"><value>Zkus to znovu nebo obnov stránku.</value></data>
+  <data name="Reconnect_RetryButton" xml:space="preserve"><value>Zkusit znovu</value></data>
+  <data name="Reconnect_Paused" xml:space="preserve"><value>// relace pozastavena serverem</value></data>
+  <data name="Reconnect_ResumeFailed" xml:space="preserve"><value>// obnovení relace selhalo</value></data>
+  <data name="Reconnect_ResumeButton" xml:space="preserve"><value>Obnovit</value></data>
+
+  <!-- ===== Admin ===== -->
+  <data name="Admin_Eyebrow" xml:space="preserve"><value>ADMIN</value></data>
+  <data name="Admin_SaveError" xml:space="preserve"><value>Chyba při ukládání: {0}</value></data>
+  <data name="Admin_UploadError" xml:space="preserve"><value>Chyba při nahrávání obrázku: {0}</value></data>
+  <data name="Admin_Dash_Availability" xml:space="preserve"><value>Dostupnost</value></data>
+  <data name="Admin_Dash_AvailabilityHint" xml:space="preserve"><value>Zobrazuje se návštěvníkům v úvodní sekci webu.</value></data>
+  <data name="Admin_Dash_Saved" xml:space="preserve"><value>✓ Uloženo</value></data>
+  <data name="Admin_Dash_NotePlaceholder" xml:space="preserve"><value>Volitelná poznámka (např. „od září 2026“)</value></data>
+  <data name="Admin_Dash_SaveNote" xml:space="preserve"><value>Uložit poznámku</value></data>
+  <data name="Admin_Dash_StatPosts" xml:space="preserve"><value>Příspěvky</value></data>
+  <data name="Admin_Dash_StatProjects" xml:space="preserve"><value>Projekty</value></data>
+  <data name="Admin_Dash_StatCategories" xml:space="preserve"><value>Kategorie</value></data>
+  <data name="Admin_Dash_StatComments" xml:space="preserve"><value>Komentáře</value></data>
+  <data name="Admin_Dash_PendingApproval" xml:space="preserve"><value>čeká na schválení</value></data>
+  <data name="Admin_Dash_NewPost" xml:space="preserve"><value>+ Nový příspěvek</value></data>
+  <data name="Admin_Dash_NewProject" xml:space="preserve"><value>+ Nový projekt</value></data>
+  <data name="Admin_Dash_SectionContent" xml:space="preserve"><value>Obsah</value></data>
+  <data name="Admin_Dash_SectionProjects" xml:space="preserve"><value>Projekty</value></data>
+  <data name="Admin_Dash_SectionCommunity" xml:space="preserve"><value>Komunita</value></data>
+  <data name="Admin_Dash_CardPostsDesc" xml:space="preserve"><value>Vytvářet, upravovat a mazat články.</value></data>
+  <data name="Admin_Dash_CardCategoriesDesc" xml:space="preserve"><value>Rozdělení článků do rubrik.</value></data>
+  <data name="Admin_Dash_CardTagsDesc" xml:space="preserve"><value>Štítky pro články i projekty.</value></data>
+  <data name="Admin_Dash_CardProjects" xml:space="preserve"><value>Správa projektů</value></data>
+  <data name="Admin_Dash_CardProjectsDesc" xml:space="preserve"><value>Portfolio – přidávání a publikování.</value></data>
+  <data name="Admin_Dash_CardCommentsDesc" xml:space="preserve"><value>Schvalování a moderace diskuzí.</value></data>
+  <data name="Admin_Dash_MostViewed" xml:space="preserve"><value>Nejnavštěvovanější</value></data>
+  <data name="Admin_Dash_Visits" xml:space="preserve"><value>návštěv</value></data>
+  <data name="Admin_Posts_Title" xml:space="preserve"><value>Příspěvky</value></data>
+  <data name="Admin_Projects_Title" xml:space="preserve"><value>Projekty</value></data>
+  <data name="Admin_Categories_Title" xml:space="preserve"><value>Kategorie</value></data>
+  <data name="Admin_Tags_Title" xml:space="preserve"><value>Tagy</value></data>
+  <data name="Admin_Comments_Title" xml:space="preserve"><value>Komentáře ke schválení</value></data>
+  <data name="Admin_Comments_None" xml:space="preserve"><value>// žádné komentáře čekající na schválení</value></data>
+  <data name="Admin_Comments_Approve" xml:space="preserve"><value>✓ Schválit</value></data>
+  <data name="Admin_Comments_Delete" xml:space="preserve"><value>× Smazat</value></data>
+  <data name="Admin_Categories_Placeholder" xml:space="preserve"><value>Název kategorie</value></data>
+  <data name="Admin_Tags_Placeholder" xml:space="preserve"><value>Název tagu</value></data>
+  <data name="Admin_Post_New" xml:space="preserve"><value>Nový příspěvek</value></data>
+  <data name="Admin_Post_Edit" xml:space="preserve"><value>Upravit příspěvek</value></data>
+  <data name="Admin_Project_New" xml:space="preserve"><value>Nový projekt</value></data>
+  <data name="Admin_Project_Edit" xml:space="preserve"><value>Upravit projekt</value></data>
+  <data name="Admin_Field_Title" xml:space="preserve"><value>Titulek</value></data>
+  <data name="Admin_Field_Name" xml:space="preserve"><value>Název</value></data>
+  <data name="Admin_Field_Slug" xml:space="preserve"><value>Slug</value></data>
+  <data name="Admin_Field_Category" xml:space="preserve"><value>Kategorie</value></data>
+  <data name="Admin_Field_Tags" xml:space="preserve"><value>Tagy</value></data>
+  <data name="Admin_Field_NewTag" xml:space="preserve"><value>Nový tag…</value></data>
+  <data name="Admin_Field_AddTag" xml:space="preserve"><value>+ Přidat tag</value></data>
+  <data name="Admin_Field_Intro" xml:space="preserve"><value>Úvod</value></data>
+  <data name="Admin_Field_ContentMd" xml:space="preserve"><value>Obsah (Markdown)</value></data>
+  <data name="Admin_Field_DetailMd" xml:space="preserve"><value>Detail (Markdown)</value></data>
+  <data name="Admin_Field_Description" xml:space="preserve"><value>Popis</value></data>
+  <data name="Admin_Field_Image" xml:space="preserve"><value>Obrázek</value></data>
+  <data name="Admin_Field_MainImage" xml:space="preserve"><value>Hlavní obrázek</value></data>
+  <data name="Admin_Field_MoreImages" xml:space="preserve"><value>Další obrázky</value></data>
+  <data name="Admin_Field_StartYear" xml:space="preserve"><value>Rok začátku</value></data>
+  <data name="Admin_Field_EndYear" xml:space="preserve"><value>Rok konce (nepovinné)</value></data>
+  <data name="Admin_Field_GithubUrl" xml:space="preserve"><value>GitHub URL (nepovinné)</value></data>
+  <data name="Admin_Field_LiveDemoUrl" xml:space="preserve"><value>Live demo URL (nepovinné)</value></data>
+  <data name="Admin_Field_Publish" xml:space="preserve"><value>Publikovat</value></data>
+  <data name="Admin_Field_Featured" xml:space="preserve"><value>★ Vybraný projekt (jde nahoru)</value></data>
+  <data name="Admin_Err_TitleRequired" xml:space="preserve"><value>Titulek je povinný.</value></data>
+  <data name="Admin_Err_NameRequired" xml:space="preserve"><value>Název je povinný.</value></data>
+  <data name="Admin_Err_SlugRequired" xml:space="preserve"><value>Slug je povinný.</value></data>
+  <data name="Admin_Err_CategoryRequired" xml:space="preserve"><value>Vyber kategorii.</value></data>
+  <data name="Admin_Err_StartYearRequired" xml:space="preserve"><value>Rok začátku je povinný.</value></data>
+  <data name="Admin_Err_TagCreate" xml:space="preserve"><value>Chyba při vytváření tagu: {0}</value></data>
+
+  <!-- ===== Admin – překlady obsahu ===== -->
+  <data name="Admin_Tr_LangLabel" xml:space="preserve"><value>Jazyk obsahu</value></data>
+  <data name="Admin_Lang_Cs" xml:space="preserve"><value>Čeština</value></data>
+  <data name="Admin_Lang_En" xml:space="preserve"><value>Angličtina</value></data>
+  <data name="Admin_Tr_Translated" xml:space="preserve"><value>● přeloženo</value></data>
+  <data name="Admin_Tr_NotTranslated" xml:space="preserve"><value>○ nepřeloženo</value></data>
+  <data name="Admin_Tr_SharedNote" xml:space="preserve"><value>Kategorie, tagy, obrázky, roky a publikace jsou společné pro oba jazyky – edituj je v české verzi.</value></data>
+  <data name="Admin_Tr_EnEmptyHint" xml:space="preserve"><value>Nech pole prázdná a EN verze se na webu automaticky nahradí českou.</value></data>
+  <data name="Admin_Field_NameEn" xml:space="preserve"><value>Název (EN)</value></data>
+  <data name="Admin_Field_NameEnPlaceholder" xml:space="preserve"><value>Anglický název (nepovinné)</value></data>
+  <data name="Admin_Dash_NoteEnPlaceholder" xml:space="preserve"><value>Anglická poznámka (např. „from September 2026“)</value></data>
+  <data name="Admin_Tr_AutoTranslate" xml:space="preserve"><value>⚡ Přeložit z češtiny</value></data>
+  <data name="Admin_Tr_Translating" xml:space="preserve"><value>// překládám…</value></data>
+  <data name="Admin_Tr_TranslateError" xml:space="preserve"><value>Automatický překlad se nezdařil: {0}</value></data>
+</root>

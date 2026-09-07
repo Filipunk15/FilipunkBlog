@@ -12,8 +12,12 @@ namespace FilipunkBlog.Domain.Entities
         public string Detail { get; set; } = string.Empty;
         public int StartYear { get; set; } = DateTime.Today.Year;
         public int? EndYear { get; set; }
+        public string? GitHubUrl { get; set; }
+        public string? LiveDemoUrl { get; set; }
+        public bool IsFeatured { get; set; }
         public ICollection<ProjectImage> Images { get; set; } = [];
         public bool IsPublished { get; set; }
         public ICollection<ProjectTag> ProjectTags { get; set; } = [];
+        public ICollection<ProjectTranslation> Translations { get; set; } = [];
     }
 }

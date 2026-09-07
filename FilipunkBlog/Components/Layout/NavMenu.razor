@@ -1,35 +1,31 @@
-﻿@inject ICategoryService CategoryService
-@inject IJSRuntime JS
 @inject NavigationManager Navigation
-@using FilipunkBlog.Application.Contracts
-@using FilipunkBlog.Application.Models
+@inject IStringLocalizer<SharedResource> L
 
 <header class="sticky top-0 z-50 border-b border-gray-800 bg-gray-950/90 backdrop-blur">
     <div class="mx-auto max-w-7xl px-6 lg:px-8">
         <div class="flex h-16 items-center justify-between">
-            <a href="/" class="font-mono text-lg font-bold text-white">
+            <a href="@($"{P}/")" class="font-mono text-lg font-bold text-white">
                 filipunk<span class="text-blue-500">.cz</span>
             </a>
             <nav class="hidden items-center gap-8 text-sm sm:flex">
-                <a class="text-gray-400 hover:text-white transition"
-                   style="cursor:pointer"
-                   onclick="goHome()">Home</a>
-                <a class="text-gray-400 hover:text-white transition" href="#about">O mně</a>
-                <a class="text-gray-400 hover:text-white transition" href="#projects">Projekty</a>
-                <a class="text-gray-400 hover:text-white transition" href="#skills">Zkušenosti</a>
-                <a class="text-gray-400 hover:text-white transition" href="#blog">Blog</a>
-                <a class="text-gray-400 hover:text-white transition" href="/setup">Vybavení</a>
-                <a class="text-gray-400 hover:text-white transition" href="#kontakt">Kontakt</a>
+                @foreach (var link in NavLinks)
+                {
+                    <a class="text-gray-400 hover:text-white transition" href="@link.Href">@link.Label</a>
+                }
             </nav>
             <div class="flex items-center gap-3">
+                <LanguageSwitcher />
                 <AuthorizeView>
                     <Authorized>
-                        <a href="/admin" class="hidden sm:block rounded font-mono text-xs px-3 py-1.5 bg-gray-800 text-white hover:bg-gray-700 transition">Admin</a>
-                        <a href="/Account/Logout" class="hidden sm:block rounded font-mono text-xs px-3 py-1.5 border border-gray-700 text-gray-400 hover:text-white transition">Logout</a>
+                        <a href="@($"{P}/admin")" class="hidden sm:block rounded font-mono text-xs px-3 py-1.5 bg-gray-800 text-white hover:bg-gray-700 transition">@L["Nav_Admin"]</a>
+                        <a href="/Account/Logout" class="hidden sm:block rounded font-mono text-xs px-3 py-1.5 border border-gray-700 text-gray-400 hover:text-white transition">@L["Nav_Logout"]</a>
                     </Authorized>
                 </AuthorizeView>
-                <button @onclick="ToggleMenu" class="sm:hidden rounded border border-gray-700 p-2 text-gray-400 hover:text-white transition">
-                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <button @onclick="ToggleMenu" type="button"
+                        aria-label="@(_menuOpen ? L["Nav_MenuClose"] : L["Nav_MenuOpen"])"
+                        aria-expanded="@_menuOpen" aria-controls="mobile-nav"
+                        class="sm:hidden rounded border border-gray-700 p-2 text-gray-400 hover:text-white transition">
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
                         @if (_menuOpen)
                         {
                             <path d="M6 18L18 6M6 6l12 12" />
@@ -45,29 +41,19 @@
 
         @if (_menuOpen)
         {
-            <div class="border-t border-gray-800 py-4 sm:hidden">
+            <div id="mobile-nav" class="border-t border-gray-800 py-4 sm:hidden">
                 <nav class="flex flex-col gap-1">
-                    <a class="text-gray-400 hover:text-white transition"
-                       style="cursor:pointer"
-                       onclick="goHome()">Home</a>
-                    <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition"
-                       href="#about" @onclick="() => _menuOpen = false">O mně</a>
-                    <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition"
-                       href="#projects" @onclick="() => _menuOpen = false">Projekty</a>
-                    <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition"
-                       href="#skills" @onclick="() => _menuOpen = false">Zkušenosti</a>
-                    <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition"
-                       href="/posts" @onclick="() => _menuOpen = false">Blog</a>
-                    <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition"
-                       href="/setup" @onclick="() => _menuOpen = false">Vybavení</a>
-                    <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition"
-                       href="#kontakt" @onclick="() => _menuOpen = false">Kontakt</a>
+                    @foreach (var link in NavLinks)
+                    {
+                        <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition"
+                           href="@link.Href" @onclick="CloseMenu">@link.Label</a>
+                    }
                     <AuthorizeView>
                         <Authorized>
                             <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition"
-                               href="/admin" @onclick="() => _menuOpen = false">Admin</a>
+                               href="@($"{P}/admin")" @onclick="CloseMenu">@L["Nav_Admin"]</a>
                             <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition"
-                               href="/Account/Logout" @onclick="() => _menuOpen = false">Logout</a>
+                               href="/Account/Logout" @onclick="CloseMenu">@L["Nav_Logout"]</a>
                         </Authorized>
                     </AuthorizeView>
                 </nav>
@@ -77,26 +63,25 @@
 </header>
 
 @code {
-    private List<CategoryViewModel> _categories = [];
     private bool _menuOpen = false;
 
-    protected override async Task OnInitializedAsync()
-    {
-        _categories = await CategoryService.GetCategoriesAsync();
-    }
+    // Jazykový prefix aktuální stránky: "" (cs) nebo "/en".
+    private string P => new Uri(Navigation.BaseUri).AbsolutePath.TrimEnd('/');
 
-    private async Task GoHome()
-    {
-        if (Navigation.Uri.TrimEnd('/') == Navigation.BaseUri.TrimEnd('/'))
-        {
-            await JS.InvokeVoidAsync("scrollToTop");
-        }
-        else
-        {
-            Navigation.NavigateTo("/");
-        }
-        _menuOpen = false;
-    }
+    private record NavLink(string Label, string Href);
+
+    // Sekce úvodní stránky odkazujeme absolutně s prefixem, aby fungovaly i z jiných stránek.
+    private NavLink[] NavLinks =>
+    [
+        new(L["Nav_Home"], $"{P}/"),
+        new(L["Nav_About"], $"{P}/#about"),
+        new(L["Nav_Projects"], $"{P}/#projects"),
+        new(L["Nav_Experience"], $"{P}/#experience"),
+        new(L["Nav_Blog"], $"{P}/#blog"),
+        new(L["Nav_Gear"], $"{P}/setup"),
+        new(L["Nav_Contact"], $"{P}/#kontakt"),
+    ];
 
     private void ToggleMenu() => _menuOpen = !_menuOpen;
+    private void CloseMenu() => _menuOpen = false;
 }

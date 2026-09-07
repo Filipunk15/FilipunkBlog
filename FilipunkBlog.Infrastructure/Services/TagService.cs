@@ -1,4 +1,4 @@
-﻿using FilipunkBlog.Application.Contracts;
+using FilipunkBlog.Application.Contracts;
 using FilipunkBlog.Application.Models;
 using FilipunkBlog.Domain.Entities;
 using FilipunkBlog.Infrastructure.Persistence.Repositories;
@@ -13,7 +13,8 @@ public class TagAdminService(TagRepository repository) : ITagService
         return tags.Select(t => new TagViewModel
         {
             Id = t.Id,
-            Name = t.Name,
+            Name = CultureContext.IsEnglish ? (t.NameEn ?? t.Name) : t.Name,
+            NameEn = t.NameEn,
             Slug = t.Slug
         }).ToList();
     }
@@ -24,6 +25,9 @@ public class TagAdminService(TagRepository repository) : ITagService
         await repository.AddAsync(tag);
         return new TagViewModel { Id = tag.Id, Name = tag.Name, Slug = tag.Slug };
     }
+
+    public async Task SetNameEnAsync(Guid id, string? nameEn)
+        => await repository.SetNameEnAsync(id, nameEn);
 
     public async Task DeleteTagAsync(Guid id)
     {

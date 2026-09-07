@@ -18,6 +18,15 @@ public class TagRepository(IDbContextFactory<ApplicationDbContext> factory)
         await context.SaveChangesAsync();
     }
 
+    public async Task SetNameEnAsync(Guid id, string? nameEn)
+    {
+        await using var context = await factory.CreateDbContextAsync();
+        var tag = await context.Tags.FindAsync(id);
+        if (tag == null) return;
+        tag.NameEn = string.IsNullOrWhiteSpace(nameEn) ? null : nameEn.Trim();
+        await context.SaveChangesAsync();
+    }
+
     public async Task DeleteAsync(Tag tag)
     {
         await using var context = await factory.CreateDbContextAsync();

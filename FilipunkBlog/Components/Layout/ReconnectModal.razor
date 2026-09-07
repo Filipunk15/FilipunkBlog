@@ -1,4 +1,5 @@
-﻿<script type="module" src="@Assets["Components/Layout/ReconnectModal.razor.js"]"></script>
+﻿@inject IStringLocalizer<SharedResource> L
+<script type="module" src="@Assets["Components/Layout/ReconnectModal.razor.js"]"></script>
 
 <dialog id="components-reconnect-modal" data-nosnippet>
     <div class="components-reconnect-container" style="
@@ -16,13 +17,13 @@
             <div></div>
         </div>
         <p class="components-reconnect-first-attempt-visible">
-            // připojuji se...
+            @L["Reconnect_Connecting"]
         </p>
         <p class="components-reconnect-repeated-attempt-visible">
-            // připojení selhalo — zkouším znovu za <span id="components-seconds-to-next-attempt"></span>s
+            @L["Reconnect_RetryPrefix"]<span id="components-seconds-to-next-attempt"></span>s
         </p>
         <p class="components-reconnect-failed-visible">
-            // připojení selhalo<br />Zkus to znovu nebo obnov stránku.
+            @L["Reconnect_Failed"]<br />@L["Reconnect_FailedHint"]
         </p>
         <button id="components-reconnect-button" class="components-reconnect-failed-visible" style="
             margin-top: 1rem;
@@ -35,13 +36,13 @@
             border-radius: 0.25rem;
             cursor: pointer;
             ">
-            Zkusit znovu
+            @L["Reconnect_RetryButton"]
         </button>
         <p class="components-pause-visible">
-            // relace pozastavena serverem
+            @L["Reconnect_Paused"]
         </p>
         <p class="components-resume-failed-visible">
-            // obnovení relace selhalo<br />Zkus to znovu nebo obnov stránku.
+            @L["Reconnect_ResumeFailed"]<br />@L["Reconnect_FailedHint"]
         </p>
         <button id="components-resume-button" class="components-pause-visible components-resume-failed-visible" style="
             margin-top: 1rem;
@@ -54,7 +55,7 @@
             border-radius: 0.25rem;
             cursor: pointer;
             ">
-            Obnovit
+            @L["Reconnect_ResumeButton"]
         </button>
     </div>
 </dialog>

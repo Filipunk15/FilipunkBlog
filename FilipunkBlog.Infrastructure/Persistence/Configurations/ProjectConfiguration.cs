@@ -30,6 +30,9 @@ namespace FilipunkBlog.Infrastructure.Persistence.Configurations
             builder.Property(x => x.Detail)
                 .IsRequired();
 
+            builder.Property(x => x.GitHubUrl).HasMaxLength(300);
+            builder.Property(x => x.LiveDemoUrl).HasMaxLength(300);
+
             builder.HasMany(x => x.Images)
             .WithOne(x => x.Project)
             .HasForeignKey(x => x.ProjectId)

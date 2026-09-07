@@ -1,8 +1,14 @@
-﻿<footer class="border-t border-gray-800 bg-gray-900 py-10">
+@inject NavigationManager Navigation
+
+<footer class="border-t border-gray-800 bg-gray-900 py-10">
     <div class="mx-auto max-w-7xl px-6 lg:px-8">
         <div class="flex items-center justify-between">
-            <span class="font-mono text-sm text-gray-500">© @DateTime.Today.Year Filip Lafata</span>
-            <a href="/rss" class="font-mono text-xs text-gray-500 hover:text-blue-500 transition">RSS</a>
+            <span class="font-mono text-sm text-gray-400">© @DateTime.Today.Year Filip Lafata</span>
+            <a href="@($"{Prefix}/rss")" class="font-mono text-xs text-gray-400 hover:text-blue-500 transition">RSS</a>
         </div>
     </div>
 </footer>
+
+@code {
+    private string Prefix => new Uri(Navigation.BaseUri).AbsolutePath.TrimEnd('/');
+}

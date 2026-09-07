@@ -1,51 +1,76 @@
-﻿@page "/search"
+@page "/search"
 @using FilipunkBlog.Application.Contracts
 @using FilipunkBlog.Application.Models
 @inject IBlogPostService BlogPostService
+@inject IProjectService ProjectService
 @inject NavigationManager Navigation
+@inject IStringLocalizer<SharedResource> L
 
-<PageTitle>Filip Lafata - Hledání</PageTitle>
+<PageTitle>@L["PageTitle_Search"]</PageTitle>
 
 <div class="mx-auto max-w-7xl px-6 py-20 lg:px-8">
     <div class="mb-12">
-        <span class="inline-block mb-4 rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
-            // HLEDÁNÍ
-        </span>
         <div class="flex gap-4 mt-6">
             <input @bind="_query" @bind:event="oninput" @onkeyup="OnKeyUp"
-                   placeholder="Hledat příspěvky..."
+                   placeholder="@L["Search_Placeholder"]"
                    class="flex-1 rounded border border-gray-700 bg-gray-900 px-4 py-3 text-sm text-white font-mono focus:border-blue-600/50 focus:outline-none" />
             <button @onclick="DoSearch"
                     class="rounded font-mono text-sm px-6 py-3 bg-blue-600/20 text-blue-500 border border-blue-600/40 hover:bg-blue-600/30 transition">
-                Hledat →
+                @L["Search_Button"]
             </button>
         </div>
     </div>
 
     @if (_searched)
     {
-        @if (_results.Count > 0)
+        @if (_posts.Count == 0 && _projects.Count == 0)
         {
-            <div class="flex flex-col divide-y divide-gray-800">
-                @foreach (var post in _results)
+            <p class="font-mono text-sm text-gray-400">@L["Search_NoResults", _query]</p>
+        }
+
+        @if (_posts.Count > 0)
+        {
+            <h2 class="font-mono text-xs text-blue-500 uppercase tracking-widest mb-4">// @L["Search_Articles"] (@_posts.Count)</h2>
+            <div class="flex flex-col divide-y divide-gray-800 mb-14">
+                @foreach (var post in _posts)
                 {
-                    <a href="/posts/@post.Slug" class="group flex items-center justify-between gap-6 py-6 hover:pl-4 transition-all">
+                    <a href="posts/@post.Slug" class="group flex items-center justify-between gap-6 py-6 hover:pl-4 transition-all">
                         <div>
                             <div class="flex items-center gap-3 mb-2">
                                 <span class="font-mono text-xs text-blue-500 bg-blue-600/10 px-2 py-0.5 rounded-sm">@post.CategoryName</span>
-                                <span class="text-xs text-gray-500">@post.PublishedAtDisplay</span>
+                                <span class="text-xs text-gray-400">@post.PublishedAtDisplay</span>
                             </div>
                             <h3 class="font-mono text-sm font-bold text-white group-hover:text-blue-500 transition">@post.Title</h3>
-                            <p class="text-xs text-gray-500 mt-1 line-clamp-2">@post.Introduction</p>
+                            <p class="text-xs text-gray-400 mt-1 line-clamp-2">@post.Introduction</p>
                         </div>
-                        <span class="text-xs text-gray-500 whitespace-nowrap">@post.ReadingTime čtení</span>
+                        <span class="text-xs text-gray-400 whitespace-nowrap">@post.ReadingTime @L["Common_Reading"]</span>
                     </a>
                 }
             </div>
         }
-        else
+
+        @if (_projects.Count > 0)
         {
-            <p class="font-mono text-sm text-gray-500">// žádné výsledky pro "@_query"</p>
+            <h2 class="font-mono text-xs text-blue-500 uppercase tracking-widest mb-4">// @L["Search_Projects"] (@_projects.Count)</h2>
+            <div class="flex flex-col divide-y divide-gray-800">
+                @foreach (var project in _projects)
+                {
+                    <a href="project/@project.Slug" class="group flex items-center justify-between gap-6 py-6 hover:pl-4 transition-all">
+                        <div>
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="font-mono text-xs text-blue-500">@project.YearDisplay</span>
+                                @if (project.IsFeatured)
+                                {
+                                    <span class="font-mono text-xs text-amber-400">@L["Projects_Featured"]</span>
+                                }
+                            </div>
+                            <h3 class="font-mono text-sm font-bold text-white group-hover:text-blue-500 transition">@project.Title</h3>
+                            <p class="text-xs text-gray-400 mt-1 line-clamp-2">@project.Description</p>
+                        </div>
+                        <span class="text-xs text-gray-400 whitespace-nowrap">@L["Common_Detail"] <span aria-hidden="true">↗</span></span>
+                    </a>
+                }
+            </div>
         }
     }
 </div>
@@ -54,7 +79,8 @@
     [SupplyParameterFromQuery] public string? Q { get; set; }
 
     private string _query = string.Empty;
-    private List<BlogPostViewModel> _results = [];
+    private List<BlogPostViewModel> _posts = [];
+    private List<ProjectViewModel> _projects = [];
     private bool _searched = false;
 
     protected override async Task OnInitializedAsync()
@@ -74,7 +100,8 @@
     private async Task DoSearch()
     {
         if (string.IsNullOrWhiteSpace(_query)) return;
-        _results = await BlogPostService.SearchAsync(_query);
+        _posts = await BlogPostService.SearchAsync(_query);
+        _projects = await ProjectService.SearchProjectsAsync(_query);
         _searched = true;
     }
 }

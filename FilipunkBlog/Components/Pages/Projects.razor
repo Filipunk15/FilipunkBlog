@@ -3,20 +3,18 @@
 @using FilipunkBlog.Application.Models
 @inject IProjectService ProjectService
 @inject ITagService TagService
+@inject IStringLocalizer<SharedResource> L
 
-<PageTitle>Filip Lafata - Projekty</PageTitle>
+<PageTitle>@L["PageTitle_Projects"]</PageTitle>
 
 <HeadContent>
-    <meta name="description" content="Všechny moje projekty." />
-    <meta property="og:title" content="Projekty — Filip" />
+    <meta name="description" content="@L["Projects_Title"]" />
+    <meta property="og:title" content="@L["PageTitle_Projects"]" />
 </HeadContent>
 
 <div class="mx-auto max-w-7xl px-6 py-20 lg:px-8">
     <div class="mb-12">
-        <span class="inline-block mb-4 rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
-            // PROJEKTY
-        </span>
-        <h1 class="font-mono text-3xl font-bold text-white">Všechny projekty</h1>
+        <h1 class="font-mono text-3xl font-bold text-white">@L["Projects_Title"]</h1>
     </div>
 
     <div class="grid gap-12 lg:grid-cols-12">
@@ -26,7 +24,7 @@
                 <div class="grid gap-6 sm:grid-cols-2">
                     @foreach (var p in _projects.Items)
                     {
-                        <a href="/project/@p.Slug" class="group flex flex-col rounded-lg border border-gray-700 bg-gray-950 overflow-hidden hover:border-blue-600/50 transition">
+                        <a href="project/@p.Slug" class="group flex flex-col rounded-lg border border-gray-700 bg-gray-950 overflow-hidden hover:border-blue-600/50 transition">
                             @if (!string.IsNullOrEmpty(p.MainImage))
                             {
                                 <img src="@p.MainImage" alt="@p.Title" class="w-full aspect-video object-cover" />
@@ -34,12 +32,16 @@
                             else
                             {
                                 <div class="w-full aspect-video bg-gray-800 flex items-center justify-center">
-                                    <span class="font-mono text-gray-600 text-xs">// no image</span>
+                                    <span class="font-mono text-gray-600 text-xs">@L["Common_NoImage"]</span>
                                 </div>
                             }
                             <div class="p-6 flex flex-col flex-1">
                                 <div class="flex items-center gap-3 mb-3">
                                     <span class="font-mono text-xs text-blue-500">@p.YearDisplay</span>
+                                    @if (p.IsFeatured)
+                                    {
+                                        <span class="font-mono text-xs text-amber-400">@L["Projects_Featured"]</span>
+                                    }
                                 </div>
                                 <h2 class="font-mono text-sm font-bold text-white group-hover:text-blue-500 transition mb-3">@p.Title</h2>
                                 <p class="text-sm text-gray-400 leading-relaxed line-clamp-3 flex-1">@p.Description</p>
@@ -61,15 +63,15 @@
                         {
                             <button @onclick="() => LoadPage(_currentPage - 1)"
                                     class="font-mono text-xs px-4 py-2 border border-gray-700 text-gray-400 hover:border-blue-600/50 hover:text-blue-500 transition rounded">
-                                ← Předchozí
+                                @L["Common_Prev"]
                             </button>
                         }
-                        <span class="font-mono text-xs text-gray-500">@_currentPage / @_projects.TotalPages</span>
+                        <span class="font-mono text-xs text-gray-400">@_currentPage / @_projects.TotalPages</span>
                         @if (_projects.HasNextPage)
                         {
                             <button @onclick="() => LoadPage(_currentPage + 1)"
                                     class="font-mono text-xs px-4 py-2 border border-gray-700 text-gray-400 hover:border-blue-600/50 hover:text-blue-500 transition rounded">
-                                Další →
+                                @L["Common_Next"]
                             </button>
                         }
                     </div>
@@ -77,7 +79,7 @@
             }
             else
             {
-                <p class="text-gray-500 font-mono text-sm">// zatím žádné projekty</p>
+                <p class="text-gray-400 font-mono text-sm">@L["Projects_NoProjects"]</p>
             }
         </div>
     </div>

@@ -9,7 +9,7 @@ using FilipunkBlog.Infrastructure.Persistence.Repositories;
 
 namespace FilipunkBlog.Infrastructure.Services;
 
-public class CommentService(CommentRepository repository) : ICommentService
+public class CommentService(CommentRepository repository, INotificationService notifier) : ICommentService
 {
     public async Task<List<CommentViewModel>> GetApprovedByPostAsync(Guid postId)
     {
@@ -33,6 +33,9 @@ public class CommentService(CommentRepository repository) : ICommentService
             IsApproved = false
         };
         await repository.AddAsync(comment);
+
+        var saved = await repository.GetByIdAsync(comment.Id);
+        await notifier.NotifyNewCommentAsync(name, saved?.BlogPost?.Title ?? "?", content);
     }
 
     public async Task ApproveAsync(Guid id) => await repository.ApproveAsync(id);

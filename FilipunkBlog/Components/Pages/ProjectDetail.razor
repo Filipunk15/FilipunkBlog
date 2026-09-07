@@ -3,23 +3,31 @@
 @using FilipunkBlog.Application.Models
 @inject IProjectService ProjectService
 @inject NavigationManager Navigation
+@inject IMarkdownService Markdown
+@inject IJSRuntime JS
+@inject IStringLocalizer<SharedResource> L
 
-<PageTitle>Filip Lafata - @(_project?.Title ?? "Projekt")</PageTitle>
+<PageTitle>Filip Lafata – @(_project?.Title ?? "Project")</PageTitle>
 
 <HeadContent>
     <meta name="description" content="@_project?.Description" />
     <meta property="og:title" content="@_project?.Title" />
     <meta property="og:description" content="@_project?.Description" />
     <meta property="og:image" content="@_project?.MainImage" />
-    <meta property="og:url" content="https://filipunk.cz/project/@_project?.Slug" />
     <meta property="og:type" content="article" />
     <meta name="twitter:card" content="summary_large_image" />
+    @if (_project != null)
+    {
+        <link rel="alternate" hreflang="cs" href="@($"https://filipunk.cz/project/{_project.SlugCs}")" />
+        <link rel="alternate" hreflang="en" href="@($"https://filipunk.cz/en/project/{_project.SlugEn ?? _project.SlugCs}")" />
+        <link rel="alternate" hreflang="x-default" href="@($"https://filipunk.cz/project/{_project.SlugCs}")" />
+    }
 </HeadContent>
 
 @if (_project == null)
 {
     <div class="mx-auto max-w-3xl px-6 py-20 lg:px-8">
-        <p class="font-mono text-gray-500 text-sm">// načítám...</p>
+        <p class="font-mono text-gray-400 text-sm">@L["Common_Loading"]</p>
     </div>
 }
 else
@@ -27,8 +35,8 @@ else
     <!-- HERO -->
     <div class="border-b border-gray-800 bg-gray-950">
         <div class="mx-auto max-w-3xl px-6 py-16 lg:px-8">
-            <a href="/" class="inline-flex items-center gap-2 font-mono text-xs text-gray-500 hover:text-blue-500 transition mb-8">
-                ← Zpět na hlavní stránku
+            <a href="." class="inline-flex items-center gap-2 font-mono text-xs text-gray-400 hover:text-blue-500 transition mb-8">
+                @L["ProjectDetail_BackHome"]
             </a>
             <div class="flex flex-wrap items-center gap-3 mb-4">
                 <span class="font-mono text-xs px-3 py-1 rounded-sm bg-blue-600/10 border border-blue-600/40 text-blue-500">
@@ -43,6 +51,26 @@ else
             </div>
             <h1 class="font-mono text-4xl font-bold text-white leading-tight mb-4">@_project.Title</h1>
             <p class="text-gray-400 text-lg leading-relaxed max-w-2xl">@_project.Description</p>
+
+            @if (!string.IsNullOrWhiteSpace(_project.GitHubUrl) || !string.IsNullOrWhiteSpace(_project.LiveDemoUrl))
+            {
+                <div class="mt-6 flex flex-wrap gap-3">
+                    @if (!string.IsNullOrWhiteSpace(_project.LiveDemoUrl))
+                    {
+                        <a href="@_project.LiveDemoUrl" target="_blank" rel="noopener noreferrer"
+                           class="inline-flex items-center gap-2 rounded font-mono text-sm px-5 py-2.5 bg-blue-600/20 text-blue-500 border border-blue-600/40 hover:bg-blue-600/30 transition">
+                            <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> @L["ProjectDetail_LiveDemo"]
+                        </a>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(_project.GitHubUrl))
+                    {
+                        <a href="@_project.GitHubUrl" target="_blank" rel="noopener noreferrer"
+                           class="inline-flex items-center gap-2 rounded font-mono text-sm px-5 py-2.5 border border-gray-700 text-gray-300 hover:border-gray-500 transition">
+                            <i class="fa-brands fa-github" aria-hidden="true"></i> GitHub
+                        </a>
+                    }
+                </div>
+            }
         </div>
     </div>
 
@@ -56,13 +84,13 @@ else
         }
 
         <div class="prose prose-invert prose-green max-w-none text-gray-300 leading-relaxed mb-12">
-            @((MarkupString)_project.Detail)
+            @((MarkupString)Markdown.ToHtml(_project.Detail))
         </div>
 
         @if (_project.Images.Any(x => x != _project.MainImage))
         {
             <div class="mt-12 pt-8 border-t border-gray-800">
-                <span class="inline-block mb-6 font-mono text-xs text-blue-500 uppercase tracking-widest">// Galerie</span>
+                <span class="inline-block mb-6 font-mono text-xs text-blue-500 uppercase tracking-widest">// @L["ProjectDetail_Gallery"]</span>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     @foreach (var img in _project.Images.Where(x => x != _project.MainImage))
                     {
@@ -74,8 +102,8 @@ else
         }
 
         <div class="mt-12 pt-8 border-t border-gray-800">
-            <a href="/" class="font-mono text-xs text-blue-500 hover:text-blue-400 transition">
-                ← Zpět na hlavní stránku
+            <a href="." class="font-mono text-xs text-blue-500 hover:text-blue-400 transition">
+                @L["ProjectDetail_BackHome"]
             </a>
         </div>
     </article>
@@ -91,8 +119,14 @@ else
         _project = await ProjectService.GetProjectBySlugAsync(Slug);
         if (_project == null)
         {
-            Navigation.NavigateTo("/projects");
+            Navigation.NavigateTo("projects");
             return;
         }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_project != null)
+            await JS.InvokeVoidAsync("blogEnhance");
     }
 }

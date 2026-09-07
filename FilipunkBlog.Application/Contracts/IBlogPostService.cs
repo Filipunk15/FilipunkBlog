@@ -14,6 +14,7 @@ public interface IBlogPostService
     Task<List<BlogPostViewModel>> GetPostsByCategoryAsync(string categorySlug, int page = 1, int pageSize = 10);
     Task<List<BlogPostViewModel>> GetPostsByTagAsync(string tagSlug);
     Task<List<BlogPostViewModel>> GetAllPostsAsync();
+    Task<BlogPostViewModel?> GetForEditAsync(Guid id);
     Task CreatePostAsync(BlogPostViewModel post);
     Task UpdatePostAsync(BlogPostViewModel post);
     Task DeletePostAsync(Guid id);

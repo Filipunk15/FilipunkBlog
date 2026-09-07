@@ -1,7 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
 using FilipunkBlog.Application.Contracts;
 using FilipunkBlog.Application.Models;
 using FilipunkBlog.Domain.Entities;
@@ -17,7 +13,8 @@ public class CategoryAdminService(CategoryRepository repository) : ICategoryAdmi
         return cats.Select(c => new CategoryViewModel
         {
             Id = c.Id,
-            Name = c.Name,
+            Name = CultureContext.IsEnglish ? (c.NameEn ?? c.Name) : c.Name,
+            NameEn = c.NameEn,
             Slug = c.Slug
         }).ToList();
     }
@@ -27,6 +24,9 @@ public class CategoryAdminService(CategoryRepository repository) : ICategoryAdmi
         var cat = new Category { Name = name, Slug = slug };
         await repository.AddAsync(cat);
     }
+
+    public async Task SetNameEnAsync(Guid id, string? nameEn)
+        => await repository.SetNameEnAsync(id, nameEn);
 
     public async Task DeleteCategoryAsync(Guid id)
     {

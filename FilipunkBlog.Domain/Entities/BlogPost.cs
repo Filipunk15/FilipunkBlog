@@ -15,4 +15,5 @@ public class BlogPost : EntityBase
     public int Views { get; set; }
 
     public ICollection<Comment> Comments { get; set; } = [];
+    public ICollection<BlogPostTranslation> Translations { get; set; } = [];
 }

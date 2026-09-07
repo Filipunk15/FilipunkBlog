@@ -12,6 +12,7 @@ public interface IProjectService
     Task<ProjectViewModel?> GetProjectBySlugAsync(string slug);
     Task<List<ProjectViewModel>> GetProjectsByTagAsync(string tagSlug);
     Task<List<ProjectViewModel>> GetAllProjectsAsync();
+    Task<ProjectViewModel?> GetForEditAsync(Guid id);
     Task CreateProjectAsync(ProjectViewModel project);
     Task UpdateProjectAsync(ProjectViewModel project);
     Task DeleteProjectAsync(Guid id);

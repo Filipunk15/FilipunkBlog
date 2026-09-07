@@ -1,15 +1,18 @@
-﻿@page "/"
+@page "/"
 @using FilipunkBlog.Application.Contracts
 @using FilipunkBlog.Application.Models
+@using FilipunkBlog.Domain.Entities
 @inject IBlogPostService BlogPostService
-@inject IProjectService ProjectService  
+@inject IProjectService ProjectService
+@inject ISiteSettingsService SiteSettingsService
+@inject IStringLocalizer<SharedResource> L
 
-<PageTitle>Filip Lafata - Osobní portfolio</PageTitle>
+<PageTitle>@L["PageTitle_Home"]</PageTitle>
 
 <HeadContent>
-    <meta name="description" content="Filip — Junior .NET Developer. Portfolio a blog o C# a .NET vývoji." />
-    <meta property="og:title" content="Filip Lafata - Osobní portfolio" />
-    <meta property="og:description" content="Portfolio a blog o C# a .NET vývoji." />
+    <meta name="description" content="@L["Home_Meta_Description"]" />
+    <meta property="og:title" content="@L["PageTitle_Home"]" />
+    <meta property="og:description" content="@L["Home_Meta_Description"]" />
     <meta property="og:type" content="website" />
 </HeadContent>
 
@@ -17,31 +20,47 @@
 <section class="bg-gray-950 border-b border-gray-800">
     <div class="mx-auto max-w-7xl px-6 py-32 lg:px-8">
         <div class="max-w-3xl">
-            <span class="inline-block mb-6 rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
-                // hello world
-            </span>
+            <div class="mb-6 flex flex-wrap items-center gap-3">
+                @if (_availability is not null)
+                {
+                    <span class="inline-flex items-center gap-2 rounded-sm border @_availability.BorderClass @_availability.BgClass px-3 py-1 font-mono text-xs @_availability.TextClass">
+                        <span class="relative flex h-2 w-2">
+                            @if (_availability.ShowPulse)
+                            {
+                                <span class="absolute inline-flex h-full w-full animate-ping rounded-full @_availability.DotClass opacity-75"></span>
+                            }
+                            <span class="relative inline-flex h-2 w-2 rounded-full @_availability.DotClass"></span>
+                        </span>
+                        @AvailabilityLabel(_availability.Status)
+                    </span>
+                }
+            </div>
+            @if (_availability?.Note is { Length: > 0 } note)
+            {
+                <p class="mb-6 -mt-2 font-mono text-xs text-gray-400">@note</p>
+            }
             <h1 class="font-mono text-5xl font-bold leading-tight tracking-tight text-white lg:text-7xl mb-6">
-                Jsem Filip,<br />
-                <span class="text-blue-500">juniorní vývojář</span>
+                @L["Hero_TitleLine1"]<br />
+                <span class="text-blue-500">@L["Hero_TitleLine2"]</span>
             </h1>
             <p class="text-lg text-gray-400 leading-relaxed max-w-xl mb-10">
-                Pracuji v C# a .NET na firemních interních aplikacích. Zajímám se o to, jak věci fungují uvnitř a postupně se zlepšuji.
+                @L["Hero_Subtitle"]
             </p>
             <div class="flex flex-wrap gap-4">
                 <a href="#projects" class="rounded font-mono text-sm font-bold px-7 py-3 bg-blue-600/20 text-blue-500 border border-blue-600/40 hover:bg-blue-600/30 transition">
-                    Moje projekty →
+                    @L["Hero_CtaProjects"]
                 </a>
                 <a href="#kontakt" class="rounded font-mono text-sm px-7 py-3 border border-gray-700 text-gray-300 hover:border-gray-500 transition">
-                    Kontakt
+                    @L["Hero_CtaContact"]
                 </a>
             </div>
         </div>
         <div class="mt-20 flex gap-12">
-            @foreach (var stat in new[] { ("6+", "Projekty"), ("2+", "Roky komerční praxe")})
+            @foreach (var stat in new[] { ("6+", L["Stat_Projects"].Value), ("2+", L["Stat_Experience"].Value) })
             {
                 <div>
                     <div class="font-mono text-4xl font-bold text-white">@stat.Item1</div>
-                    <div class="mt-1 text-sm text-gray-500">@stat.Item2</div>
+                    <div class="mt-1 text-sm text-gray-400">@stat.Item2</div>
                 </div>
             }
         </div>
@@ -49,32 +68,26 @@
 </section>
 
 <!-- O MNĚ -->
-<section id="about" class="bg-gray-950 border-b border-gray-800">
+<section id="about" class="bg-gray-950 border-b border-gray-800 scroll-mt-16">
     <div class="mx-auto max-w-7xl px-6 py-20 lg:px-8">
         <div class="grid gap-20 lg:grid-cols-2 items-start">
             <div>
-                <span class="inline-block mb-6 rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
-                    // O MNĚ
+                <span class="inline-block mb-6 rounded-sm bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
+                   @L["Home_About_Eyebrow"]
                 </span>
                 <p class="text-gray-400 leading-relaxed text-base mb-4">
-                    K programování jsem se dostal již na základní škole, kdy jsem s kamarády tvořil svoje Minecraft servery s vlastními pluginy, na střední škole jsme Minecraft vyměnili za FiveM modifikaci do GTA V, kde jsme si upravovali vlastní LUA scripty.
+                    @L["Home_About_P1"]
                 </p>
                 <p class="text-gray-400 leading-relaxed text-base">
-                    Nyní se věnuji čistě C# programování, nejčastěji webovému vývoji a vývoji interních aplikací.
+                    @L["Home_About_P2"]
                 </p>
             </div>
             <div class="flex flex-col">
-                @foreach (var item in new[] {
-                    ("Zaměření", ".NET / C# "),
-                    ("Databáze", "MSSQL, MySQL"),
-                    ("Frontend", "HTML, CSS, JavaScript"),
-                    ("Nástroje", "Git, Visual Studio, Visual Studio Code, Notion"),
-                    ("Jazyk", "Čeština, Angličtina")
-                })
+                @foreach (var item in AboutFacts)
                 {
                     <div class="flex justify-between py-3 border-b border-gray-800">
-                        <span class="font-mono text-xs text-gray-500 uppercase tracking-wider shrink-0">@item.Item1</span>
-                        <span class="text-sm text-white font-medium text-right ml-4">@item.Item2</span>
+                        <span class="font-mono text-xs text-gray-400 uppercase tracking-wider shrink-0">@item.Label</span>
+                        <span class="text-sm text-white font-medium text-right ml-4">@item.Value</span>
                     </div>
                 }
             </div>
@@ -83,39 +96,47 @@
 </section>
 
 <!-- PROJEKTY -->
-<section id="projects" class="bg-gray-900 border-b border-gray-800">
+<section id="projects" class="bg-gray-900 border-b border-gray-800 scroll-mt-16">
     <div class="mx-auto max-w-7xl px-6 py-20 lg:px-8">
         <div class="flex items-end justify-between mb-12">
-            <span class="inline-block rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
-                // PROJEKTY
+            <span class="inline-block rounded-sm px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
+                @L["Home_Section_Projects"]
             </span>
             <div class="flex items-center gap-3">
                 @if (_isAdmin)
                 {
-                    <a href="/admin/projects/new" class="font-mono text-xs px-3 py-1.5 bg-blue-600/20 text-blue-500 border border-blue-600/40 rounded hover:bg-blue-600/30 transition">
-                        + Přidat projekt
+                    <a href="admin/projects/new" class="font-mono text-xs px-3 py-1.5 bg-blue-600/20 text-blue-500 border border-blue-600/40 rounded hover:bg-blue-600/30 transition">
+                        @L["Home_AddProject"]
                     </a>
                 }
                 @if (_projects.Count() >= maxProjects)
                 {
-                    <a href="/projects" class="font-mono text-xs text-blue-500 hover:text-blue-400 transition">Všechny projekty →</a>
+                    <a href="projects" class="font-mono text-xs text-blue-500 hover:text-blue-400 transition">@L["Common_AllProjects"]</a>
                 }
             </div>
         </div>
         <div class="grid gap-6 sm:grid-cols-2">
                 @foreach (var p in _projects)
                 {
-                    <a href="/project/@p.Slug" class="rounded-lg border border-gray-700 bg-gray-950 p-8 hover:border-blue-600/50 transition cursor-pointer group block">
+                    <a href="project/@p.Slug" class="rounded-lg border border-gray-700 bg-gray-950 p-8 hover:border-blue-600/50 transition cursor-pointer group block">
                             <div class="flex justify-between items-start mb-4">
-                                <span class="font-mono text-xs text-blue-500">@p.YearDisplay</span>
+                                <span class="font-mono text-xs">
+                                    <span class="text-blue-500">@p.YearDisplay</span>
+                                    @if (p.IsFeatured)
+                                    {
+                                        <span class="ml-2 text-amber-400">★</span>
+                                    }
+                                </span>
                                 <div class="flex items-center gap-2">
                                 @if (_isAdmin)
                                 {
-                                    <a href="/admin/projects/edit/@p.Id" @onclick:stopPropagation="true" class="font-mono text-xs px-2 py-0.5 border border-gray-700 text-gray-500 hover:border-blue-600/50 hover:text-blue-500 transition rounded">
-                                        ✎
+                                    <a href="admin/projects/edit/@p.Id" @onclick:stopPropagation="true"
+                                       aria-label="@L["Home_EditProjectAria", p.Title]"
+                                       class="font-mono text-xs px-2 py-0.5 border border-gray-700 text-gray-400 hover:border-blue-600/50 hover:text-blue-500 transition rounded">
+                                        <span aria-hidden="true">✎</span>
                                     </a>
                                 }
-            <span class="font-mono text-xs text-gray-500 group-hover:text-blue-500 transition">detail ↗</span>
+            <span class="font-mono text-xs text-gray-400 group-hover:text-blue-500 transition">@L["Common_Detail"] <span aria-hidden="true">↗</span></span>
         </div>
     </div>
                         <h3 class="font-mono text-base font-bold text-white mb-3">@p.Title</h3>
@@ -134,13 +155,13 @@
 
 
 <!-- TECHNOLOGIE -->
-<section id="skills" class="bg-gray-950 border-b border-gray-800">
+<section id="skills" class="bg-gray-950 border-b border-gray-800 scroll-mt-16">
     <div class="mx-auto max-w-7xl px-6 py-20 lg:px-8">
-        <span class="inline-block mb-12 rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
-            // TECHNOLOGIE
+        <span class="inline-block mb-12 rounded-sm px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
+            @L["Home_Section_Tech"]
         </span>
         <div class="grid gap-10 grid-cols-2 lg:grid-cols-4">
-            @foreach (var group in _skillGroups)
+            @foreach (var group in SkillGroups)
             {
                 <div>
                     <div class="font-mono text-xs text-blue-500 uppercase tracking-widest mb-4">@group.Group</div>
@@ -157,19 +178,19 @@
 </section>
 
 <!-- ZKUŠENOSTI -->
-<section class="bg-gray-900 border-b border-gray-800">
+<section id="experience" class="bg-gray-900 border-b border-gray-800 scroll-mt-16">
     <div class="mx-auto max-w-3xl px-6 py-20 lg:px-8">
-        <span class="inline-block mb-12 rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
-            // ZKUŠENOSTI
+        <span class="inline-block mb-12 rounded-sm px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
+           @L["Home_Section_Experience"]
         </span>
         <div class="relative pl-8 border-l border-gray-700">
-            @foreach (var (item, i) in _timeline.Select((t, i) => (t, i)))
+            @foreach (var (item, i) in Timeline.Select((t, i) => (t, i)))
             {
-                <div class="relative @(i < _timeline.Count - 1 ? "mb-10" : "")">
+                <div class="relative @(i < Timeline.Count - 1 ? "mb-10" : "")">
                     <div class="absolute -left-[37px] top-1.5 h-3 w-3 rounded-full bg-blue-500 border-2 border-gray-900"></div>
                     <div class="font-mono text-xs text-blue-500 mb-1">@item.Year</div>
                     <h3 class="font-mono text-sm font-bold text-white">@item.Role</h3>
-                    <div class="text-xs text-gray-500 mb-2">@item.Company</div>
+                    <div class="text-xs text-gray-400 mb-2">@item.Company</div>
                     <p class="text-sm text-gray-400 leading-relaxed" style="white-space: pre-line">@item.Desc</p>
                 </div>
             }
@@ -178,21 +199,21 @@
 </section>
 
 <!-- BLOG -->
-<section id="blog" class="bg-gray-950 border-b border-gray-800">
+<section id="blog" class="bg-gray-950 border-b border-gray-800 scroll-mt-16">
     <div class="mx-auto max-w-7xl px-6 py-20 lg:px-8">
         <div class="flex items-end justify-between mb-12">
-            <span class="inline-block rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
-                // BLOG
+            <span class="inline-block rounded-sm px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
+                @L["Home_Section_Blog"]
             </span>
             <div class="flex items-center gap-3">
                 @if (_isAdmin)
                 {
-                    <a href="/admin/posts/new" class="font-mono text-xs px-3 py-1.5 bg-blue-600/20 text-blue-500 border border-blue-600/40 rounded hover:bg-blue-600/30 transition">
-                        + Nový článek
+                    <a href="admin/posts/new" class="font-mono text-xs px-3 py-1.5 bg-blue-600/20 text-blue-500 border border-blue-600/40 rounded hover:bg-blue-600/30 transition">
+                        @L["Home_NewArticle"]
                     </a>
                 }
                 @if (_recentPosts.Count > 0){
-                    <a href="/posts" class="font-mono text-xs text-blue-500 hover:text-blue-400 transition">Všechny články →</a>
+                    <a href="posts" class="font-mono text-xs text-blue-500 hover:text-blue-400 transition">@L["Common_AllPosts"]</a>
                 }
             </div>
         </div>
@@ -201,84 +222,87 @@
             {
                 @foreach (var post in _recentPosts)
                 {
-                    <a href="/posts/@post.Slug" class="group flex items-center justify-between gap-6 py-6 hover:pl-4 transition-all">
+                    <a href="posts/@post.Slug" class="group flex items-center justify-between gap-6 py-6 hover:pl-4 transition-all">
                         <div>
                             <div class="flex items-center gap-3 mb-2">
                                 <span class="font-mono text-xs text-blue-500 bg-blue-600/10 px-2 py-0.5 rounded-sm">@post.CategoryName</span>
-                                <span class="text-xs text-gray-500">@post.PublishedAtDisplay</span>
+                                <span class="text-xs text-gray-400">@post.PublishedAtDisplay</span>
                             </div>
                             <h3 class="font-mono text-sm font-bold text-white group-hover:text-blue-500 transition">@post.Title</h3>
                         </div>
-                        <span class="text-xs text-gray-500 whitespace-nowrap">@post.ReadingTime čtení</span>
+                        <span class="text-xs text-gray-400 whitespace-nowrap">@post.ReadingTime @L["Common_Reading"]</span>
                     </a>
                 }
             }
             else
             {
-                <p class="text-gray-500 text-sm py-6">Zatím žádné příspěvky.</p>
+                <p class="text-gray-400 text-sm py-6">@L["Home_NoPosts"]</p>
             }
         </div>
     </div>
 </section>
 
 <!-- KONTAKT -->
-<section id="kontakt" class="bg-gray-900">
+<section id="kontakt" class="bg-gray-900 scroll-mt-16">
     <div class="mx-auto max-w-3xl px-6 py-20 lg:px-8">
-        <span class="inline-block mb-4 rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
-            // KONTAKT
+        <span class="inline-block mb-4 rounded-sm px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
+            @L["Contact_Eyebrow"]
         </span>
-        <p class="text-gray-400 text-sm leading-relaxed mb-12">
-            Neváhejte mě kontaktovat ohledně nabídky práce, nabídce spolupráce, s dotazy.
+        <p class="text-gray-400 text-sm leading-relaxed mb-8">
+            @L["Contact_Intro"]
         </p>
-        <div class="grid gap-4 sm:grid-cols-2">
+
+        <ContactForm />
+
+        <div class="grid gap-4 sm:grid-cols-2 mt-8">
             <a href="https://www.github.com/filipunk15" target="_blank"
                    class="flex items-center gap-5 rounded-lg border border-gray-700 bg-gray-950 px-6 py-5 hover:border-blue-600/50 transition group">
-                <span class="text-gray-500 group-hover:text-blue-500 transition font-mono text-lg"><i class="fa-brands fa-github"></i></span>
+                <span class="text-gray-400 group-hover:text-blue-500 transition font-mono text-lg"><i class="fa-brands fa-github"></i></span>
                 <div>
                     <div class="font-mono text-sm font-bold text-white">GitHub</div>
-                    <div class="text-xs text-gray-500">Zdrojové kódy projektů</div>
+                    <div class="text-xs text-gray-400">@L["Contact_Card_Github"]</div>
                 </div>
                 <span class="ml-auto text-gray-700 group-hover:text-blue-500 transition font-mono">↗</span>
             </a>
             <a href="https://www.linkedin.com/in/filip-lafata/" target="_blank"
                    class="flex items-center gap-5 rounded-lg border border-gray-700 bg-gray-950 px-6 py-5 hover:border-blue-600/50 transition group">
-                <span class="text-gray-500 group-hover:text-blue-500 transition font-mono text-lg"><i class="fa-brands fa-square-linkedin"></i></span>
+                <span class="text-gray-400 group-hover:text-blue-500 transition font-mono text-lg"><i class="fa-brands fa-square-linkedin"></i></span>
                 <div>
                     <div class="font-mono text-sm font-bold text-white">LinkedIn</div>
-                    <div class="text-xs text-gray-500">Profesní profil</div>
+                    <div class="text-xs text-gray-400">@L["Contact_Card_LinkedIn"]</div>
                 </div>
                 <span class="ml-auto text-gray-700 group-hover:text-blue-500 transition font-mono">↗</span>
             </a>
             <a href="mailto:f.lafata@filipunk.cz"
                    class="flex items-center gap-5 rounded-lg border border-gray-700 bg-gray-950 px-6 py-5 hover:border-blue-600/50 transition group">
-                <span class="text-gray-500 group-hover:text-blue-500 transition font-mono text-lg">
+                <span class="text-gray-400 group-hover:text-blue-500 transition font-mono text-lg">
                     <i class="fa-solid fa-at"></i>
                 </span>
                 <div>
                     <div class="font-mono text-sm font-bold text-white">E-mail</div>
-                    <div class="text-xs text-gray-500">Přímý kontakt</div>
+                    <div class="text-xs text-gray-400">@L["Contact_Card_Email"]</div>
                     <div class="font-mono text-xs text-blue-500 mt-1">f.lafata@filipunk.cz</div>
                 </div>
                 <span class="ml-auto text-gray-700 group-hover:text-blue-500 transition font-mono">↗</span>
             </a>
             <a href="https://www.instagram.com/filiplafata/"
                class="flex items-center gap-5 rounded-lg border border-gray-700 bg-gray-950 px-6 py-5 hover:border-blue-600/50 transition group">
-                <span class="text-gray-500 group-hover:text-blue-500 transition font-mono text-lg"><i class="fa-brands fa-instagram"></i></span>
+                <span class="text-gray-400 group-hover:text-blue-500 transition font-mono text-lg"><i class="fa-brands fa-instagram"></i></span>
                 <div>
                     <div class="font-mono text-sm font-bold text-white">Instagram</div>
-                    <div class="text-xs text-gray-500">Osobní profil</div>
+                    <div class="text-xs text-gray-400">@L["Contact_Card_Instagram"]</div>
                 </div>
                 <span class="ml-auto text-gray-700 group-hover:text-blue-500 transition font-mono">↗</span>
             </a>
             <div class="relative group/cv">
                 <button @onclick="() => _showDropdown = !_showDropdown"
                         class="w-full flex items-center gap-5 rounded-lg border border-gray-700 bg-gray-950 px-6 py-5 hover:border-blue-600/50 transition group">
-                    <span class="text-gray-500 group-hover:text-blue-500 transition font-mono text-lg">
+                    <span class="text-gray-400 group-hover:text-blue-500 transition font-mono text-lg">
                         <i class="fa-solid fa-file-pdf"></i>
                     </span>
                     <div class="text-left">
-                        <div class="font-mono text-sm font-bold text-white">Životopis (CV)</div>
-                        <div class="text-xs text-gray-500">Stáhnout životopis</div>
+                        <div class="font-mono text-sm font-bold text-white">@L["Contact_Card_CvTitle"]</div>
+                        <div class="text-xs text-gray-400">@L["Contact_Card_CvSub"]</div>
                     </div>
                     <span class="ml-auto text-gray-700 group-hover:text-blue-500 transition font-mono">
                         @(_showDropdown ? "↑" : "↓")
@@ -288,13 +312,27 @@
                 @if (_showDropdown)
                 {
                     <div class="absolute z-10 mt-1 w-full rounded-lg border border-gray-700 bg-gray-950 overflow-hidden">
-                        <a href="/files/lafata_cv-cz.pdf" target="_blank"
+                        <a href="/files/lafata_cv-cz.pdf" target="_blank" rel="noopener noreferrer"
                            class="flex items-center gap-3 px-6 py-4 hover:bg-gray-800 transition font-mono text-sm text-white">
-                            <span class="fi fi-cz"></span> CZ verze
+                            <svg viewBox="0 0 900 600" class="h-3.5 w-5 shrink-0 rounded-sm" aria-hidden="true">
+                                <rect width="900" height="600" fill="#fff" />
+                                <rect width="900" height="300" y="300" fill="#d7141a" />
+                                <path d="M0 0l450 300L0 600z" fill="#11457e" />
+                            </svg>
+                            @L["Contact_Card_CvCz"]
                         </a>
                         <div class="flex items-center gap-3 px-6 py-4 border-t border-gray-800 font-mono text-sm text-gray-600 cursor-not-allowed">
-                            <span class="fi fi-gb"></span> EU verze
-                            <span class="ml-auto text-xs text-gray-700">// připravuji</span>
+                            <svg viewBox="0 0 60 30" class="h-3.5 w-5 shrink-0 rounded-sm opacity-60" aria-hidden="true">
+                                <clipPath id="cvgb"><path d="M0 0v30h60V0z" /></clipPath>
+                                <g clip-path="url(#cvgb)">
+                                    <path d="M0 0v30h60V0z" fill="#012169" />
+                                    <path d="M0 0l60 30m0-30L0 30" stroke="#fff" stroke-width="6" />
+                                    <path d="M30 0v30M0 15h60" stroke="#fff" stroke-width="10" />
+                                    <path d="M30 0v30M0 15h60" stroke="#C8102E" stroke-width="6" />
+                                </g>
+                            </svg>
+                            @L["Contact_Card_CvEu"]
+                            <span class="ml-auto text-xs text-gray-700">@L["Contact_Card_CvPrep"]</span>
                         </div>
                     </div>
                 }
@@ -306,10 +344,9 @@
 @code {
     private List<BlogPostViewModel> _recentPosts = [];
     private List<ProjectViewModel> _projects = [];
-
+    private SiteSettingsViewModel? _availability;
 
     private bool _showDropdown = false;
-
     private int maxProjects = 4;
 
     [CascadingParameter] private Task<AuthenticationState>? AuthState { get; set; }
@@ -317,6 +354,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        _availability = await SiteSettingsService.GetAsync();
         _recentPosts = await BlogPostService.GetRecentPostsAsync(3);
         PagedResult<ProjectViewModel> pagedResult = await ProjectService.GetProjectsAsync(1, maxProjects);
         _projects = pagedResult.Items;
@@ -328,21 +366,39 @@
         }
     }
 
-    record SkillGroup(string Group, string[] Items);
-    record TimelineItem(string Year, string Role, string Company, string Desc);
+    private string AvailabilityLabel(AvailabilityStatus status) => status switch
+    {
+        AvailabilityStatus.Available => L["Avail_Available"].Value,
+        AvailabilityStatus.Busy => L["Avail_Busy"].Value,
+        AvailabilityStatus.Unavailable => L["Avail_Unavailable"].Value,
+        _ => string.Empty,
+    };
 
-    private readonly List<SkillGroup> _skillGroups =
+    private record Fact(string Label, string Value);
+    private record SkillGroup(string Group, string[] Items);
+    private record TimelineItem(string Year, string Role, string Company, string Desc);
+
+    private IEnumerable<Fact> AboutFacts =>
+    [
+        new(L["Home_About_Focus"], ".NET / C#"),
+        new(L["Home_About_Database"], "MSSQL, MySQL"),
+        new(L["Home_About_Frontend"], "HTML, CSS, JavaScript"),
+        new(L["Home_About_Tools"], "Git, Visual Studio, Visual Studio Code, Notion"),
+        new(L["Home_About_Lang"], L["Home_About_LangValue"]),
+    ];
+
+    private List<SkillGroup> SkillGroups =>
     [
         new("Backend", ["C#", ".NET", "MSSQL", "MYSQL", "REST API", "BLAZOR"]),
         new("Frontend", ["HTML", "CSS", "JAVASCRIPT", "BOOTSTRAP"]),
-        new("Nástroje", ["Git", "Visual Studio", "Microsoft SQL Server", "Heidi SQL", "Unity", "Godot"]),
-        new("Koncepty", ["OOP", "MVC", "CRUD", "Debugging"]),
+        new(L["Home_Skills_Tools"], ["Git", "Visual Studio", "Microsoft SQL Server", "Heidi SQL", "Unity", "Godot"]),
+        new(L["Home_Skills_Concepts"], ["OOP", "MVC", "CRUD", "Debugging"]),
     ];
 
-    private readonly List<TimelineItem> _timeline =
+    private List<TimelineItem> Timeline =>
     [
-        new("2024–nyní", "IT Technik - Vývojář interních aplikací", "KDK Automotive Czech", "Programování interních aplikacích v jazycích C# (Blazor, MAUI) nebo Javascript (Node.js). \r\n Práce s databází Microsoft SQL, Informix, Oracle. Práce s Microsoft Azure, Microsoft Office. \r\n Zpracovávání dat z MES systému a ERP systému"),
-        new("2023", "IT Stáž", "SUSPA CZ", "Programování maker v Microsoft Exce, Instalace síťové infrastruktury a příprava kabelových rozvodů pro nové kanceláře. \r\n Instalace a konfigurace čteček čárových kódů, tvorba a správa systémů pro generování čárových kódu"),
-        new("2019-2023", "SPŠ Tachov, Světce 1", "Střední vzdělání s maturitou (Obor: Informační technologie)", "Programování a vývoj aplikací v Javě, instalace a správa operačních systémů, systémů i aplikačního programového vybavení"),
+        new(L["Home_Tl1_Year"], L["Home_Tl1_Role"], L["Home_Tl1_Company"], L["Home_Tl1_Desc"]),
+        new(L["Home_Tl2_Year"], L["Home_Tl2_Role"], L["Home_Tl2_Company"], L["Home_Tl2_Desc"]),
+        new(L["Home_Tl3_Year"], L["Home_Tl3_Role"], L["Home_Tl3_Company"], L["Home_Tl3_Desc"]),
     ];
 }

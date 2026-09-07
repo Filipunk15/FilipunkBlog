@@ -29,4 +29,32 @@
     <Folder Include="wwwroot\files\" />
   </ItemGroup>
 
+  <!-- ================= Build klientských assetů ================= -->
+  <!-- Nahrazuje dřívější CDN skripty (Tailwind, highlight.js). Vyžaduje Node.js/npm.
+       Vypnout lze pomocí -p:BuildClientAssets=false. -->
+  <PropertyGroup>
+    <BuildClientAssets Condition="'$(BuildClientAssets)' == ''">true</BuildClientAssets>
+  </PropertyGroup>
+
+  <Target Name="NpmInstall"
+          Condition="'$(BuildClientAssets)' == 'true'"
+          BeforeTargets="BuildClientAssets"
+          Inputs="package.json;package-lock.json"
+          Outputs="node_modules\.package-lock.json">
+    <Message Importance="high" Text="FilipunkBlog: npm install (Tailwind + highlight.js)…" />
+    <Exec Command="npm install --no-audit --no-fund" WorkingDirectory="$(MSBuildProjectDirectory)" />
+  </Target>
+
+  <!-- Generuje wwwroot/app.css (Tailwind) + kopíruje highlight.js z node_modules.
+       ZÁMĚRNĚ bez Inputs/Outputs – běží při každém buildu/publishi. `npm run build`
+       je ~1-2 s a inkrementální kontrola tu dřív způsobovala, že se do publishe
+       dostal zastaralý app.css (soubor měl novější časové razítko než vstupy).
+       Musí proběhnout dřív, než se posbírají a zkomprimují static web assets. -->
+  <Target Name="BuildClientAssets"
+          Condition="'$(BuildClientAssets)' == 'true'"
+          BeforeTargets="ResolveStaticWebAssetsInputs;BeforeBuild;BeforeCompile">
+    <Message Importance="high" Text="FilipunkBlog: build Tailwind CSS + kopírování klientských assetů" />
+    <Exec Command="npm run build" WorkingDirectory="$(MSBuildProjectDirectory)" />
+  </Target>
+
 </Project>

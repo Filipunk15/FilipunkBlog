@@ -1,40 +1,47 @@
 ﻿@page "/Account/Login"
 @layout MainLayout
 @rendermode InteractiveServer
+@inject IStringLocalizer<SharedResource> L
 
-
-<PageTitle>Filip Lafata Portfolio - Přihlášení</PageTitle>
+<PageTitle>filipunk.cz — Login</PageTitle>
 
 <div class="min-h-screen flex items-center justify-center bg-gray-950 px-6">
     <div class="w-full max-w-sm">
         <div class="mb-8 text-center">
-            <a href="/" class="font-mono text-xl font-bold text-white">
+            <a href="." class="font-mono text-xl font-bold text-white">
                 filipunk<span class="text-blue-500">.cz</span>
             </a>
-            <p class="mt-2 text-sm text-gray-500 font-mono">// admin login</p>
+            <p class="mt-2 text-sm text-gray-400 font-mono">@L["Login_Subtitle"]</p>
         </div>
         <div class="rounded-lg border border-gray-700 bg-gray-900 p-8">
             @if (Error == "1")
             {
                 <div class="mb-6 rounded border border-red-500/30 bg-red-500/10 px-4 py-3">
-                    <p class="font-mono text-xs text-red-400">Nesprávný e-mail nebo heslo.</p>
+                    <p class="font-mono text-xs text-red-400">@L["Login_ErrCredentials"]</p>
+                </div>
+            }
+            else if (Error == "locked")
+            {
+                <div class="mb-6 rounded border border-amber-500/30 bg-amber-500/10 px-4 py-3">
+                    <p class="font-mono text-xs text-amber-400">@L["Login_ErrLocked"]</p>
                 </div>
             }
             <form method="post" action="/Account/LoginPost">
+                <AntiforgeryToken />
                 <div class="flex flex-col gap-5">
                     <div>
-                        <label class="font-mono text-xs text-gray-500 uppercase tracking-wider mb-2 block">E-mail</label>
+                        <label class="font-mono text-xs text-gray-400 uppercase tracking-wider mb-2 block">@L["Login_Email"]</label>
                         <input name="email" type="email"
                                class="w-full rounded border border-gray-700 bg-gray-950 px-4 py-3 text-sm text-white font-mono focus:border-blue-600/50 focus:outline-none" />
                     </div>
                     <div>
-                        <label class="font-mono text-xs text-gray-500 uppercase tracking-wider mb-2 block">Heslo</label>
+                        <label class="font-mono text-xs text-gray-400 uppercase tracking-wider mb-2 block">@L["Login_Password"]</label>
                         <input name="password" type="password"
                                class="w-full rounded border border-gray-700 bg-gray-950 px-4 py-3 text-sm text-white font-mono focus:border-blue-600/50 focus:outline-none" />
                     </div>
                     <button type="submit"
                             class="w-full rounded font-mono text-sm font-bold py-3 bg-blue-600/20 text-blue-500 border border-blue-600/40 hover:bg-blue-600/30 transition">
-                        Přihlásit se →
+                        @L["Login_Submit"]
                     </button>
                 </div>
             </form>

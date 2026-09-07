@@ -4,20 +4,18 @@
 @using FilipunkBlog.Application.Models
 @using Microsoft.AspNetCore.Authorization
 @inject ICommentService CommentService
+@inject IStringLocalizer<SharedResource> L
 
-<PageTitle>Správa komentářů</PageTitle>
+<PageTitle>@L["Admin_Comments_Title"]</PageTitle>
 
 <div class="mx-auto max-w-4xl px-6 py-20 lg:px-8">
     <div class="mb-12">
-        <span class="inline-block mb-4 rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
-            // ADMIN
-        </span>
-        <h1 class="font-mono text-3xl font-bold text-white">Komentáře ke schválení</h1>
+        <h1 class="font-mono text-3xl font-bold text-white">@L["Admin_Comments_Title"]</h1>
     </div>
 
     @if (_comments.Count == 0)
     {
-        <p class="font-mono text-sm text-gray-500">// žádné komentáře čekající na schválení</p>
+        <p class="font-mono text-sm text-gray-400">@L["Admin_Comments_None"]</p>
     }
     else
     {
@@ -29,7 +27,7 @@
                         <div class="flex-1">
                             <div class="flex items-center gap-3 mb-2">
                                 <span class="font-mono text-sm font-bold text-white">@comment.Name</span>
-                                <span class="text-xs text-gray-500">@comment.CreatedAtDisplay</span>
+                                <span class="text-xs text-gray-400">@comment.CreatedAtDisplay</span>
                                 <span class="font-mono text-xs text-blue-500 bg-blue-600/10 px-2 py-0.5 rounded-sm">@comment.BlogPostTitle</span>
                             </div>
                             <p class="text-sm text-gray-400 leading-relaxed">@comment.Content</p>
@@ -37,11 +35,11 @@
                         <div class="flex gap-3 shrink-0">
                             <button @onclick="() => Approve(comment.Id)"
                                     class="font-mono text-xs px-3 py-1.5 border border-gray-700 text-gray-400 hover:border-blue-500/50 hover:text-blue-400 transition rounded">
-                                ✓ Schválit
+                                @L["Admin_Comments_Approve"]
                             </button>
                             <button @onclick="() => Delete(comment.Id)"
                                     class="font-mono text-xs px-3 py-1.5 border border-gray-700 text-gray-400 hover:border-red-500/50 hover:text-red-400 transition rounded">
-                                × Smazat
+                                @L["Admin_Comments_Delete"]
                             </button>
                         </div>
                     </div>

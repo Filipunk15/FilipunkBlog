@@ -1,89 +1,243 @@
-﻿@page "/admin"
+@page "/admin"
 @attribute [Authorize(Roles = "Admin")]
 @using FilipunkBlog.Application.Contracts
 @using FilipunkBlog.Application.Models
+@using FilipunkBlog.Domain.Entities
 @using Microsoft.AspNetCore.Authorization
 @inject IBlogPostService BlogPostService
 @inject ICategoryService CategoryService
+@inject IProjectService ProjectService
+@inject ICommentService CommentService
+@inject ISiteSettingsService SiteSettingsService
+@inject IStringLocalizer<SharedResource> L
 
 <PageTitle>Admin — Dashboard</PageTitle>
 
 <div class="mx-auto max-w-7xl px-6 py-20 lg:px-8">
-    <div class="mb-12">
-        <span class="inline-block mb-4 rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
-            // ADMIN
-        </span>
+    <div class="mb-10">
         <h1 class="font-mono text-3xl font-bold text-white">Dashboard</h1>
     </div>
 
-    <div class="grid gap-6 sm:grid-cols-3 mb-12">
-        <div class="rounded-lg border border-gray-700 bg-gray-900 p-6">
-            <div class="font-mono text-xs text-gray-500 uppercase tracking-wider mb-2">Příspěvky</div>
-            <div class="font-mono text-4xl font-bold text-white">@_postCount</div>
+    <!-- DOSTUPNOST -->
+    <div class="mb-12 rounded-xl border border-gray-700 bg-gray-900 p-6">
+        <div class="flex flex-wrap items-start justify-between gap-4">
+            <div>
+                <h2 class="font-mono text-xs text-blue-500 uppercase tracking-widest mb-2">// @L["Admin_Dash_Availability"]</h2>
+                <div class="flex items-center gap-2.5">
+                    <span class="relative flex h-2.5 w-2.5">
+                        @if (_availability.ShowPulse)
+                        {
+                            <span class="absolute inline-flex h-full w-full animate-ping rounded-full @_availability.DotClass opacity-75"></span>
+                        }
+                        <span class="relative inline-flex h-2.5 w-2.5 rounded-full @_availability.DotClass"></span>
+                    </span>
+                    <span class="font-mono text-sm font-bold @_availability.TextClass">@AvailabilityLabel(_availability.Status)</span>
+                </div>
+                <p class="mt-1 font-mono text-xs text-gray-400">@L["Admin_Dash_AvailabilityHint"]</p>
+            </div>
+            @if (_savedFlash)
+            {
+                <span class="font-mono text-xs text-emerald-400">@L["Admin_Dash_Saved"]</span>
+            }
         </div>
-        <div class="rounded-lg border border-gray-700 bg-gray-900 p-6">
-            <div class="font-mono text-xs text-gray-500 uppercase tracking-wider mb-2">Kategorie</div>
-            <div class="font-mono text-4xl font-bold text-white">@_categoryCount</div>
+
+        <div class="mt-5 flex flex-wrap gap-2">
+            @foreach (var status in _statusOptions)
+            {
+                var vm = new SiteSettingsViewModel { Status = status };
+                var active = _availability.Status == status;
+                <button @onclick="() => SetStatus(status)"
+                        class="@($"inline-flex items-center gap-2 rounded font-mono text-xs px-4 py-2 border transition {(active ? $"{vm.BgClass} {vm.BorderClass} {vm.TextClass}" : "border-gray-700 text-gray-400 hover:border-gray-500 hover:text-white")}")">
+                    <span class="inline-flex h-2 w-2 rounded-full @vm.DotClass"></span>
+                    @AvailabilityLabel(status)
+                </button>
+            }
+        </div>
+
+        <div class="mt-4 flex flex-col gap-2">
+            <div class="flex flex-wrap gap-3">
+                <input @bind="_noteCs" @bind:event="oninput" maxlength="160"
+                       placeholder="@L["Admin_Dash_NotePlaceholder"]"
+                       class="flex-1 min-w-[16rem] rounded border border-gray-700 bg-gray-950 px-4 py-2.5 text-sm text-white font-mono focus:border-blue-600/50 focus:outline-none" />
+                <button @onclick="SaveNote"
+                        class="rounded font-mono text-xs px-5 py-2.5 bg-blue-600/20 text-blue-500 border border-blue-600/40 hover:bg-blue-600/30 transition">
+                    @L["Admin_Dash_SaveNote"]
+                </button>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="font-mono text-[0.65rem] text-gray-500 uppercase tracking-wider">EN</span>
+                <input @bind="_noteEn" @bind:event="oninput" maxlength="160"
+                       placeholder="@L["Admin_Dash_NoteEnPlaceholder"]"
+                       class="flex-1 min-w-[16rem] rounded border border-gray-700 bg-gray-950 px-4 py-2.5 text-sm text-white font-mono focus:border-blue-600/50 focus:outline-none" />
+            </div>
         </div>
     </div>
 
-    <div class="mt-12">
-        <h2 class="font-mono text-xs text-blue-500 uppercase tracking-widest mb-6">// Nejnavštěvovanější</h2>
-        <div class="flex flex-col divide-y divide-gray-800">
-            @foreach (var post in _topPosts)
+    <!-- STATISTIKY -->
+    <div class="grid gap-4 grid-cols-2 lg:grid-cols-4 mb-12">
+        <div class="rounded-lg border border-gray-700 bg-gray-900 p-6">
+            <div class="font-mono text-xs text-gray-400 uppercase tracking-wider mb-2">@L["Admin_Dash_StatPosts"]</div>
+            <div class="font-mono text-4xl font-bold text-white">@_postCount</div>
+        </div>
+        <div class="rounded-lg border border-gray-700 bg-gray-900 p-6">
+            <div class="font-mono text-xs text-gray-400 uppercase tracking-wider mb-2">@L["Admin_Dash_StatProjects"]</div>
+            <div class="font-mono text-4xl font-bold text-white">@_projectCount</div>
+        </div>
+        <div class="rounded-lg border border-gray-700 bg-gray-900 p-6">
+            <div class="font-mono text-xs text-gray-400 uppercase tracking-wider mb-2">@L["Admin_Dash_StatCategories"]</div>
+            <div class="font-mono text-4xl font-bold text-white">@_categoryCount</div>
+        </div>
+        <div class="rounded-lg border @(_pendingComments > 0 ? "border-amber-500/40 bg-amber-500/5" : "border-gray-700 bg-gray-900") p-6">
+            <div class="font-mono text-xs text-gray-400 uppercase tracking-wider mb-2">@L["Admin_Dash_StatComments"]</div>
+            <div class="font-mono text-4xl font-bold @(_pendingComments > 0 ? "text-amber-400" : "text-white")">@_pendingComments</div>
+            @if (_pendingComments > 0)
             {
-                <div class="flex items-center justify-between py-4">
-                    <a href="/posts/@post.Slug" class="font-mono text-sm text-white hover:text-blue-500 transition">@post.Title</a>
-                    <span class="font-mono text-xs text-gray-500">@post.Views návštěv</span>
-                </div>
+                <div class="mt-1 font-mono text-[0.65rem] text-amber-400/80 uppercase tracking-wider">@L["Admin_Dash_PendingApproval"]</div>
             }
         </div>
     </div>
 
-    <div class="flex flex-wrap gap-4">
-        <a href="/admin/posts/new"
-               class="rounded font-mono text-sm px-6 py-3 bg-blue-600/20 text-blue-500 border border-blue-600/40 hover:bg-blue-600/30 transition">
-            + Nový příspěvek
-        </a>
-        <a href="/admin/projects/new"
+    <!-- RYCHLÉ AKCE -->
+    <div class="flex flex-wrap gap-3 mb-14">
+        <a href="admin/posts/new"
            class="rounded font-mono text-sm px-6 py-3 bg-blue-600/20 text-blue-500 border border-blue-600/40 hover:bg-blue-600/30 transition">
-            + Nový projekt
+            @L["Admin_Dash_NewPost"]
         </a>
-        <a href="/admin/posts"
-               class="rounded font-mono text-sm px-6 py-3 border border-gray-700 text-gray-300 hover:border-gray-500 transition">
-            Správa příspěvků
-        </a>
-        <a href="/admin/categories"
-               class="rounded font-mono text-sm px-6 py-3 border border-gray-700 text-gray-300 hover:border-gray-500 transition">
-            Správa kategorií
-        </a>
-        <a href="/admin/tags"
-               class="rounded font-mono text-sm px-6 py-3 border border-gray-700 text-gray-300 hover:border-gray-500 transition">
-            Správa tagů
-        </a>
-        <a href="/admin/comments"
-               class="rounded font-mono text-sm px-6 py-3 border border-gray-700 text-gray-300 hover:border-gray-500 transition">
-            Správa komentářů
-        </a>
-        <a href="/admin/projects"
-           class="rounded font-mono text-sm px-6 py-3 border border-gray-700 text-gray-300 hover:border-gray-500 transition">
-            Správa projektů
+        <a href="admin/projects/new"
+           class="rounded font-mono text-sm px-6 py-3 bg-blue-600/20 text-blue-500 border border-blue-600/40 hover:bg-blue-600/30 transition">
+            @L["Admin_Dash_NewProject"]
         </a>
     </div>
+
+    <!-- NAVIGACE -->
+    @foreach (var section in Sections)
+    {
+        <div class="mb-10">
+            <h2 class="font-mono text-xs text-blue-500 uppercase tracking-widest mb-5">// @section.Title</h2>
+            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                @foreach (var card in section.Cards)
+                {
+                    <a href="@card.Href"
+                       class="group rounded-lg border border-gray-700 bg-gray-900 p-6 hover:border-blue-600/50 transition block">
+                        <div class="flex items-start justify-between mb-3">
+                            <span class="text-gray-400 group-hover:text-blue-500 transition text-lg">
+                                <i class="@card.Icon"></i>
+                            </span>
+                            @if (card.Badge > 0)
+                            {
+                                <span class="font-mono text-[0.65rem] px-2 py-0.5 rounded-sm bg-amber-500/15 text-amber-400 border border-amber-500/30">@card.Badge</span>
+                            }
+                            else
+                            {
+                                <span class="font-mono text-xs text-gray-700 group-hover:text-blue-500 transition">→</span>
+                            }
+                        </div>
+                        <div class="font-mono text-sm font-bold text-white mb-1">@card.Title</div>
+                        <div class="text-xs text-gray-400 leading-relaxed">@card.Description</div>
+                    </a>
+                }
+            </div>
+        </div>
+    }
+
+    <!-- NEJNAVŠTĚVOVANĚJŠÍ -->
+    @if (_topPosts.Count > 0)
+    {
+        <div class="mt-14">
+            <h2 class="font-mono text-xs text-blue-500 uppercase tracking-widest mb-6">// @L["Admin_Dash_MostViewed"]</h2>
+            <div class="flex flex-col divide-y divide-gray-800">
+                @foreach (var post in _topPosts)
+                {
+                    <div class="flex items-center justify-between py-4">
+                        <a href="posts/@post.Slug" class="font-mono text-sm text-white hover:text-blue-500 transition">@post.Title</a>
+                        <span class="font-mono text-xs text-gray-400">@post.Views @L["Admin_Dash_Visits"]</span>
+                    </div>
+                }
+            </div>
+        </div>
+    }
 </div>
 
 @code {
     private int _postCount;
     private int _categoryCount;
+    private int _projectCount;
+    private int _pendingComments;
     private List<BlogPostViewModel> _topPosts = [];
 
+    private SiteSettingsViewModel _availability = new();
+    private string? _noteCs;
+    private string? _noteEn;
+    private bool _savedFlash;
+
+    private readonly AvailabilityStatus[] _statusOptions =
+        [AvailabilityStatus.Available, AvailabilityStatus.Busy, AvailabilityStatus.Unavailable];
+
+    private record NavCard(string Title, string Description, string Href, string Icon, int Badge = 0);
+    private record NavSection(string Title, List<NavCard> Cards);
 
     protected override async Task OnInitializedAsync()
     {
+        _availability = await SiteSettingsService.GetAsync();
+        _noteCs = _availability.NoteCs;
+        _noteEn = _availability.NoteEn;
+
         var posts = await BlogPostService.GetPostsAsync(1, 1);
         _postCount = posts.TotalCount;
-        var categories = await CategoryService.GetCategoriesAsync();
-        _categoryCount = categories.Count;
+        _categoryCount = (await CategoryService.GetCategoriesAsync()).Count;
+        _projectCount = (await ProjectService.GetAllProjectsAsync()).Count;
+        _pendingComments = (await CommentService.GetPendingAsync()).Count;
         _topPosts = await BlogPostService.GetMostViewedAsync(5);
+    }
+
+    private string AvailabilityLabel(AvailabilityStatus status) => status switch
+    {
+        AvailabilityStatus.Available => L["Avail_Available"].Value,
+        AvailabilityStatus.Busy => L["Avail_Busy"].Value,
+        AvailabilityStatus.Unavailable => L["Avail_Unavailable"].Value,
+        _ => string.Empty,
+    };
+
+    private List<NavSection> Sections =>
+    [
+        new NavSection(L["Admin_Dash_SectionContent"],
+        [
+            new NavCard(L["Admin_Dash_StatPosts"], L["Admin_Dash_CardPostsDesc"], "admin/posts", "fa-solid fa-newspaper"),
+            new NavCard(L["Admin_Dash_StatCategories"], L["Admin_Dash_CardCategoriesDesc"], "admin/categories", "fa-solid fa-folder-tree"),
+            new NavCard(L["Admin_Tags_Title"], L["Admin_Dash_CardTagsDesc"], "admin/tags", "fa-solid fa-tags"),
+        ]),
+        new NavSection(L["Admin_Dash_SectionProjects"],
+        [
+            new NavCard(L["Admin_Dash_CardProjects"], L["Admin_Dash_CardProjectsDesc"], "admin/projects", "fa-solid fa-diagram-project"),
+        ]),
+        new NavSection(L["Admin_Dash_SectionCommunity"],
+        [
+            new NavCard(L["Admin_Dash_StatComments"], L["Admin_Dash_CardCommentsDesc"], "admin/comments", "fa-solid fa-comments", _pendingComments),
+        ]),
+    ];
+
+    private async Task SetStatus(AvailabilityStatus status)
+    {
+        await SiteSettingsService.UpdateAvailabilityAsync(status, _noteCs, _noteEn);
+        _availability = await SiteSettingsService.GetAsync();
+        await FlashSaved();
+    }
+
+    private async Task SaveNote()
+    {
+        await SiteSettingsService.UpdateAvailabilityAsync(_availability.Status, _noteCs, _noteEn);
+        _availability = await SiteSettingsService.GetAsync();
+        _noteCs = _availability.NoteCs;
+        _noteEn = _availability.NoteEn;
+        await FlashSaved();
+    }
+
+    private async Task FlashSaved()
+    {
+        _savedFlash = true;
+        StateHasChanged();
+        await Task.Delay(2000);
+        _savedFlash = false;
+        StateHasChanged();
     }
 }

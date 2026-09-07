@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using FilipunkBlog.Application.Contracts;
+using FilipunkBlog.Infrastructure.Options;
 using FilipunkBlog.Infrastructure.Persistence;
 using FilipunkBlog.Infrastructure.Persistence.Repositories;
 using FilipunkBlog.Infrastructure.Services;
@@ -31,6 +32,10 @@ public static class DependencyInjection
         services.AddScoped<SeedService>();
         services.AddScoped<CommentRepository>();
         services.AddScoped<ProjectRepository>();
+        services.AddScoped<SiteSettingsRepository>();
+        services.AddScoped<CvProfileRepository>();
+        services.AddScoped<ExperienceRepository>();
+        services.AddScoped<CertificationRepository>();
 
 
         services.AddScoped<IBlogPostService, BlogPostService>();
@@ -40,6 +45,18 @@ public static class DependencyInjection
         services.AddScoped<IImageService, ImageService>();
         services.AddScoped<ICommentService, CommentService>();
         services.AddScoped<IProjectService, ProjectService>();
+        services.AddScoped<ISiteSettingsService, SiteSettingsService>();
+        services.AddScoped<ICvProfileService, CvProfileService>();
+        services.AddScoped<IExperienceService, ExperienceService>();
+        services.AddScoped<ICertificationService, CertificationService>();
+        services.AddScoped<ICvService, CvService>();
+        services.AddScoped<ICvPdfRenderer, CvPdfRenderer>();
+
+        services.Configure<SmtpOptions>(configuration.GetSection(SmtpOptions.SectionName));
+        services.Configure<DiscordOptions>(configuration.GetSection(DiscordOptions.SectionName));
+        services.Configure<DeepLOptions>(configuration.GetSection(DeepLOptions.SectionName));
+        services.AddHttpClient<INotificationService, NotificationService>();
+        services.AddHttpClient<ITranslationService, DeepLTranslationService>();
 
         return services;
     }

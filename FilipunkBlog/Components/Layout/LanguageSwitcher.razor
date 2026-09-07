@@ -1,0 +1,33 @@
+@using System.Globalization
+@inject NavigationManager Navigation
+@inject IStringLocalizer<SharedResource> L
+
+<div class="flex items-center gap-1 font-mono text-xs" aria-label="@L["Lang_Switch"]">
+    @foreach (var (code, label) in _langs)
+    {
+        var isCurrent = string.Equals(_current, code, StringComparison.OrdinalIgnoreCase);
+        <a href="@UrlFor(code)" data-enhance-nav="false"
+           class="@($"px-1.5 py-0.5 rounded-sm transition {(isCurrent ? "text-blue-500 font-bold" : "text-gray-500 hover:text-white")}")"
+           aria-current="@(isCurrent ? "true" : null)">
+            @label
+        </a>
+    }
+</div>
+
+@code {
+    private readonly (string Code, string Label)[] _langs = [("cs", "CZ"), ("en", "EN")];
+
+    private string _current = "cs";
+
+    protected override void OnInitialized()
+        => _current = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+
+    /// <summary>Tatáž stránka pod druhým jazykovým prefixem (plný reload kvůli restartu circuitu).</summary>
+    private string UrlFor(string code)
+    {
+        // ToBaseRelativePath vrací cestu bez <base> prefixu, tj. bez /en.
+        var rel = Navigation.ToBaseRelativePath(Navigation.Uri);
+        var prefix = code == "en" ? "en/" : "";
+        return "/" + prefix + rel;
+    }
+}

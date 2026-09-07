@@ -5,20 +5,18 @@
 @using Microsoft.AspNetCore.Authorization
 @inject IBlogPostService BlogPostService
 @inject NavigationManager Navigation
+@inject IStringLocalizer<SharedResource> L
 
-<PageTitle>Správa příspěvků</PageTitle>
+<PageTitle>@L["Admin_Posts_Title"]</PageTitle>
 
 <div class="mx-auto max-w-7xl px-6 py-20 lg:px-8">
     <div class="flex items-end justify-between mb-12">
         <div>
-            <span class="inline-block mb-4 rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
-                // ADMIN
-            </span>
-            <h1 class="font-mono text-3xl font-bold text-white">Příspěvky</h1>
+            <h1 class="font-mono text-3xl font-bold text-white">@L["Admin_Posts_Title"]</h1>
         </div>
-        <a href="/admin/posts/new"
+        <a href="admin/posts/new"
                class="rounded font-mono text-sm px-6 py-3 bg-blue-600/20 text-blue-500 border border-blue-600/40 hover:bg-blue-600/30 transition">
-            + Nový příspěvek
+            @L["Admin_Dash_NewPost"]
         </a>
     </div>
 
@@ -28,21 +26,21 @@
             <div class="flex items-center justify-between gap-6 py-5">
                 <div>
                     <div class="flex items-center gap-3 mb-1">
-                        <span class="font-mono text-xs @(post.IsPublished ? "text-blue-500" : "text-gray-500")">
-                            @(post.IsPublished ? "● publikováno" : "○ draft")
+                        <span class="font-mono text-xs @(post.IsPublished ? "text-blue-500" : "text-gray-400")">
+                            @(post.IsPublished ? L["Common_Published"] : L["Common_Draft"])
                         </span>
-                        <span class="text-xs text-gray-500">@post.CategoryName</span>
+                        <span class="text-xs text-gray-400">@post.CategoryName</span>
                     </div>
                     <h3 class="font-mono text-sm font-bold text-white">@post.Title</h3>
                 </div>
                 <div class="flex gap-3">
-                    <a href="/admin/posts/edit/@post.Id"
+                    <a href="admin/posts/edit/@post.Id"
                            class="font-mono text-xs px-3 py-1.5 border border-gray-700 text-gray-400 hover:border-blue-600/50 hover:text-blue-500 transition rounded">
-                        Upravit
+                        @L["Common_Edit"]
                     </a>
                     <button @onclick="() => DeletePost(post.Id)"
                             class="font-mono text-xs px-3 py-1.5 border border-gray-700 text-gray-400 hover:border-red-500/50 hover:text-red-400 transition rounded">
-                        Smazat
+                        @L["Common_Delete"]
                     </button>
                 </div>
             </div>

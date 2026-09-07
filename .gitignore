@@ -399,7 +399,8 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
-FilipunkBlog/appsettings.json
-FilipunkBlog.Infrastructure/Persistence/ApplicationDbContextFactory.cs
-FilipunkBlog.Infrastructure/Persistence/ApplicationDbContextFactory.cs
-FilipunkBlog/appsettings.json
+# Node / build klientských assetů
+node_modules/
+# Generované při buildu z FilipunkBlog/Styles/ a scripts/copy-assets.mjs
+FilipunkBlog/wwwroot/app.css
+FilipunkBlog/wwwroot/lib/

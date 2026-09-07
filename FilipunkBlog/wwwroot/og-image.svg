@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" font-family="'Space Mono', ui-monospace, monospace">
+  <rect width="1200" height="630" fill="#030712"/>
+  <rect width="1200" height="630" fill="none" stroke="#1f2937" stroke-width="2"/>
+  <text x="80" y="150" fill="#3b82f6" font-size="26" letter-spacing="6">// PORTFOLIO</text>
+  <text x="78" y="300" fill="#ffffff" font-size="104" font-weight="700">Filip Lafata</text>
+  <text x="80" y="380" fill="#9ca3af" font-size="40">juniorní .NET / C# vývojář</text>
+  <text x="80" y="540" fill="#6b7280" font-size="30">filipunk<tspan fill="#3b82f6">.cz</tspan></text>
+  <circle cx="1090" cy="150" r="10" fill="#10b981"/>
+  <text x="1070" y="157" fill="#34d399" font-size="24" text-anchor="end">available</text>
+</svg>

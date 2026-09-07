@@ -5,20 +5,18 @@
 @using Microsoft.AspNetCore.Authorization
 @inject IProjectService ProjectService
 @inject NavigationManager Navigation
+@inject IStringLocalizer<SharedResource> L
 
-<PageTitle>Správa projektů</PageTitle>
+<PageTitle>@L["Admin_Projects_Title"]</PageTitle>
 
 <div class="mx-auto max-w-7xl px-6 py-20 lg:px-8">
     <div class="flex items-end justify-between mb-12">
         <div>
-            <span class="inline-block mb-4 rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
-                // ADMIN
-            </span>
-            <h1 class="font-mono text-3xl font-bold text-white">Projekty</h1>
+            <h1 class="font-mono text-3xl font-bold text-white">@L["Admin_Projects_Title"]</h1>
         </div>
-        <a href="/admin/projects/new"
+        <a href="admin/projects/new"
            class="rounded font-mono text-sm px-6 py-3 bg-blue-600/20 text-blue-500 border border-blue-600/40 hover:bg-blue-600/30 transition">
-            + Nový projekt
+            @L["Admin_Dash_NewProject"]
         </a>
     </div>
 
@@ -28,21 +26,21 @@
             <div class="flex items-center justify-between gap-6 py-5">
                 <div>
                     <div class="flex items-center gap-3 mb-1">
-                        <span class="font-mono text-xs @(project.IsPublished ? "text-blue-500" : "text-gray-500")">
-                            @(project.IsPublished ? "● publikováno" : "○ draft")
+                        <span class="font-mono text-xs @(project.IsPublished ? "text-blue-500" : "text-gray-400")">
+                            @(project.IsPublished ? L["Common_Published"] : L["Common_Draft"])
                         </span>
-                        <span class="text-xs text-gray-500">@project.YearDisplay</span>
+                        <span class="text-xs text-gray-400">@project.YearDisplay</span>
                     </div>
                     <h3 class="font-mono text-sm font-bold text-white">@project.Title</h3>
                 </div>
                 <div class="flex gap-3">
-                    <a href="/admin/projects/edit/@project.Id"
+                    <a href="admin/projects/edit/@project.Id"
                        class="font-mono text-xs px-3 py-1.5 border border-gray-700 text-gray-400 hover:border-blue-600/50 hover:text-blue-500 transition rounded">
-                        Upravit
+                        @L["Common_Edit"]
                     </a>
                     <button @onclick="() => DeleteProject(project.Id)"
                             class="font-mono text-xs px-3 py-1.5 border border-gray-700 text-gray-400 hover:border-red-500/50 hover:text-red-400 transition rounded">
-                        Smazat
+                        @L["Common_Delete"]
                     </button>
                 </div>
             </div>

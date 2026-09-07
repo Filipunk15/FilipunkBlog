@@ -1,0 +1,95 @@
+@using FilipunkBlog.Application.Contracts
+@using FilipunkBlog.Application.Models
+@inject INotificationService Notifications
+@inject IStringLocalizer<SharedResource> L
+
+<div class="rounded-lg border border-gray-700 bg-gray-950 p-6 sm:p-8 mb-4">
+    <h3 class="font-mono text-xs text-blue-500 uppercase tracking-widest mb-6">@L["Contact_FormTitle"]</h3>
+
+    @if (_sent)
+    {
+        <div class="rounded border border-emerald-500/30 bg-emerald-500/10 px-4 py-3">
+            <p class="font-mono text-xs text-emerald-400">@L["Contact_Success"]</p>
+        </div>
+    }
+    else
+    {
+        <div class="flex flex-col gap-4">
+            <div class="grid gap-4 sm:grid-cols-2">
+                <div>
+                    <label class="font-mono text-xs text-gray-400 uppercase tracking-wider mb-2 block">@L["Contact_Name"]</label>
+                    <input @bind="_name" placeholder="@L["Contact_NamePlaceholder"]"
+                           class="w-full rounded border border-gray-700 bg-gray-900 px-4 py-3 text-sm text-white font-mono focus:border-blue-600/50 focus:outline-none" />
+                </div>
+                <div>
+                    <label class="font-mono text-xs text-gray-400 uppercase tracking-wider mb-2 block">@L["Contact_Email"]</label>
+                    <input @bind="_email" type="email" placeholder="@L["Contact_EmailPlaceholder"]"
+                           class="w-full rounded border border-gray-700 bg-gray-900 px-4 py-3 text-sm text-white font-mono focus:border-blue-600/50 focus:outline-none" />
+                </div>
+            </div>
+            <div>
+                <label class="font-mono text-xs text-gray-400 uppercase tracking-wider mb-2 block">@L["Contact_Message"]</label>
+                <textarea @bind="_message" rows="5" placeholder="@L["Contact_MessagePlaceholder"]"
+                          class="w-full rounded border border-gray-700 bg-gray-900 px-4 py-3 text-sm text-white font-mono focus:border-blue-600/50 focus:outline-none resize-none"></textarea>
+            </div>
+
+            <input @bind="_website" name="website" tabindex="-1" autocomplete="off" aria-hidden="true"
+                   class="hidden" />
+
+            @if (!string.IsNullOrEmpty(_error))
+            {
+                <p class="font-mono text-xs text-red-400">@_error</p>
+            }
+
+            <button @onclick="Submit" disabled="@_sending"
+                    class="self-start rounded font-mono text-sm px-6 py-3 bg-blue-600/20 text-blue-500 border border-blue-600/40 hover:bg-blue-600/30 transition disabled:opacity-50">
+                @(_sending ? L["Contact_Sending"] : L["Contact_Send"])
+            </button>
+        </div>
+    }
+</div>
+
+@code {
+    private string _name = string.Empty;
+    private string _email = string.Empty;
+    private string _message = string.Empty;
+    private string _website = string.Empty; // honeypot
+    private string _error = string.Empty;
+    private bool _sent;
+    private bool _sending;
+    private DateTime _loadedAt;
+
+    protected override void OnInitialized() => _loadedAt = DateTime.UtcNow;
+
+    private async Task Submit()
+    {
+        _error = string.Empty;
+
+        // Antispam: honeypot vyplněn nebo formulář odeslán podezřele rychle → tvař se OK, nic neposílej.
+        if (!string.IsNullOrWhiteSpace(_website) || (DateTime.UtcNow - _loadedAt).TotalSeconds < 2)
+        {
+            _sent = true;
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(_name)) { _error = L["Contact_ErrName"]; return; }
+        if (string.IsNullOrWhiteSpace(_email) || !_email.Contains('@')) { _error = L["Contact_ErrEmail"]; return; }
+        if (string.IsNullOrWhiteSpace(_message)) { _error = L["Contact_ErrMessage"]; return; }
+        if (_message.Length > 2000) { _error = L["Contact_ErrTooLong"]; return; }
+
+        _sending = true;
+        try
+        {
+            await Notifications.NotifyContactAsync(new ContactMessage(_name.Trim(), _email.Trim(), _message.Trim()));
+            _sent = true;
+        }
+        catch
+        {
+            _error = L["Contact_ErrSend"];
+        }
+        finally
+        {
+            _sending = false;
+        }
+    }
+}

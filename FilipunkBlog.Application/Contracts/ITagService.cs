@@ -10,5 +10,6 @@ public interface ITagService
 {
     Task<List<TagViewModel>> GetTagsAsync();
     Task<TagViewModel> CreateTagAsync(string name, string slug);
+    Task SetNameEnAsync(Guid id, string? nameEn);
     Task DeleteTagAsync(Guid id);
 }

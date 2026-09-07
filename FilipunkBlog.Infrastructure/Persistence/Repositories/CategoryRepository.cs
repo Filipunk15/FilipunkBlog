@@ -29,6 +29,15 @@ public class CategoryRepository(IDbContextFactory<ApplicationDbContext> factory)
         await context.SaveChangesAsync();
     }
 
+    public async Task SetNameEnAsync(Guid id, string? nameEn)
+    {
+        await using var context = await factory.CreateDbContextAsync();
+        var category = await context.Categories.FindAsync(id);
+        if (category == null) return;
+        category.NameEn = string.IsNullOrWhiteSpace(nameEn) ? null : nameEn.Trim();
+        await context.SaveChangesAsync();
+    }
+
     public async Task DeleteAsync(Category category)
     {
         await using var context = await factory.CreateDbContextAsync();

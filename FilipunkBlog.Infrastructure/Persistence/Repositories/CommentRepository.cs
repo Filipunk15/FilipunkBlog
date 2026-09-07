@@ -24,6 +24,14 @@ public class CommentRepository(IDbContextFactory<ApplicationDbContext> factory)
             .ToListAsync();
     }
 
+    public async Task<Comment?> GetByIdAsync(Guid id)
+    {
+        await using var context = await factory.CreateDbContextAsync();
+        return await context.Comments
+            .Include(x => x.BlogPost)
+            .FirstOrDefaultAsync(x => x.Id == id);
+    }
+
     public async Task AddAsync(Comment comment)
     {
         await using var context = await factory.CreateDbContextAsync();

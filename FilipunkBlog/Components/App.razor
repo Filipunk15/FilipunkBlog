@@ -1,33 +1,45 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="@System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName">
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <base href="/" />
+    <base href="@BaseHref" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <ResourcePreloader />
     <link rel="stylesheet" href="@Assets["app.css"]" />
     <link rel="stylesheet" href="@Assets["FilipunkBlog.styles.css"]" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.3.2/css/flag-icons.min.css" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-        darkMode: 'class',
-        }
-    </script>
+          href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" />
     <script src="https://kit.fontawesome.com/befdd96ac7.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/lib/hljs/github-dark.min.css" />
+    <link rel="canonical" href="@CanonicalUrl" />
+    @if (!HasLocalizedSlug)
+    {
+        <link rel="alternate" hreflang="cs" href="@AltUrl("cs")" />
+        <link rel="alternate" hreflang="en" href="@AltUrl("en")" />
+        <link rel="alternate" hreflang="x-default" href="@AltUrl("cs")" />
+    }
+    <meta property="og:url" content="@CanonicalUrl" />
+    <meta property="og:site_name" content="filipunk.cz" />
+    <meta property="og:locale" content="@(IsEn ? "en_US" : "cs_CZ")" />
+    @* Pro plnou podporu Facebooku/X nahraď za PNG 1200×630 a uprav cestu. *@
+    <meta property="og:image" content="/og-image.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
     <ImportMap />
     <HeadOutlet @rendermode="PageRenderMode" />
 </head>
 
 <body>
+    <div id="read-progress"></div>
     <Routes @rendermode="PageRenderMode" />
     <ReconnectModal />
     <script src="@Assets["_framework/blazor.web.js"]"></script>
     <script src="./app.js"></script>
-    <script src="https://kit.fontawesome.com/befdd96ac7.js" crossorigin="anonymous"></script>
+    <script src="/lib/hljs/highlight.min.js"></script>
+    <script src="./js/blog.js"></script>
 </body>
 
 </html>
@@ -38,4 +50,50 @@
 
     private IComponentRenderMode? PageRenderMode =>
         HttpContext.AcceptsInteractiveRouting() ? InteractiveServer : null;
+
+    private bool IsEn => HttpContext.Request.PathBase.Value?.TrimEnd('/').EndsWith("/en", StringComparison.OrdinalIgnoreCase) == true;
+
+    // Prefix pro <base>: "/" (cs) nebo "/en/" (en). PathBase je "/en" (nebo prázdné).
+    private string BaseHref
+    {
+        get
+        {
+            var pb = HttpContext.Request.PathBase.Value?.Trim('/') ?? "";
+            return pb.Length == 0 ? "/" : $"/{pb}/";
+        }
+    }
+
+    // Cesta bez jazykového prefixu (Path je už bez /en díky middleware).
+    private string PathWithoutPrefix
+    {
+        get
+        {
+            var p = HttpContext.Request.Path.HasValue ? HttpContext.Request.Path.Value!.TrimEnd('/') : "";
+            return p;
+        }
+    }
+
+    /// <summary>Kanonická URL = schéma + host + PathBase + cesta (bez query).</summary>
+    private string CanonicalUrl
+        => $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.PathBase}{PathWithoutPrefix}";
+
+    /// <summary>
+    /// Detailní stránky článku/projektu mají lokalizovaný slug – hreflang si emitují samy
+    /// přes &lt;HeadContent&gt; s přesnou alternativní URL.
+    /// </summary>
+    private bool HasLocalizedSlug
+    {
+        get
+        {
+            var segs = PathWithoutPrefix.Split('/', StringSplitOptions.RemoveEmptyEntries);
+            return segs.Length >= 2 && segs[0] is "posts" or "project";
+        }
+    }
+
+    /// <summary>Alternativní URL pro daný jazyk (stejná cesta, prohozený prefix).</summary>
+    private string AltUrl(string culture)
+    {
+        var prefix = culture == "en" ? "/en" : "";
+        return $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{prefix}{PathWithoutPrefix}";
+    }
 }

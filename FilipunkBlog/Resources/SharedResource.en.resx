@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <data name="Nav_Home" xml:space="preserve"><value>Home</value></data>
+  <data name="Nav_About" xml:space="preserve"><value>About</value></data>
+  <data name="Nav_Projects" xml:space="preserve"><value>Projects</value></data>
+  <data name="Nav_Experience" xml:space="preserve"><value>Experience</value></data>
+  <data name="Nav_Blog" xml:space="preserve"><value>Blog</value></data>
+  <data name="Nav_Gear" xml:space="preserve"><value>Gear</value></data>
+  <data name="Nav_Contact" xml:space="preserve"><value>Contact</value></data>
+  <data name="Nav_Admin" xml:space="preserve"><value>Admin</value></data>
+  <data name="Nav_Logout" xml:space="preserve"><value>Log out</value></data>
+  <data name="Nav_MenuOpen" xml:space="preserve"><value>Open menu</value></data>
+  <data name="Nav_MenuClose" xml:space="preserve"><value>Close menu</value></data>
+  <data name="Lang_Switch" xml:space="preserve"><value>Switch language</value></data>
+
+  <data name="PageTitle_Home" xml:space="preserve"><value>Filip Lafata – Personal portfolio</value></data>
+
+  <data name="Hero_TitleLine1" xml:space="preserve"><value>I'm Filip,</value></data>
+  <data name="Hero_TitleLine2" xml:space="preserve"><value>a junior developer</value></data>
+  <data name="Hero_Subtitle" xml:space="preserve"><value>I work with C# and .NET on internal company applications. I'm curious about how things work under the hood and I keep getting better.</value></data>
+  <data name="Hero_CtaProjects" xml:space="preserve"><value>My projects →</value></data>
+  <data name="Hero_CtaContact" xml:space="preserve"><value>Contact</value></data>
+  <data name="Stat_Projects" xml:space="preserve"><value>Projects</value></data>
+  <data name="Stat_Experience" xml:space="preserve"><value>Years of commercial experience</value></data>
+
+  <data name="Avail_Available" xml:space="preserve"><value>Available for new projects</value></data>
+  <data name="Avail_Busy" xml:space="preserve"><value>Currently busy</value></data>
+  <data name="Avail_Unavailable" xml:space="preserve"><value>Not taking new projects</value></data>
+
+  <data name="Contact_Eyebrow" xml:space="preserve"><value>CONTACT</value></data>
+  <data name="Contact_Intro" xml:space="preserve"><value>Feel free to reach out about a job offer, a collaboration, or with any questions.</value></data>
+  <data name="Contact_FormTitle" xml:space="preserve"><value>Write to me</value></data>
+  <data name="Contact_Name" xml:space="preserve"><value>Name</value></data>
+  <data name="Contact_NamePlaceholder" xml:space="preserve"><value>Your name</value></data>
+  <data name="Contact_Email" xml:space="preserve"><value>E-mail</value></data>
+  <data name="Contact_EmailPlaceholder" xml:space="preserve"><value>you@email.com</value></data>
+  <data name="Contact_Message" xml:space="preserve"><value>Message</value></data>
+  <data name="Contact_MessagePlaceholder" xml:space="preserve"><value>How can I help?</value></data>
+  <data name="Contact_Send" xml:space="preserve"><value>Send message →</value></data>
+  <data name="Contact_Sending" xml:space="preserve"><value>Sending…</value></data>
+  <data name="Contact_Success" xml:space="preserve"><value>Message sent. I'll get back to you soon. Thanks! 😊</value></data>
+  <data name="Contact_ErrName" xml:space="preserve"><value>Please enter your name.</value></data>
+  <data name="Contact_ErrEmail" xml:space="preserve"><value>Please enter a valid e-mail.</value></data>
+  <data name="Contact_ErrMessage" xml:space="preserve"><value>Please write a message.</value></data>
+  <data name="Contact_ErrTooLong" xml:space="preserve"><value>The message is too long (max 2000 characters).</value></data>
+  <data name="Contact_ErrSend" xml:space="preserve"><value>The message couldn't be sent. Please try e-mail instead.</value></data>
+
+  <data name="Contact_Card_Github" xml:space="preserve"><value>Project source code</value></data>
+  <data name="Contact_Card_LinkedIn" xml:space="preserve"><value>Professional profile</value></data>
+  <data name="Contact_Card_Email" xml:space="preserve"><value>Direct contact</value></data>
+  <data name="Contact_Card_Instagram" xml:space="preserve"><value>Personal profile</value></data>
+  <data name="Contact_Card_CvTitle" xml:space="preserve"><value>Résumé (CV)</value></data>
+  <data name="Contact_Card_CvSub" xml:space="preserve"><value>Download résumé</value></data>
+  <data name="Contact_Card_CvCz" xml:space="preserve"><value>CZ version</value></data>
+  <data name="Contact_Card_CvEu" xml:space="preserve"><value>EU version</value></data>
+  <data name="Contact_Card_CvPrep" xml:space="preserve"><value>// in progress</value></data>
+
+  <data name="Login_Subtitle" xml:space="preserve"><value>Admin login</value></data>
+  <data name="Login_Email" xml:space="preserve"><value>E-mail</value></data>
+  <data name="Login_Password" xml:space="preserve"><value>Password</value></data>
+  <data name="Login_Submit" xml:space="preserve"><value>Sign in →</value></data>
+  <data name="Login_ErrCredentials" xml:space="preserve"><value>Wrong e-mail or password.</value></data>
+  <data name="Login_ErrLocked" xml:space="preserve"><value>The account is temporarily locked due to too many attempts. Try again in 15 minutes.</value></data>
+
+  <!-- ===== Common ===== -->
+  <data name="Common_Edit" xml:space="preserve"><value>Edit</value></data>
+  <data name="Common_Delete" xml:space="preserve"><value>Delete</value></data>
+  <data name="Common_Save" xml:space="preserve"><value>Save</value></data>
+  <data name="Common_Create" xml:space="preserve"><value>Create</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="Common_Add" xml:space="preserve"><value>+ Add</value></data>
+  <data name="Common_BackHome" xml:space="preserve"><value>← Back home</value></data>
+  <data name="Common_Loading" xml:space="preserve"><value>// loading…</value></data>
+  <data name="Common_ReadMore" xml:space="preserve"><value>Read more →</value></data>
+  <data name="Common_Prev" xml:space="preserve"><value>← Previous</value></data>
+  <data name="Common_Next" xml:space="preserve"><value>Next →</value></data>
+  <data name="Common_Reading" xml:space="preserve"><value>read</value></data>
+  <data name="Common_AllProjects" xml:space="preserve"><value>All projects →</value></data>
+  <data name="Common_AllPosts" xml:space="preserve"><value>All posts →</value></data>
+  <data name="Common_Published" xml:space="preserve"><value>● published</value></data>
+  <data name="Common_Draft" xml:space="preserve"><value>○ draft</value></data>
+  <data name="Common_NoImage" xml:space="preserve"><value>// no image</value></data>
+  <data name="Common_Detail" xml:space="preserve"><value>detail</value></data>
+  <data name="Common_Uploading" xml:space="preserve"><value>// uploading…</value></data>
+  <data name="Common_Remove" xml:space="preserve"><value>× Remove</value></data>
+  <data name="Common_Preview" xml:space="preserve"><value>Preview</value></data>
+  <data name="Common_PreviewHide" xml:space="preserve"><value>Hide preview</value></data>
+
+  <!-- ===== Home ===== -->
+  <data name="Home_Meta_Description" xml:space="preserve"><value>Filip — Junior .NET Developer. Portfolio and a blog about C# and .NET development.</value></data>
+  <data name="Home_About_Eyebrow" xml:space="preserve"><value>ABOUT ME</value></data>
+  <data name="Home_About_P1" xml:space="preserve"><value>I got into programming back in primary school, when friends and I ran our own Minecraft servers with custom plugins. In high school we swapped Minecraft for a FiveM mod for GTA V, where we wrote our own LUA scripts.</value></data>
+  <data name="Home_About_P2" xml:space="preserve"><value>These days I focus purely on C# — mostly web development and internal business applications.</value></data>
+  <data name="Home_About_Focus" xml:space="preserve"><value>Focus</value></data>
+  <data name="Home_About_Database" xml:space="preserve"><value>Database</value></data>
+  <data name="Home_About_Frontend" xml:space="preserve"><value>Frontend</value></data>
+  <data name="Home_About_Tools" xml:space="preserve"><value>Tools</value></data>
+  <data name="Home_About_Lang" xml:space="preserve"><value>Languages</value></data>
+  <data name="Home_About_LangValue" xml:space="preserve"><value>Czech, English</value></data>
+  <data name="Home_Section_Projects" xml:space="preserve"><value>PROJECTS</value></data>
+  <data name="Home_AddProject" xml:space="preserve"><value>+ Add project</value></data>
+  <data name="Home_EditProjectAria" xml:space="preserve"><value>Edit project {0}</value></data>
+  <data name="Home_Section_Tech" xml:space="preserve"><value>TECHNOLOGY</value></data>
+  <data name="Home_Skills_Tools" xml:space="preserve"><value>Tools</value></data>
+  <data name="Home_Skills_Concepts" xml:space="preserve"><value>Concepts</value></data>
+  <data name="Home_Section_Experience" xml:space="preserve"><value>EXPERIENCE</value></data>
+  <data name="Home_Section_Blog" xml:space="preserve"><value>BLOG</value></data>
+  <data name="Home_NewArticle" xml:space="preserve"><value>+ New article</value></data>
+  <data name="Home_NoPosts" xml:space="preserve"><value>No posts yet.</value></data>
+  <data name="Home_Tl1_Year" xml:space="preserve"><value>2024–now</value></data>
+  <data name="Home_Tl1_Role" xml:space="preserve"><value>IT Technician – Internal application developer</value></data>
+  <data name="Home_Tl1_Company" xml:space="preserve"><value>KDK Automotive Czech</value></data>
+  <data name="Home_Tl1_Desc" xml:space="preserve"><value>Building internal applications in C# (Blazor, MAUI) and JavaScript (Node.js).&#10;Working with Microsoft SQL, Informix and Oracle databases. Working with Microsoft Azure and Microsoft Office.&#10;Processing data from MES and ERP systems.</value></data>
+  <data name="Home_Tl2_Year" xml:space="preserve"><value>2023</value></data>
+  <data name="Home_Tl2_Role" xml:space="preserve"><value>IT Internship</value></data>
+  <data name="Home_Tl2_Company" xml:space="preserve"><value>SUSPA CZ</value></data>
+  <data name="Home_Tl2_Desc" xml:space="preserve"><value>Writing macros in Microsoft Excel, installing network infrastructure and preparing cabling for new offices.&#10;Installing and configuring barcode scanners, building and maintaining barcode-generation systems.</value></data>
+  <data name="Home_Tl3_Year" xml:space="preserve"><value>2019–2023</value></data>
+  <data name="Home_Tl3_Role" xml:space="preserve"><value>SPŠ Tachov, Světce 1</value></data>
+  <data name="Home_Tl3_Company" xml:space="preserve"><value>Secondary school with a school-leaving exam (field: Information Technology)</value></data>
+  <data name="Home_Tl3_Desc" xml:space="preserve"><value>Programming and application development in Java, installing and managing operating systems and application software.</value></data>
+
+  <!-- ===== Blog / Posts ===== -->
+  <data name="PageTitle_Blog" xml:space="preserve"><value>Filip Lafata – Blog</value></data>
+  <data name="Posts_Title" xml:space="preserve"><value>All posts</value></data>
+  <data name="Posts_Eyebrow" xml:space="preserve"><value>BLOG</value></data>
+  <data name="Posts_Search" xml:space="preserve"><value>Search</value></data>
+  <data name="Posts_SearchPlaceholder" xml:space="preserve"><value>Search…</value></data>
+  <data name="Posts_TagsTitle" xml:space="preserve"><value>Tags</value></data>
+  <data name="Posts_NoPosts" xml:space="preserve"><value>// no posts yet</value></data>
+  <data name="PostDetail_BackBlog" xml:space="preserve"><value>← Back to blog</value></data>
+  <data name="PostDetail_Comments" xml:space="preserve"><value>COMMENTS</value></data>
+  <data name="PostDetail_NoComments" xml:space="preserve"><value>// no comments yet</value></data>
+  <data name="PostDetail_AddComment" xml:space="preserve"><value>ADD A COMMENT</value></data>
+  <data name="PostDetail_CommentSubmitted" xml:space="preserve"><value>Comment sent — awaiting approval. Thanks! 😊</value></data>
+  <data name="PostDetail_CommentName" xml:space="preserve"><value>Name</value></data>
+  <data name="PostDetail_CommentNamePlaceholder" xml:space="preserve"><value>Your name</value></data>
+  <data name="PostDetail_CommentText" xml:space="preserve"><value>Comment</value></data>
+  <data name="PostDetail_CommentPlaceholder" xml:space="preserve"><value>Write a comment…</value></data>
+  <data name="PostDetail_CommentSend" xml:space="preserve"><value>Send comment →</value></data>
+  <data name="PostDetail_ErrName" xml:space="preserve"><value>Enter your name.</value></data>
+  <data name="PostDetail_ErrText" xml:space="preserve"><value>Enter a comment.</value></data>
+  <data name="PostDetail_ErrTooLong" xml:space="preserve"><value>The comment is too long.</value></data>
+  <data name="Category_Eyebrow" xml:space="preserve"><value>CATEGORY</value></data>
+  <data name="Category_NoPosts" xml:space="preserve"><value>// no posts in this category</value></data>
+  <data name="Tag_Eyebrow" xml:space="preserve"><value>TAG</value></data>
+  <data name="Tag_NoPosts" xml:space="preserve"><value>// no posts with this tag</value></data>
+  <data name="Tag_Meta" xml:space="preserve"><value>Posts tagged {0}</value></data>
+
+  <!-- ===== Projects ===== -->
+  <data name="PageTitle_Projects" xml:space="preserve"><value>Filip Lafata – Projects</value></data>
+  <data name="Projects_Title" xml:space="preserve"><value>All projects</value></data>
+  <data name="Projects_Eyebrow" xml:space="preserve"><value>PROJECTS</value></data>
+  <data name="Projects_NoProjects" xml:space="preserve"><value>// no projects yet</value></data>
+  <data name="Projects_Featured" xml:space="preserve"><value>★ Featured</value></data>
+  <data name="ProjectDetail_BackHome" xml:space="preserve"><value>← Back to the home page</value></data>
+  <data name="ProjectDetail_LiveDemo" xml:space="preserve"><value>Live demo</value></data>
+  <data name="ProjectDetail_Gallery" xml:space="preserve"><value>Gallery</value></data>
+
+  <!-- ===== Search ===== -->
+  <data name="PageTitle_Search" xml:space="preserve"><value>Filip Lafata – Search</value></data>
+  <data name="Search_Eyebrow" xml:space="preserve"><value>SEARCH</value></data>
+  <data name="Search_Placeholder" xml:space="preserve"><value>Search posts and projects…</value></data>
+  <data name="Search_Button" xml:space="preserve"><value>Search →</value></data>
+  <data name="Search_Articles" xml:space="preserve"><value>Posts</value></data>
+  <data name="Search_Projects" xml:space="preserve"><value>Projects</value></data>
+  <data name="Search_NoResults" xml:space="preserve"><value>// no results for “{0}”</value></data>
+
+  <!-- ===== Gear / Setup ===== -->
+  <data name="PageTitle_Setup" xml:space="preserve"><value>Filip Lafata – Setup / EDC</value></data>
+  <data name="Setup_Eyebrow" xml:space="preserve"><value>SETUP</value></data>
+  <data name="Setup_Title" xml:space="preserve"><value>My stack</value></data>
+  <data name="Setup_Subtitle" xml:space="preserve"><value>The hardware and software I work with every day – at home, at work and in my pockets.</value></data>
+  <data name="Setup_LastUpdate" xml:space="preserve"><value>last update:</value></data>
+  <data name="Setup_Empty" xml:space="preserve"><value>// no items yet</value></data>
+  <data name="Setup_Count_1" xml:space="preserve"><value>1 item</value></data>
+  <data name="Setup_Count_2_4" xml:space="preserve"><value>{0} items</value></data>
+  <data name="Setup_Count_5" xml:space="preserve"><value>{0} items</value></data>
+  <data name="Setup_Cat_Setup" xml:space="preserve"><value>Setup</value></data>
+  <data name="Setup_Cat_Work" xml:space="preserve"><value>Work</value></data>
+  <data name="Setup_Cat_EDC" xml:space="preserve"><value>Every Day Carry</value></data>
+  <data name="Setup_Cat_GamingPC" xml:space="preserve"><value>Gaming PC</value></data>
+  <data name="Setup_Cat_Software" xml:space="preserve"><value>Software</value></data>
+  <data name="Setup_Item_Mouse" xml:space="preserve"><value>Mouse</value></data>
+  <data name="Setup_Item_Headphones" xml:space="preserve"><value>Headphones</value></data>
+  <data name="Setup_Item_Keyboard" xml:space="preserve"><value>Keyboard</value></data>
+  <data name="Setup_Item_Monitor1" xml:space="preserve"><value>Monitor #1 – main</value></data>
+  <data name="Setup_Item_Monitor2" xml:space="preserve"><value>Monitor #2</value></data>
+  <data name="Setup_Item_Mousepad" xml:space="preserve"><value>Mousepad</value></data>
+  <data name="Setup_Item_PersonalLaptop" xml:space="preserve"><value>Personal laptop</value></data>
+  <data name="Setup_Item_WorkLaptop" xml:space="preserve"><value>Work laptop</value></data>
+  <data name="Setup_Item_Backpack" xml:space="preserve"><value>Backpack</value></data>
+  <data name="Setup_Item_Phone" xml:space="preserve"><value>Phone</value></data>
+  <data name="Setup_Item_Watch" xml:space="preserve"><value>Watch</value></data>
+  <data name="Setup_Item_Tablet" xml:space="preserve"><value>Tablet</value></data>
+  <data name="Setup_Item_Wallet" xml:space="preserve"><value>Wallet</value></data>
+  <data name="Setup_Item_Motherboard" xml:space="preserve"><value>Motherboard</value></data>
+  <data name="Setup_Item_Cpu" xml:space="preserve"><value>CPU</value></data>
+  <data name="Setup_Item_Ram" xml:space="preserve"><value>RAM</value></data>
+  <data name="Setup_Item_Drive1" xml:space="preserve"><value>Drive #1</value></data>
+  <data name="Setup_Item_Drive2" xml:space="preserve"><value>Drive #2</value></data>
+  <data name="Setup_Item_Gpu" xml:space="preserve"><value>Graphics card</value></data>
+  <data name="Setup_Item_Psu" xml:space="preserve"><value>Power supply</value></data>
+  <data name="Setup_Item_Case" xml:space="preserve"><value>Case</value></data>
+  <data name="Setup_Item_IdeWin" xml:space="preserve"><value>IDE – Windows</value></data>
+  <data name="Setup_Item_IdeMac" xml:space="preserve"><value>IDE – macOS</value></data>
+  <data name="Setup_Item_CodeEditor" xml:space="preserve"><value>Code editor</value></data>
+  <data name="Setup_Item_TaskMgmt" xml:space="preserve"><value>Task management</value></data>
+  <data name="Setup_Item_Productivity" xml:space="preserve"><value>Productivity / design</value></data>
+  <data name="Setup_Item_SqlWin" xml:space="preserve"><value>SQL client – Windows</value></data>
+  <data name="Setup_Item_SqlMac" xml:space="preserve"><value>SQL client – macOS</value></data>
+  <data name="Setup_Item_GitClient" xml:space="preserve"><value>Git client</value></data>
+  <data name="Setup_Item_VpsHosting" xml:space="preserve"><value>VPS hosting</value></data>
+  <data name="Setup_Item_CloudHosting" xml:space="preserve"><value>Cloud hosting</value></data>
+  <data name="Setup_Item_BrowserMain" xml:space="preserve"><value>Browser – main</value></data>
+  <data name="Setup_Item_BrowserAlt" xml:space="preserve"><value>Browser – alternative</value></data>
+  <data name="Setup_Item_Communication" xml:space="preserve"><value>Communication</value></data>
+  <data name="Setup_Item_PasswordManager" xml:space="preserve"><value>Password manager</value></data>
+  <data name="Setup_Item_Music" xml:space="preserve"><value>Music</value></data>
+
+  <!-- ===== Errors / system ===== -->
+  <data name="PageTitle_Error" xml:space="preserve"><value>Error — Filip</value></data>
+  <data name="Error_404_Label" xml:space="preserve"><value>// page not found</value></data>
+  <data name="Error_500_Label" xml:space="preserve"><value>// something went wrong</value></data>
+  <data name="Error_404_Text" xml:space="preserve"><value>The page you're looking for doesn't exist.</value></data>
+  <data name="Error_500_Text" xml:space="preserve"><value>An unexpected error occurred. Please try again.</value></data>
+  <data name="NotFound_Title" xml:space="preserve"><value>Not found</value></data>
+  <data name="NotFound_Text" xml:space="preserve"><value>The content you're looking for doesn't exist.</value></data>
+  <data name="AccessDenied_Title" xml:space="preserve"><value>Access denied</value></data>
+  <data name="AccessDenied_Text" xml:space="preserve"><value>You do not have access to this resource.</value></data>
+  <data name="Reconnect_Connecting" xml:space="preserve"><value>// connecting…</value></data>
+  <data name="Reconnect_RetryPrefix" xml:space="preserve"><value>// connection lost — retrying in </value></data>
+  <data name="Reconnect_Failed" xml:space="preserve"><value>// connection lost</value></data>
+  <data name="Reconnect_FailedHint" xml:space="preserve"><value>Try again or reload the page.</value></data>
+  <data name="Reconnect_RetryButton" xml:space="preserve"><value>Retry</value></data>
+  <data name="Reconnect_Paused" xml:space="preserve"><value>// session paused by the server</value></data>
+  <data name="Reconnect_ResumeFailed" xml:space="preserve"><value>// failed to resume the session</value></data>
+  <data name="Reconnect_ResumeButton" xml:space="preserve"><value>Reload</value></data>
+
+  <!-- ===== Admin ===== -->
+  <data name="Admin_Eyebrow" xml:space="preserve"><value>ADMIN</value></data>
+  <data name="Admin_SaveError" xml:space="preserve"><value>Error while saving: {0}</value></data>
+  <data name="Admin_UploadError" xml:space="preserve"><value>Error while uploading the image: {0}</value></data>
+  <data name="Admin_Dash_Availability" xml:space="preserve"><value>Availability</value></data>
+  <data name="Admin_Dash_AvailabilityHint" xml:space="preserve"><value>Shown to visitors in the hero section of the site.</value></data>
+  <data name="Admin_Dash_Saved" xml:space="preserve"><value>✓ Saved</value></data>
+  <data name="Admin_Dash_NotePlaceholder" xml:space="preserve"><value>Optional note (e.g. “from September 2026”)</value></data>
+  <data name="Admin_Dash_SaveNote" xml:space="preserve"><value>Save note</value></data>
+  <data name="Admin_Dash_StatPosts" xml:space="preserve"><value>Posts</value></data>
+  <data name="Admin_Dash_StatProjects" xml:space="preserve"><value>Projects</value></data>
+  <data name="Admin_Dash_StatCategories" xml:space="preserve"><value>Categories</value></data>
+  <data name="Admin_Dash_StatComments" xml:space="preserve"><value>Comments</value></data>
+  <data name="Admin_Dash_PendingApproval" xml:space="preserve"><value>awaiting approval</value></data>
+  <data name="Admin_Dash_NewPost" xml:space="preserve"><value>+ New post</value></data>
+  <data name="Admin_Dash_NewProject" xml:space="preserve"><value>+ New project</value></data>
+  <data name="Admin_Dash_SectionContent" xml:space="preserve"><value>Content</value></data>
+  <data name="Admin_Dash_SectionProjects" xml:space="preserve"><value>Projects</value></data>
+  <data name="Admin_Dash_SectionCommunity" xml:space="preserve"><value>Community</value></data>
+  <data name="Admin_Dash_CardPostsDesc" xml:space="preserve"><value>Create, edit and delete articles.</value></data>
+  <data name="Admin_Dash_CardCategoriesDesc" xml:space="preserve"><value>Grouping articles into sections.</value></data>
+  <data name="Admin_Dash_CardTagsDesc" xml:space="preserve"><value>Tags for articles and projects.</value></data>
+  <data name="Admin_Dash_CardProjects" xml:space="preserve"><value>Manage projects</value></data>
+  <data name="Admin_Dash_CardProjectsDesc" xml:space="preserve"><value>Portfolio – adding and publishing.</value></data>
+  <data name="Admin_Dash_CardCommentsDesc" xml:space="preserve"><value>Approving and moderating discussions.</value></data>
+  <data name="Admin_Dash_MostViewed" xml:space="preserve"><value>Most viewed</value></data>
+  <data name="Admin_Dash_Visits" xml:space="preserve"><value>views</value></data>
+  <data name="Admin_Posts_Title" xml:space="preserve"><value>Posts</value></data>
+  <data name="Admin_Projects_Title" xml:space="preserve"><value>Projects</value></data>
+  <data name="Admin_Categories_Title" xml:space="preserve"><value>Categories</value></data>
+  <data name="Admin_Tags_Title" xml:space="preserve"><value>Tags</value></data>
+  <data name="Admin_Comments_Title" xml:space="preserve"><value>Comments to approve</value></data>
+  <data name="Admin_Comments_None" xml:space="preserve"><value>// no comments awaiting approval</value></data>
+  <data name="Admin_Comments_Approve" xml:space="preserve"><value>✓ Approve</value></data>
+  <data name="Admin_Comments_Delete" xml:space="preserve"><value>× Delete</value></data>
+  <data name="Admin_Categories_Placeholder" xml:space="preserve"><value>Category name</value></data>
+  <data name="Admin_Categories_HasPosts" xml:space="preserve"><value>The category contains posts and can't be deleted.</value></data>
+  <data name="Admin_Tags_Placeholder" xml:space="preserve"><value>Tag name</value></data>
+  <data name="Admin_Post_New" xml:space="preserve"><value>New post</value></data>
+  <data name="Admin_Post_Edit" xml:space="preserve"><value>Edit post</value></data>
+  <data name="Admin_Project_New" xml:space="preserve"><value>New project</value></data>
+  <data name="Admin_Project_Edit" xml:space="preserve"><value>Edit project</value></data>
+  <data name="Admin_Field_Title" xml:space="preserve"><value>Title</value></data>
+  <data name="Admin_Field_Name" xml:space="preserve"><value>Name</value></data>
+  <data name="Admin_Field_Slug" xml:space="preserve"><value>Slug</value></data>
+  <data name="Admin_Field_Category" xml:space="preserve"><value>Category</value></data>
+  <data name="Admin_Field_Tags" xml:space="preserve"><value>Tags</value></data>
+  <data name="Admin_Field_NewTag" xml:space="preserve"><value>New tag…</value></data>
+  <data name="Admin_Field_AddTag" xml:space="preserve"><value>+ Add tag</value></data>
+  <data name="Admin_Field_Intro" xml:space="preserve"><value>Intro</value></data>
+  <data name="Admin_Field_ContentMd" xml:space="preserve"><value>Content (Markdown)</value></data>
+  <data name="Admin_Field_DetailMd" xml:space="preserve"><value>Detail (Markdown)</value></data>
+  <data name="Admin_Field_Description" xml:space="preserve"><value>Description</value></data>
+  <data name="Admin_Field_Image" xml:space="preserve"><value>Image</value></data>
+  <data name="Admin_Field_MainImage" xml:space="preserve"><value>Main image</value></data>
+  <data name="Admin_Field_MoreImages" xml:space="preserve"><value>More images</value></data>
+  <data name="Admin_Field_StartYear" xml:space="preserve"><value>Start year</value></data>
+  <data name="Admin_Field_EndYear" xml:space="preserve"><value>End year (optional)</value></data>
+  <data name="Admin_Field_GithubUrl" xml:space="preserve"><value>GitHub URL (optional)</value></data>
+  <data name="Admin_Field_LiveDemoUrl" xml:space="preserve"><value>Live demo URL (optional)</value></data>
+  <data name="Admin_Field_Publish" xml:space="preserve"><value>Publish</value></data>
+  <data name="Admin_Field_Featured" xml:space="preserve"><value>★ Featured project (moves to the top)</value></data>
+  <data name="Admin_Err_TitleRequired" xml:space="preserve"><value>Title is required.</value></data>
+  <data name="Admin_Err_NameRequired" xml:space="preserve"><value>Name is required.</value></data>
+  <data name="Admin_Err_SlugRequired" xml:space="preserve"><value>Slug is required.</value></data>
+  <data name="Admin_Err_CategoryRequired" xml:space="preserve"><value>Pick a category.</value></data>
+  <data name="Admin_Err_StartYearRequired" xml:space="preserve"><value>Start year is required.</value></data>
+  <data name="Admin_Err_TagCreate" xml:space="preserve"><value>Error while creating the tag: {0}</value></data>
+
+  <!-- ===== Admin – content translations ===== -->
+  <data name="Admin_Tr_LangLabel" xml:space="preserve"><value>Content language</value></data>
+  <data name="Admin_Lang_Cs" xml:space="preserve"><value>Czech</value></data>
+  <data name="Admin_Lang_En" xml:space="preserve"><value>English</value></data>
+  <data name="Admin_Tr_Translated" xml:space="preserve"><value>● translated</value></data>
+  <data name="Admin_Tr_NotTranslated" xml:space="preserve"><value>○ not translated</value></data>
+  <data name="Admin_Tr_SharedNote" xml:space="preserve"><value>Categories, tags, images, years and publishing are shared across both languages – edit them in the Czech version.</value></data>
+  <data name="Admin_Tr_EnEmptyHint" xml:space="preserve"><value>Leave the fields empty and the EN version falls back to Czech on the site.</value></data>
+  <data name="Admin_Field_NameEn" xml:space="preserve"><value>Name (EN)</value></data>
+  <data name="Admin_Field_NameEnPlaceholder" xml:space="preserve"><value>English name (optional)</value></data>
+  <data name="Admin_Dash_NoteEnPlaceholder" xml:space="preserve"><value>English note (e.g. “from September 2026”)</value></data>
+  <data name="Admin_Tr_AutoTranslate" xml:space="preserve"><value>⚡ Translate from Czech</value></data>
+  <data name="Admin_Tr_Translating" xml:space="preserve"><value>// translating…</value></data>
+  <data name="Admin_Tr_TranslateError" xml:space="preserve"><value>Auto-translation failed: {0}</value></data>
+</root>

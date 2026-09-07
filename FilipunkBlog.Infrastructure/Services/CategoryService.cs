@@ -1,7 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
 using FilipunkBlog.Application.Contracts;
 using FilipunkBlog.Application.Models;
 using FilipunkBlog.Infrastructure.Persistence.Repositories;
@@ -16,7 +12,8 @@ public class CategoryService(CategoryRepository repository) : ICategoryService
         return categories.Select(c => new CategoryViewModel
         {
             Id = c.Id,
-            Name = c.Name,
+            Name = CultureContext.IsEnglish ? (c.NameEn ?? c.Name) : c.Name,
+            NameEn = c.NameEn,
             Slug = c.Slug
         }).ToList();
     }

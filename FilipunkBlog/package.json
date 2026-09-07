@@ -1,0 +1,18 @@
+{
+  "name": "filipunkblog-assets",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Build klientských assetů pro FilipunkBlog (Tailwind CSS + highlight.js), nahrazuje dřívější CDN skripty.",
+  "type": "module",
+  "scripts": {
+    "css:build": "tailwindcss -i ./Styles/app.css -o ./wwwroot/app.css --minify",
+    "css:watch": "tailwindcss -i ./Styles/app.css -o ./wwwroot/app.css --watch",
+    "assets:build": "node ./scripts/copy-assets.mjs",
+    "build": "npm run css:build && npm run assets:build"
+  },
+  "devDependencies": {
+    "@highlightjs/cdn-assets": "^11.11.1",
+    "@tailwindcss/typography": "^0.5.16",
+    "tailwindcss": "^3.4.17"
+  }
+}

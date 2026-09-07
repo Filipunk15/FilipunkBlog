@@ -4,38 +4,42 @@
 @using FilipunkBlog.Application.Models
 @using Microsoft.AspNetCore.Authorization
 @inject ITagService TagAdminService
+@inject IStringLocalizer<SharedResource> L
 
-<PageTitle>Správa tagů</PageTitle>
+<PageTitle>@L["Admin_Tags_Title"]</PageTitle>
 
 <div class="mx-auto max-w-3xl px-6 py-20 lg:px-8">
     <div class="mb-12">
-        <span class="inline-block mb-4 rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
-            // ADMIN
-        </span>
-        <h1 class="font-mono text-3xl font-bold text-white">Tagy</h1>
+        <h1 class="font-mono text-3xl font-bold text-white">@L["Admin_Tags_Title"]</h1>
     </div>
 
     <div class="flex gap-4 mb-10">
-        <input @bind="_newName" placeholder="Název tagu"
+        <input @bind="_newName" placeholder="@L["Admin_Tags_Placeholder"]"
                class="flex-1 rounded border border-gray-700 bg-gray-900 px-4 py-3 text-sm text-white font-mono focus:border-blue-600/50 focus:outline-none" />
         <button @onclick="AddTag"
                 class="rounded font-mono text-sm px-6 py-3 bg-blue-600/20 text-blue-500 border border-blue-600/40 hover:bg-blue-600/30 transition">
-            + Přidat
+            @L["Common_Add"]
         </button>
     </div>
 
     <div class="flex flex-col divide-y divide-gray-800">
         @foreach (var tag in _tags)
         {
-            <div class="flex items-center justify-between py-4">
-                <div>
+            <div class="flex flex-wrap items-center justify-between gap-4 py-4">
+                <div class="min-w-[10rem]">
                     <div class="font-mono text-sm font-bold text-white">@tag.Name</div>
-                    <div class="font-mono text-xs text-gray-500">@tag.Slug</div>
+                    <div class="font-mono text-xs text-gray-400">@tag.Slug</div>
                 </div>
-                <button @onclick="() => DeleteTag(tag.Id)"
-                        class="font-mono text-xs px-3 py-1.5 border border-gray-700 text-gray-400 hover:border-red-500/50 hover:text-red-400 transition rounded">
-                    Smazat
-                </button>
+                <div class="flex items-center gap-2">
+                    <span class="font-mono text-[0.65rem] text-gray-500 uppercase tracking-wider">EN</span>
+                    <input value="@tag.NameEn" @onchange="e => SaveNameEn(tag, e.Value?.ToString())"
+                           placeholder="@L["Admin_Field_NameEnPlaceholder"]"
+                           class="w-56 rounded border border-gray-700 bg-gray-900 px-3 py-1.5 text-xs text-white font-mono focus:border-blue-600/50 focus:outline-none" />
+                    <button @onclick="() => DeleteTag(tag.Id)"
+                            class="font-mono text-xs px-3 py-1.5 border border-gray-700 text-gray-400 hover:border-red-500/50 hover:text-red-400 transition rounded">
+                        @L["Common_Delete"]
+                    </button>
+                </div>
             </div>
         }
     </div>
@@ -53,10 +57,17 @@
     private async Task AddTag()
     {
         if (string.IsNullOrWhiteSpace(_newName)) return;
-        var slug = _newName.ToLower().Replace(" ", "-");
-        await TagAdminService.CreateTagAsync(_newName, slug);
+        await TagAdminService.CreateTagAsync(_newName, SlugHelper.Slugify(_newName));
         _newName = string.Empty;
         _tags = await TagAdminService.GetTagsAsync();
+    }
+
+    private async Task SaveNameEn(TagViewModel tag, string? value)
+    {
+        var trimmed = string.IsNullOrWhiteSpace(value) ? null : value.Trim();
+        if (trimmed == tag.NameEn) return;
+        await TagAdminService.SetNameEnAsync(tag.Id, trimmed);
+        tag.NameEn = trimmed;
     }
 
     private async Task DeleteTag(Guid id)

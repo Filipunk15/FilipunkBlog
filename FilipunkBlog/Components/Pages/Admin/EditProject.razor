@@ -7,43 +7,86 @@
 @inject IProjectService ProjectService
 @inject IImageService ImageService
 @inject ITagService TagAdminService
+@inject IMarkdownService Markdown
+@inject ITranslationService TranslationService
 @inject NavigationManager Navigation
+@inject IStringLocalizer<SharedResource> L
 
-<PageTitle>@(_isNew ? "Nový projekt" : "Upravit projekt")</PageTitle>
+<PageTitle>@(_isNew ? L["Admin_Project_New"] : L["Admin_Project_Edit"])</PageTitle>
 
 <div class="mx-auto max-w-3xl px-6 py-20 lg:px-8">
     <div class="mb-12">
-        <span class="inline-block mb-4 rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
-            // ADMIN
-        </span>
-        <h1 class="font-mono text-3xl font-bold text-white">@(_isNew ? "Nový projekt" : "Upravit projekt")</h1>
+        <h1 class="font-mono text-3xl font-bold text-white">@(_isNew ? L["Admin_Project_New"] : L["Admin_Project_Edit"])</h1>
     </div>
+
+    <div class="mb-8 flex flex-wrap items-center gap-3">
+        <span class="font-mono text-xs text-gray-400 uppercase tracking-wider">@L["Admin_Tr_LangLabel"]</span>
+        <div class="inline-flex rounded border border-gray-700 overflow-hidden">
+            <button type="button" @onclick='() => _lang = "cs"'
+                    class="@($"font-mono text-xs px-4 py-2 transition {(_lang == "cs" ? "bg-blue-600/20 text-blue-500" : "bg-gray-900 text-gray-400 hover:text-white")}")">
+                @L["Admin_Lang_Cs"]
+            </button>
+            <button type="button" @onclick='() => _lang = "en"'
+                    class="@($"font-mono text-xs px-4 py-2 border-l border-gray-700 transition {(_lang == "en" ? "bg-blue-600/20 text-blue-500" : "bg-gray-900 text-gray-400 hover:text-white")}")">
+                @L["Admin_Lang_En"]
+                <span class="ml-1.5 @(_enTranslated ? "text-emerald-400" : "text-gray-500")">@(_enTranslated ? L["Admin_Tr_Translated"] : L["Admin_Tr_NotTranslated"])</span>
+            </button>
+        </div>
+    </div>
+
+    @if (_lang == "en")
+    {
+        <p class="mb-4 font-mono text-xs text-gray-500 leading-relaxed">@L["Admin_Tr_SharedNote"]<br />@L["Admin_Tr_EnEmptyHint"]</p>
+        @if (TranslationService.IsConfigured)
+        {
+            <div class="mb-6">
+                <button type="button" @onclick="AutoTranslate" disabled="@_translating"
+                        class="font-mono text-xs px-4 py-2 rounded border border-blue-600/40 bg-blue-600/10 text-blue-500 hover:bg-blue-600/20 transition disabled:opacity-50">
+                    @(_translating ? L["Admin_Tr_Translating"] : L["Admin_Tr_AutoTranslate"])
+                </button>
+            </div>
+        }
+    }
 
     <div class="flex flex-col gap-6">
         <div>
-            <label class="font-mono text-xs text-gray-500 uppercase tracking-wider mb-2 block">Název</label>
-            <input @bind="_project.Title" @bind:event="oninput" @onchange="GenerateSlug"
+            <label class="font-mono text-xs text-gray-400 uppercase tracking-wider mb-2 block">@L["Admin_Field_Name"]</label>
+            <input @bind="FTitle" @bind:event="oninput" @onchange="GenerateSlug"
                    class="w-full rounded border border-gray-700 bg-gray-900 px-4 py-3 text-sm text-white font-mono focus:border-blue-600/50 focus:outline-none" />
         </div>
         <div>
-            <label class="font-mono text-xs text-gray-500 uppercase tracking-wider mb-2 block">Slug</label>
-            <input @bind="_project.Slug"
+            <label class="font-mono text-xs text-gray-400 uppercase tracking-wider mb-2 block">@L["Admin_Field_Slug"]</label>
+            <input @bind="FSlug"
                    class="w-full rounded border border-gray-700 bg-gray-900 px-4 py-3 text-sm text-white font-mono focus:border-blue-600/50 focus:outline-none" />
         </div>
+        @if (_lang == "cs")
+        {
         <div class="flex gap-4">
             <div class="flex-1">
-                <label class="font-mono text-xs text-gray-500 uppercase tracking-wider mb-2 block">Rok začátku</label>
+                <label class="font-mono text-xs text-gray-400 uppercase tracking-wider mb-2 block">@L["Admin_Field_StartYear"]</label>
                 <input type="number" @bind="_project.StartYear"
                        class="w-full rounded border border-gray-700 bg-gray-900 px-4 py-3 text-sm text-white font-mono focus:border-blue-600/50 focus:outline-none" />
             </div>
             <div class="flex-1">
-                <label class="font-mono text-xs text-gray-500 uppercase tracking-wider mb-2 block">Rok konce (nepovinné)</label>
+                <label class="font-mono text-xs text-gray-400 uppercase tracking-wider mb-2 block">@L["Admin_Field_EndYear"]</label>
                 <input type="number" @bind="_project.EndYear"
                        class="w-full rounded border border-gray-700 bg-gray-900 px-4 py-3 text-sm text-white font-mono focus:border-blue-600/50 focus:outline-none" />
             </div>
         </div>
+        <div class="flex gap-4">
+            <div class="flex-1">
+                <label class="font-mono text-xs text-gray-400 uppercase tracking-wider mb-2 block">@L["Admin_Field_GithubUrl"]</label>
+                <input @bind="_project.GitHubUrl" placeholder="https://github.com/..."
+                       class="w-full rounded border border-gray-700 bg-gray-900 px-4 py-3 text-sm text-white font-mono focus:border-blue-600/50 focus:outline-none" />
+            </div>
+            <div class="flex-1">
+                <label class="font-mono text-xs text-gray-400 uppercase tracking-wider mb-2 block">@L["Admin_Field_LiveDemoUrl"]</label>
+                <input @bind="_project.LiveDemoUrl" placeholder="https://..."
+                       class="w-full rounded border border-gray-700 bg-gray-900 px-4 py-3 text-sm text-white font-mono focus:border-blue-600/50 focus:outline-none" />
+            </div>
+        </div>
         <div>
-            <label class="font-mono text-xs text-gray-500 uppercase tracking-wider mb-2 block">Tagy</label>
+            <label class="font-mono text-xs text-gray-400 uppercase tracking-wider mb-2 block">@L["Admin_Field_Tags"]</label>
             <div class="flex flex-wrap gap-2">
                 @foreach (var tag in _allTags)
                 {
@@ -55,45 +98,60 @@
                 }
             </div>
             <div class="flex gap-2 mt-3">
-                <input @bind="_newTagName" placeholder="Nový tag..."
+                <input @bind="_newTagName" placeholder="@L["Admin_Field_NewTag"]"
                        class="flex-1 rounded border border-gray-700 bg-gray-900 px-4 py-2 text-sm text-white font-mono focus:border-blue-600/50 focus:outline-none" />
                 <button type="button" @onclick="AddNewTag"
                         class="font-mono text-xs px-4 py-2 bg-blue-600/20 text-blue-500 border border-blue-600/40 rounded hover:bg-blue-600/30 transition">
-                    + Přidat tag
+                    @L["Admin_Field_AddTag"]
                 </button>
             </div>
         </div>
+        }
         <div>
-            <label class="font-mono text-xs text-gray-500 uppercase tracking-wider mb-2 block">Popis</label>
-            <textarea @bind="_project.Description" rows="3"
+            <label class="font-mono text-xs text-gray-400 uppercase tracking-wider mb-2 block">@L["Admin_Field_Description"]</label>
+            <textarea @bind="FDescription" rows="3"
                       class="w-full rounded border border-gray-700 bg-gray-900 px-4 py-3 text-sm text-white font-mono focus:border-blue-600/50 focus:outline-none resize-none"></textarea>
         </div>
         <div>
-            <label class="font-mono text-xs text-gray-500 uppercase tracking-wider mb-2 block">Detail (HTML)</label>
-            <textarea @bind="_project.Detail" rows="15"
+            <div class="flex items-center justify-between mb-2">
+                <label class="font-mono text-xs text-gray-400 uppercase tracking-wider block">@L["Admin_Field_DetailMd"]</label>
+                <button type="button" @onclick="() => _preview = !_preview"
+                        class="font-mono text-xs px-3 py-1 border border-gray-700 text-gray-400 hover:border-blue-600/50 hover:text-blue-500 transition rounded">
+                    @(_preview ? L["Common_PreviewHide"] : L["Common_Preview"])
+                </button>
+            </div>
+            <textarea @bind="FDetail" @bind:event="oninput" rows="15"
                       class="w-full rounded border border-gray-700 bg-gray-900 px-4 py-3 text-sm text-white font-mono focus:border-blue-600/50 focus:outline-none resize-y"></textarea>
+            @if (_preview)
+            {
+                <div class="mt-3 rounded border border-gray-800 bg-gray-950 p-6 prose prose-invert prose-green max-w-none text-gray-300 leading-relaxed">
+                    @((MarkupString)Markdown.ToHtml(FDetail))
+                </div>
+            }
         </div>
+        @if (_lang == "cs")
+        {
         <div>
-            <label class="font-mono text-xs text-gray-500 uppercase tracking-wider mb-2 block">Hlavní obrázek</label>
+            <label class="font-mono text-xs text-gray-400 uppercase tracking-wider mb-2 block">@L["Admin_Field_MainImage"]</label>
             @if (!string.IsNullOrEmpty(_project.MainImage))
             {
                 <div class="mb-3">
                     <img src="@_project.MainImage" class="h-32 rounded border border-gray-700 object-cover" />
-                    <button @onclick="RemoveMainImage" class="mt-2 font-mono text-xs text-red-400 hover:text-red-300 transition">× Odebrat</button>
+                    <button @onclick="RemoveMainImage" class="mt-2 font-mono text-xs text-red-400 hover:text-red-300 transition">@L["Common_Remove"]</button>
                 </div>
             }
             <InputFile OnChange="UploadMainImage" accept="image/*"
                        class="w-full rounded border border-gray-700 bg-gray-900 px-4 py-3 text-sm text-gray-400 font-mono file:mr-4 file:rounded file:border-0 file:bg-blue-600/20 file:px-3 file:py-1 file:font-mono file:text-xs file:text-blue-500 cursor-pointer" />
         </div>
         <div>
-            <label class="font-mono text-xs text-gray-500 uppercase tracking-wider mb-2 block">Další obrázky</label>
+            <label class="font-mono text-xs text-gray-400 uppercase tracking-wider mb-2 block">@L["Admin_Field_MoreImages"]</label>
             @foreach (var img in _additionalImages)
             {
                 <div class="mb-2 flex items-center gap-3">
                     <img src="@img" class="h-16 rounded border border-gray-700 object-cover" />
                     <button @onclick="() => _additionalImages.Remove(img)"
                             class="font-mono text-xs text-red-400 hover:text-red-300 transition">
-                        × Odebrat
+                        @L["Common_Remove"]
                     </button>
                 </div>
             }
@@ -101,13 +159,20 @@
                        class="w-full rounded border border-gray-700 bg-gray-900 px-4 py-3 text-sm text-gray-400 font-mono file:mr-4 file:rounded file:border-0 file:bg-blue-600/20 file:px-3 file:py-1 file:font-mono file:text-xs file:text-blue-500 cursor-pointer" />
             @if (_uploading)
             {
-                <p class="font-mono text-xs text-gray-500 mt-2">// nahrávám...</p>
+                <p class="font-mono text-xs text-gray-400 mt-2">@L["Common_Uploading"]</p>
             }
         </div>
-        <div class="flex items-center gap-3">
-            <input type="checkbox" @bind="_project.IsPublished" id="published" class="rounded border-gray-700" />
-            <label for="published" class="font-mono text-xs text-gray-400">Publikovat</label>
+        <div class="flex flex-wrap items-center gap-6">
+            <div class="flex items-center gap-3">
+                <input type="checkbox" @bind="_project.IsPublished" id="published" class="rounded border-gray-700" />
+                <label for="published" class="font-mono text-xs text-gray-400">@L["Admin_Field_Publish"]</label>
+            </div>
+            <div class="flex items-center gap-3">
+                <input type="checkbox" @bind="_project.IsFeatured" id="featured" class="rounded border-gray-700" />
+                <label for="featured" class="font-mono text-xs text-gray-400">@L["Admin_Field_Featured"]</label>
+            </div>
         </div>
+        }
 
         @if (!string.IsNullOrEmpty(_error))
         {
@@ -117,11 +182,11 @@
         <div class="flex gap-4">
             <button @onclick="Save"
                     class="rounded font-mono text-sm px-6 py-3 bg-blue-600/20 text-blue-500 border border-blue-600/40 hover:bg-blue-600/30 transition">
-                @(_isNew ? "Vytvořit" : "Uložit")
+                @(_isNew ? L["Common_Create"] : L["Common_Save"])
             </button>
-            <a href="/admin/projects"
+            <a href="admin/projects"
                class="rounded font-mono text-sm px-6 py-3 border border-gray-700 text-gray-400 hover:border-gray-500 transition">
-                Zrušit
+                @L["Common_Cancel"]
             </a>
         </div>
     </div>
@@ -133,59 +198,111 @@
     private ProjectViewModel _project = new();
     private bool _isNew => Id == null;
     private string _error = string.Empty;
+    private bool _preview = false;
     private bool _uploading = false;
     private List<TagViewModel> _allTags = [];
     private List<Guid> _selectedTagIds = [];
     private List<string> _additionalImages = [];
     private string _newTagName = string.Empty;
 
+    private string _lang = "cs";
+    private ContentTranslationViewModel _en = new() { Culture = "en" };
+    private bool _enTranslated => !_en.IsEmpty;
+    private bool _translating;
+
+    private string FTitle
+    {
+        get => _lang == "en" ? _en.Title : _project.Title;
+        set { if (_lang == "en") _en.Title = value; else _project.Title = value; }
+    }
+    private string FSlug
+    {
+        get => _lang == "en" ? _en.Slug : _project.Slug;
+        set { if (_lang == "en") _en.Slug = value; else _project.Slug = value; }
+    }
+    private string FDescription
+    {
+        get => _lang == "en" ? _en.Summary : _project.Description;
+        set { if (_lang == "en") _en.Summary = value; else _project.Description = value; }
+    }
+    private string FDetail
+    {
+        get => _lang == "en" ? _en.Body : _project.Detail;
+        set { if (_lang == "en") _en.Body = value; else _project.Detail = value; }
+    }
+
     protected override async Task OnInitializedAsync()
     {
         _allTags = await TagAdminService.GetTagsAsync();
         if (!_isNew)
         {
-            var existing = await ProjectService.GetAllProjectsAsync();
-            var found = existing.FirstOrDefault(x => x.Id == Id);
+            var found = await ProjectService.GetForEditAsync(Id!.Value);
             if (found != null)
             {
                 _project = found;
                 _selectedTagIds = _project.TagIds.ToList();
                 _additionalImages = _project.Images.ToList();
+                _en = _project.Translations.FirstOrDefault(t => t.Culture == "en")
+                      ?? new ContentTranslationViewModel { Culture = "en" };
             }
         }
     }
 
     private void GenerateSlug()
     {
-        if (_isNew)
-            _project.Slug = _project.Title.ToLower()
-                .Replace(" ", "-")
-                .Replace("á", "a").Replace("č", "c").Replace("ď", "d")
-                .Replace("é", "e").Replace("ě", "e").Replace("í", "i")
-                .Replace("ň", "n").Replace("ó", "o").Replace("ř", "r")
-                .Replace("š", "s").Replace("ť", "t").Replace("ú", "u")
-                .Replace("ů", "u").Replace("ý", "y").Replace("ž", "z");
+        if (_lang == "en")
+        {
+            if (_isNew || string.IsNullOrWhiteSpace(_en.Slug))
+                _en.Slug = SlugHelper.Slugify(_en.Title);
+        }
+        else if (_isNew)
+        {
+            _project.Slug = SlugHelper.Slugify(_project.Title);
+        }
+    }
+
+    private async Task AutoTranslate()
+    {
+        _translating = true;
+        _error = string.Empty;
+        try
+        {
+            var result = await TranslationService.TranslateManyAsync([_project.Title, _project.Description, _project.Detail]);
+            _en.Title = result[0];
+            _en.Summary = result[1];
+            _en.Body = result[2];
+            _en.Slug = SlugHelper.Slugify(_en.Title);
+        }
+        catch (Exception ex)
+        {
+            _error = L["Admin_Tr_TranslateError", ex.Message];
+        }
+        finally
+        {
+            _translating = false;
+        }
     }
 
     private async Task Save()
     {
-        if (string.IsNullOrEmpty(_project.Title)) { _error = "Název je povinný."; return; }
-        if (string.IsNullOrEmpty(_project.Slug)) { _error = "Slug je povinný."; return; }
-        if (_project.StartYear == 0) { _error = "Rok začátku je povinný."; return; }
+        if (string.IsNullOrEmpty(_project.Title)) { _error = L["Admin_Err_NameRequired"]; return; }
+        if (string.IsNullOrEmpty(_project.Slug)) { _error = L["Admin_Err_SlugRequired"]; return; }
+        if (_project.StartYear == 0) { _error = L["Admin_Err_StartYearRequired"]; return; }
 
         _project.TagIds = _selectedTagIds;
         _project.Images = _additionalImages;
+        _project.Translations = [_en];
 
         try
         {
             if (_isNew) await ProjectService.CreateProjectAsync(_project);
             else await ProjectService.UpdateProjectAsync(_project);
 
-            Navigation.NavigateTo("/admin/projects");
+            Navigation.NavigateTo("admin/projects");
         }
         catch (Exception ex)
         {
-            _error = $"Chyba při ukládání: {ex.Message}";
+            _error = L["Admin_SaveError", ex.Message];
         }
     }
 
@@ -201,7 +318,7 @@
         }
         catch (Exception ex)
         {
-            _error = $"Chyba při nahrávání obrázku: {ex.Message}";
+            _error = L["Admin_UploadError", ex.Message];
         }
         finally
         {
@@ -222,7 +339,7 @@
         }
         catch (Exception ex)
         {
-            _error = $"Chyba při nahrávání obrázku: {ex.Message}";
+            _error = L["Admin_UploadError", ex.Message];
         }
         finally
         {
@@ -241,18 +358,14 @@
         if (string.IsNullOrWhiteSpace(_newTagName)) return;
         try
         {
-            var slug = _newTagName.ToLower()
-                .Replace(" ", "-")
-                .Replace("á", "a").Replace("č", "c")
-                .Replace("š", "s").Replace("ž", "z");
-            var newTag = await TagAdminService.CreateTagAsync(_newTagName, slug);
+            var newTag = await TagAdminService.CreateTagAsync(_newTagName, SlugHelper.Slugify(_newTagName));
             _allTags.Add(newTag);
             _selectedTagIds.Add(newTag.Id);
             _newTagName = string.Empty;
         }
         catch (Exception ex)
         {
-            _error = $"Chyba při vytváření tagu: {ex.Message}";
+            _error = L["Admin_Err_TagCreate", ex.Message];
         }
     }
 
