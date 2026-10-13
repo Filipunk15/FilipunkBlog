@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /Account/
+
+Sitemap: https://filipunk.cz/sitemap.xml

@@ -2,7 +2,7 @@
 @inject NavigationManager Navigation
 @inject IStringLocalizer<SharedResource> L
 
-<div class="flex items-center gap-1 font-mono text-xs" aria-label="@L["Lang_Switch"]">
+<div role="group" class="flex items-center gap-1 font-mono text-xs" aria-label="@L["Lang_Switch"]">
     @foreach (var (code, label) in _langs)
     {
         var isCurrent = string.Equals(_current, code, StringComparison.OrdinalIgnoreCase);

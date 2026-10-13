@@ -333,4 +333,15 @@
   <data name="Admin_Tr_AutoTranslate" xml:space="preserve"><value>⚡ Translate from Czech</value></data>
   <data name="Admin_Tr_Translating" xml:space="preserve"><value>// translating…</value></data>
   <data name="Admin_Tr_TranslateError" xml:space="preserve"><value>Auto-translation failed: {0}</value></data>
+
+  <!-- ===== Ochrana soukromí / Privacy ===== -->
+  <data name="Privacy_Title" xml:space="preserve"><value>Privacy policy</value></data>
+  <data name="Privacy_Eyebrow" xml:space="preserve"><value>PRIVACY</value></data>
+  <data name="Privacy_Updated" xml:space="preserve"><value>Last updated: 13 October 2026</value></data>
+  <data name="Privacy_MetaDescription" xml:space="preserve"><value>What personal data this website processes, why, and what your rights are. The site uses no cookies or third-party tracking.</value></data>
+  <data name="Footer_Privacy" xml:space="preserve"><value>Privacy policy</value></data>
+  <data name="Contact_PrivacyNote" xml:space="preserve"><value>By sending the message you acknowledge that your data will be used only to reply to you. More in the</value></data>
+  <data name="Nav_Aria_Main" xml:space="preserve"><value>Main navigation</value></data>
+  <data name="Nav_Aria_Mobile" xml:space="preserve"><value>Mobile navigation</value></data>
+  <data name="Footer_Aria" xml:space="preserve"><value>Site footer</value></data>
 </root>

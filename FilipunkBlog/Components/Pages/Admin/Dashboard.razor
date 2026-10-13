@@ -46,7 +46,7 @@
             {
                 var vm = new SiteSettingsViewModel { Status = status };
                 var active = _availability.Status == status;
-                <button @onclick="() => SetStatus(status)"
+                <button type="button" @onclick="() => SetStatus(status)"
                         class="@($"inline-flex items-center gap-2 rounded font-mono text-xs px-4 py-2 border transition {(active ? $"{vm.BgClass} {vm.BorderClass} {vm.TextClass}" : "border-gray-700 text-gray-400 hover:border-gray-500 hover:text-white")}")">
                     <span class="inline-flex h-2 w-2 rounded-full @vm.DotClass"></span>
                     @AvailabilityLabel(status)
@@ -59,7 +59,7 @@
                 <input @bind="_noteCs" @bind:event="oninput" maxlength="160"
                        placeholder="@L["Admin_Dash_NotePlaceholder"]"
                        class="flex-1 min-w-[16rem] rounded border border-gray-700 bg-gray-950 px-4 py-2.5 text-sm text-white font-mono focus:border-blue-600/50 focus:outline-none" />
-                <button @onclick="SaveNote"
+                <button type="button" @onclick="SaveNote"
                         class="rounded font-mono text-xs px-5 py-2.5 bg-blue-600/20 text-blue-500 border border-blue-600/40 hover:bg-blue-600/30 transition">
                     @L["Admin_Dash_SaveNote"]
                 </button>

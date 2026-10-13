@@ -1,14 +1,21 @@
 @inject NavigationManager Navigation
+@inject IStringLocalizer<SharedResource> L
 
 <footer class="border-t border-gray-800 bg-gray-900 py-10">
     <div class="mx-auto max-w-7xl px-6 lg:px-8">
         <div class="flex items-center justify-between">
             <span class="font-mono text-sm text-gray-400">© @DateTime.Today.Year Filip Lafata</span>
-            <a href="@($"{Prefix}/rss")" class="font-mono text-xs text-gray-400 hover:text-blue-500 transition">RSS</a>
+            <nav aria-label="@L["Footer_Aria"]" class="flex items-center gap-6">
+                <a href="@PrivacyHref" class="font-mono text-xs text-gray-400 hover:text-blue-500 transition">@L["Footer_Privacy"]</a>
+                <a href="@($"{Prefix}/rss")" class="font-mono text-xs text-gray-400 hover:text-blue-500 transition">RSS</a>
+            </nav>
         </div>
     </div>
 </footer>
 
 @code {
+    private string PrivacyHref =>
+        System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "en" ? "privacy" : "ochrana-osobnich-udaju";
+
     private string Prefix => new Uri(Navigation.BaseUri).AbsolutePath.TrimEnd('/');
 }

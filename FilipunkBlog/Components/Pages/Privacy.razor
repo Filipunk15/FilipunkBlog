@@ -1,0 +1,131 @@
+@page "/ochrana-osobnich-udaju"
+@page "/privacy"
+@inject IStringLocalizer<SharedResource> L
+
+<PageTitle>@L["Privacy_Title"] – Filip Lafata</PageTitle>
+
+<HeadContent>
+    <meta name="description" content="@L["Privacy_MetaDescription"]" />
+    <meta property="og:title" content="@L["Privacy_Title"]" />
+</HeadContent>
+
+<article class="mx-auto max-w-3xl px-6 py-20 lg:px-8">
+    <div class="mb-10">
+        <span class="inline-block mb-4 rounded-sm border border-blue-600/40 bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
+            // @L["Privacy_Eyebrow"]
+        </span>
+        <h1 class="font-mono text-3xl font-bold text-white mb-3">@L["Privacy_Title"]</h1>
+        <p class="font-mono text-xs text-gray-400">@L["Privacy_Updated"]</p>
+    </div>
+
+    <div class="prose prose-invert prose-green max-w-none text-gray-300 leading-relaxed">
+        @if (IsEn)
+        {
+            <h2>Who is responsible for your data</h2>
+            <p>
+                The controller of personal data collected on this website is Filip Lafata
+                (contact: <a href="mailto:f.lafata@filipunk.cz">f.lafata@filipunk.cz</a>).
+                This is a personal portfolio and blog; I only process the data that is strictly needed for the
+                features described below.
+            </p>
+
+            <h2>What data I process and why</h2>
+            <h3>Contact form</h3>
+            <p>
+                When you send a message I receive your name, e-mail address and the text of the message.
+                I use it only to reply to you. The message is delivered to me by e-mail and as a notification to my
+                private Discord channel (Discord Inc., USA); it is not stored in the website database.
+                Legal basis: my legitimate interest in answering enquiries (Art. 6(1)(f) GDPR) or steps taken at
+                your request before a contract is concluded (Art. 6(1)(b) GDPR).
+                I keep the communication only as long as needed to handle your enquiry.
+            </p>
+            <h3>Blog comments</h3>
+            <p>
+                A comment contains the name you enter and the comment text. It is stored in the website database,
+                reviewed by me and published only after approval; I am also notified about it in the private Discord
+                channel mentioned above. Legal basis: your consent given by submitting the comment (Art. 6(1)(a) GDPR).
+                You can ask me to remove your comment at any time.
+            </p>
+            <h3>Server logs</h3>
+            <p>
+                Like every web server, the hosting infrastructure keeps technical logs (IP address, time, requested
+                URL, browser type). They serve to keep the site secure and to diagnose errors
+                (legitimate interest, Art. 6(1)(f) GDPR) and are kept for a limited time only.
+            </p>
+
+            <h2>Cookies and third parties</h2>
+            <p>
+                The public part of the website <strong>does not use any cookies</strong>, analytics, advertising or
+                tracking tools. Fonts, icons and scripts are served from this website, so your visit is not
+                reported to Google or any other third party. A strictly necessary session cookie is set only for
+                the administrator after signing in.
+            </p>
+
+            <h2>Your rights</h2>
+            <p>
+                You have the right to access your data, to have it corrected or erased, to restrict or object to
+                its processing, and to data portability. Where processing is based on consent you can withdraw it at
+                any time. Write to <a href="mailto:f.lafata@filipunk.cz">f.lafata@filipunk.cz</a>.
+                You also have the right to lodge a complaint with the supervisory authority – in the Czech
+                Republic the Office for Personal Data Protection (<a href="https://www.uoou.gov.cz" rel="noopener noreferrer">uoou.gov.cz</a>).
+            </p>
+        }
+        else
+        {
+            <h2>Kdo je správcem údajů</h2>
+            <p>
+                Správcem osobních údajů, které se na tomto webu zpracovávají, je Filip Lafata
+                (kontakt: <a href="mailto:f.lafata@filipunk.cz">f.lafata@filipunk.cz</a>).
+                Jde o osobní portfolio a blog – zpracovávám jen údaje, které jsou nezbytné pro funkce popsané níže.
+            </p>
+
+            <h2>Jaké údaje zpracovávám a proč</h2>
+            <h3>Kontaktní formulář</h3>
+            <p>
+                Když mi napíšete, dostanu vaše jméno, e-mailovou adresu a text zprávy. Použiji je výhradně k odpovědi.
+                Zpráva mi přijde e-mailem a jako upozornění do soukromého kanálu služby Discord (Discord Inc., USA);
+                v databázi webu se neukládá.
+                Právní základ: oprávněný zájem na vyřízení dotazu (čl. 6 odst. 1 písm. f) GDPR), případně kroky
+                učiněné na vaši žádost před uzavřením smlouvy (čl. 6 odst. 1 písm. b) GDPR).
+                Komunikaci uchovávám jen po dobu nezbytnou k vyřízení vašeho dotazu.
+            </p>
+            <h3>Komentáře pod články</h3>
+            <p>
+                Komentář obsahuje jméno, které zadáte, a text komentáře. Ukládá se do databáze webu, před zveřejněním
+                ho schvaluji a o jeho přidání mě upozorní zmíněný soukromý kanál na Discordu.
+                Právní základ: váš souhlas udělený odesláním komentáře (čl. 6 odst. 1 písm. a) GDPR).
+                O odstranění komentáře mě můžete požádat kdykoli.
+            </p>
+            <h3>Provozní logy serveru</h3>
+            <p>
+                Jako každý webový server uchovává i hostingová infrastruktura technické logy (IP adresa, čas, adresa
+                stránky, typ prohlížeče). Slouží k zabezpečení webu a diagnostice chyb
+                (oprávněný zájem, čl. 6 odst. 1 písm. f) GDPR) a uchovávají se jen omezenou dobu.
+            </p>
+
+            <h2>Cookies a třetí strany</h2>
+            <p>
+                Veřejná část webu <strong>nepoužívá žádné cookies</strong>, analytiku, reklamu ani sledovací nástroje.
+                Písma, ikony i skripty se načítají z tohoto webu, takže se vaše návštěva neodesílá Googlu ani jiné
+                třetí straně. Nezbytně nutné přihlašovací cookie se nastavuje pouze administrátorovi po přihlášení.
+            </p>
+
+            <h2>Vaše práva</h2>
+            <p>
+                Máte právo na přístup ke svým údajům, jejich opravu nebo výmaz, omezení zpracování, vznést námitku
+                a právo na přenositelnost. Pokud je zpracování založeno na souhlasu, můžete ho kdykoli odvolat.
+                Napište na <a href="mailto:f.lafata@filipunk.cz">f.lafata@filipunk.cz</a>.
+                Máte také právo podat stížnost u dozorového úřadu – v ČR u Úřadu pro ochranu osobních údajů
+                (<a href="https://www.uoou.gov.cz" rel="noopener noreferrer">uoou.gov.cz</a>).
+            </p>
+        }
+    </div>
+
+    <div class="mt-12">
+        <a href="." class="font-mono text-xs text-blue-500 hover:text-blue-400 transition">@L["Common_BackHome"]</a>
+    </div>
+</article>
+
+@code {
+    private static bool IsEn => System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "en";
+}

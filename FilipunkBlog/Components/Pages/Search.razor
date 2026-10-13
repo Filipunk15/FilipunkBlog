@@ -10,11 +10,12 @@
 
 <div class="mx-auto max-w-7xl px-6 py-20 lg:px-8">
     <div class="mb-12">
+        <h1 class="sr-only">@L["Search_Eyebrow"]</h1>
         <div class="flex gap-4 mt-6">
-            <input @bind="_query" @bind:event="oninput" @onkeyup="OnKeyUp"
+            <input id="search-q" type="search" aria-label="@L["Search_Placeholder"]" @bind="_query" @bind:event="oninput" @onkeyup="OnKeyUp"
                    placeholder="@L["Search_Placeholder"]"
                    class="flex-1 rounded border border-gray-700 bg-gray-900 px-4 py-3 text-sm text-white font-mono focus:border-blue-600/50 focus:outline-none" />
-            <button @onclick="DoSearch"
+            <button type="button" @onclick="DoSearch"
                     class="rounded font-mono text-sm px-6 py-3 bg-blue-600/20 text-blue-500 border border-blue-600/40 hover:bg-blue-600/30 transition">
                 @L["Search_Button"]
             </button>

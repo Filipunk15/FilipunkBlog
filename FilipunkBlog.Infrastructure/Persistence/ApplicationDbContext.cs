@@ -26,9 +26,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     public DbSet<SiteSettings> SiteSettings { get; set; }
 
-    public DbSet<CvProfile> CvProfiles { get; set; }
-    public DbSet<ExperienceItem> ExperienceItems { get; set; }
-    public DbSet<Certification> Certifications { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

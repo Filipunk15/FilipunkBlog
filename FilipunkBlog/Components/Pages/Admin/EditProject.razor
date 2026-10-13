@@ -137,7 +137,7 @@
             {
                 <div class="mb-3">
                     <img src="@_project.MainImage" class="h-32 rounded border border-gray-700 object-cover" />
-                    <button @onclick="RemoveMainImage" class="mt-2 font-mono text-xs text-red-400 hover:text-red-300 transition">@L["Common_Remove"]</button>
+                    <button type="button" @onclick="RemoveMainImage" class="mt-2 font-mono text-xs text-red-400 hover:text-red-300 transition">@L["Common_Remove"]</button>
                 </div>
             }
             <InputFile OnChange="UploadMainImage" accept="image/*"
@@ -149,7 +149,7 @@
             {
                 <div class="mb-2 flex items-center gap-3">
                     <img src="@img" class="h-16 rounded border border-gray-700 object-cover" />
-                    <button @onclick="() => _additionalImages.Remove(img)"
+                    <button type="button" @onclick="() => _additionalImages.Remove(img)"
                             class="font-mono text-xs text-red-400 hover:text-red-300 transition">
                         @L["Common_Remove"]
                     </button>
@@ -180,7 +180,7 @@
         }
 
         <div class="flex gap-4">
-            <button @onclick="Save"
+            <button type="button" @onclick="Save"
                     class="rounded font-mono text-sm px-6 py-3 bg-blue-600/20 text-blue-500 border border-blue-600/40 hover:bg-blue-600/30 transition">
                 @(_isNew ? L["Common_Create"] : L["Common_Save"])
             </button>

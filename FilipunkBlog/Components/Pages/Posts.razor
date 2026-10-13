@@ -56,7 +56,7 @@
                     <div class="mt-12 flex items-center justify-center gap-3">
                         @if (_posts.HasPreviousPage)
                         {
-                            <button @onclick="() => LoadPage(_currentPage - 1)"
+                            <button type="button" @onclick="() => LoadPage(_currentPage - 1)"
                                     class="font-mono text-xs px-4 py-2 border border-gray-700 text-gray-400 hover:border-blue-600/50 hover:text-blue-500 transition rounded">
                                 @L["Common_Prev"]
                             </button>
@@ -64,7 +64,7 @@
                         <span class="font-mono text-xs text-gray-400">@_currentPage / @_posts.TotalPages</span>
                         @if (_posts.HasNextPage)
                         {
-                            <button @onclick="() => LoadPage(_currentPage + 1)"
+                            <button type="button" @onclick="() => LoadPage(_currentPage + 1)"
                                     class="font-mono text-xs px-4 py-2 border border-gray-700 text-gray-400 hover:border-blue-600/50 hover:text-blue-500 transition rounded">
                                 @L["Common_Next"]
                             </button>
@@ -83,9 +83,9 @@
                 <div class="rounded-lg border border-gray-700 bg-gray-900 p-6">
                     <h3 class="font-mono text-xs text-blue-500 uppercase tracking-widest mb-4">// @L["Posts_Search"]</h3>
                     <div class="flex gap-2">
-                        <input @bind="_searchQuery" placeholder="@L["Posts_SearchPlaceholder"]"
+                        <input id="posts-search" type="search" aria-label="@L["Posts_Search"]" @bind="_searchQuery" placeholder="@L["Posts_SearchPlaceholder"]"
                                class="flex-1 rounded border border-gray-700 bg-gray-950 px-3 py-2 text-xs text-white font-mono focus:border-blue-600/50 focus:outline-none" />
-                        <a href="search?Q=@_searchQuery"
+                        <a href="search?Q=@_searchQuery" aria-label="@L["Posts_Search"]"
                                class="rounded font-mono text-xs px-3 py-2 bg-blue-600/20 text-blue-500 border border-blue-600/40 hover:bg-blue-600/30 transition">
                             →
                         </a>

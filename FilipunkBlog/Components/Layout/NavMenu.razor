@@ -7,7 +7,7 @@
             <a href="@($"{P}/")" class="font-mono text-lg font-bold text-white">
                 filipunk<span class="text-blue-500">.cz</span>
             </a>
-            <nav class="hidden items-center gap-8 text-sm sm:flex">
+            <nav aria-label="@L["Nav_Aria_Main"]" class="hidden items-center gap-8 text-sm sm:flex">
                 @foreach (var link in NavLinks)
                 {
                     <a class="text-gray-400 hover:text-white transition" href="@link.Href">@link.Label</a>
@@ -42,7 +42,7 @@
         @if (_menuOpen)
         {
             <div id="mobile-nav" class="border-t border-gray-800 py-4 sm:hidden">
-                <nav class="flex flex-col gap-1">
+                <nav aria-label="@L["Nav_Aria_Mobile"]" class="flex flex-col gap-1">
                     @foreach (var link in NavLinks)
                     {
                         <a class="rounded px-3 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white transition"

@@ -33,11 +33,11 @@
                             <p class="text-sm text-gray-400 leading-relaxed">@comment.Content</p>
                         </div>
                         <div class="flex gap-3 shrink-0">
-                            <button @onclick="() => Approve(comment.Id)"
+                            <button type="button" @onclick="() => Approve(comment.Id)"
                                     class="font-mono text-xs px-3 py-1.5 border border-gray-700 text-gray-400 hover:border-blue-500/50 hover:text-blue-400 transition rounded">
                                 @L["Admin_Comments_Approve"]
                             </button>
-                            <button @onclick="() => Delete(comment.Id)"
+                            <button type="button" @onclick="() => Delete(comment.Id)"
                                     class="font-mono text-xs px-3 py-1.5 border border-gray-700 text-gray-400 hover:border-red-500/50 hover:text-red-400 transition rounded">
                                 @L["Admin_Comments_Delete"]
                             </button>

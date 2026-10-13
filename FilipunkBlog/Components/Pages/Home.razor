@@ -6,6 +6,7 @@
 @inject IProjectService ProjectService
 @inject ISiteSettingsService SiteSettingsService
 @inject IStringLocalizer<SharedResource> L
+@inject NavigationManager Navigation
 
 <PageTitle>@L["PageTitle_Home"]</PageTitle>
 
@@ -14,6 +15,8 @@
     <meta property="og:title" content="@L["PageTitle_Home"]" />
     <meta property="og:description" content="@L["Home_Meta_Description"]" />
     <meta property="og:type" content="website" />
+    @* Strukturovaná data pro vyhledávače (schema.org) *@
+    @((MarkupString)$"<script type=\"application/ld+json\">{StructuredData}</script>")
 </HeadContent>
 
 <!-- HERO -->
@@ -72,9 +75,9 @@
     <div class="mx-auto max-w-7xl px-6 py-20 lg:px-8">
         <div class="grid gap-20 lg:grid-cols-2 items-start">
             <div>
-                <span class="inline-block mb-6 rounded-sm bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
+                <h2 class="inline-block mb-6 rounded-sm bg-blue-600/10 px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
                    @L["Home_About_Eyebrow"]
-                </span>
+                </h2>
                 <p class="text-gray-400 leading-relaxed text-base mb-4">
                     @L["Home_About_P1"]
                 </p>
@@ -99,9 +102,9 @@
 <section id="projects" class="bg-gray-900 border-b border-gray-800 scroll-mt-16">
     <div class="mx-auto max-w-7xl px-6 py-20 lg:px-8">
         <div class="flex items-end justify-between mb-12">
-            <span class="inline-block rounded-sm px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
+            <h2 class="inline-block rounded-sm px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
                 @L["Home_Section_Projects"]
-            </span>
+            </h2>
             <div class="flex items-center gap-3">
                 @if (_isAdmin)
                 {
@@ -157,9 +160,9 @@
 <!-- TECHNOLOGIE -->
 <section id="skills" class="bg-gray-950 border-b border-gray-800 scroll-mt-16">
     <div class="mx-auto max-w-7xl px-6 py-20 lg:px-8">
-        <span class="inline-block mb-12 rounded-sm px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
+        <h2 class="inline-block mb-12 rounded-sm px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
             @L["Home_Section_Tech"]
-        </span>
+        </h2>
         <div class="grid gap-10 grid-cols-2 lg:grid-cols-4">
             @foreach (var group in SkillGroups)
             {
@@ -180,9 +183,9 @@
 <!-- ZKUŠENOSTI -->
 <section id="experience" class="bg-gray-900 border-b border-gray-800 scroll-mt-16">
     <div class="mx-auto max-w-3xl px-6 py-20 lg:px-8">
-        <span class="inline-block mb-12 rounded-sm px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
+        <h2 class="inline-block mb-12 rounded-sm px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
            @L["Home_Section_Experience"]
-        </span>
+        </h2>
         <div class="relative pl-8 border-l border-gray-700">
             @foreach (var (item, i) in Timeline.Select((t, i) => (t, i)))
             {
@@ -202,9 +205,9 @@
 <section id="blog" class="bg-gray-950 border-b border-gray-800 scroll-mt-16">
     <div class="mx-auto max-w-7xl px-6 py-20 lg:px-8">
         <div class="flex items-end justify-between mb-12">
-            <span class="inline-block rounded-sm px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
+            <h2 class="inline-block rounded-sm px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
                 @L["Home_Section_Blog"]
-            </span>
+            </h2>
             <div class="flex items-center gap-3">
                 @if (_isAdmin)
                 {
@@ -245,9 +248,9 @@
 <!-- KONTAKT -->
 <section id="kontakt" class="bg-gray-900 scroll-mt-16">
     <div class="mx-auto max-w-3xl px-6 py-20 lg:px-8">
-        <span class="inline-block mb-4 rounded-sm px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
+        <h2 class="inline-block mb-4 rounded-sm px-3 py-1 font-mono text-xs text-blue-500 tracking-widest uppercase">
             @L["Contact_Eyebrow"]
-        </span>
+        </h2>
         <p class="text-gray-400 text-sm leading-relaxed mb-8">
             @L["Contact_Intro"]
         </p>
@@ -295,15 +298,15 @@
                 <span class="ml-auto text-gray-700 group-hover:text-blue-500 transition font-mono">↗</span>
             </a>
             <div class="relative group/cv">
-                <button @onclick="() => _showDropdown = !_showDropdown"
+                <button type="button" @onclick="() => _showDropdown = !_showDropdown"
                         class="w-full flex items-center gap-5 rounded-lg border border-gray-700 bg-gray-950 px-6 py-5 hover:border-blue-600/50 transition group">
                     <span class="text-gray-400 group-hover:text-blue-500 transition font-mono text-lg">
                         <i class="fa-solid fa-file-pdf"></i>
                     </span>
-                    <div class="text-left">
-                        <div class="font-mono text-sm font-bold text-white">@L["Contact_Card_CvTitle"]</div>
-                        <div class="text-xs text-gray-400">@L["Contact_Card_CvSub"]</div>
-                    </div>
+                    <span class="block text-left">
+                        <span class="block font-mono text-sm font-bold text-white">@L["Contact_Card_CvTitle"]</span>
+                        <span class="block text-xs text-gray-400">@L["Contact_Card_CvSub"]</span>
+                    </span>
                     <span class="ml-auto text-gray-700 group-hover:text-blue-500 transition font-mono">
                         @(_showDropdown ? "↑" : "↓")
                     </span>
@@ -342,6 +345,49 @@
 </section>
 
 @code {
+    private string StructuredData
+    {
+        get
+        {
+            var home = Navigation.ToAbsoluteUri("/").ToString().TrimEnd('/');
+            var graph = new object[]
+            {
+                new Dictionary<string, object>
+                {
+                    ["@type"] = "Person",
+                    ["@id"] = home + "/#person",
+                    ["name"] = "Filip Lafata",
+                    ["jobTitle"] = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "en" ? "Junior .NET Developer" : "Juniorní .NET vývojář",
+                    ["description"] = L["Home_Meta_Description"].Value,
+                    ["url"] = home,
+                    ["image"] = home + "/og-image.svg",
+                    ["sameAs"] = new[]
+                    {
+                        "https://www.github.com/filipunk15",
+                        "https://www.linkedin.com/in/filip-lafata/",
+                        "https://www.instagram.com/filiplafata/",
+                    },
+                    ["knowsAbout"] = new[] { "C#", ".NET", "Blazor", "ASP.NET Core", "Microsoft SQL Server" },
+                },
+                new Dictionary<string, object>
+                {
+                    ["@type"] = "WebSite",
+                    ["@id"] = home + "/#website",
+                    ["url"] = home,
+                    ["name"] = "filipunk.cz",
+                    ["inLanguage"] = new[] { "cs", "en" },
+                    ["publisher"] = new Dictionary<string, object> { ["@id"] = home + "/#person" },
+                },
+            };
+            var doc = new Dictionary<string, object> { ["@context"] = "https://schema.org", ["@graph"] = graph };
+            // znak < escapujeme, aby se obsah nedal předčasně uzavřít přes </script>
+            return System.Text.Json.JsonSerializer.Serialize(doc, new System.Text.Json.JsonSerializerOptions
+            {
+                Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            }).Replace("<", "\\u003C");
+        }
+    }
+
     private List<BlogPostViewModel> _recentPosts = [];
     private List<ProjectViewModel> _projects = [];
     private SiteSettingsViewModel? _availability;

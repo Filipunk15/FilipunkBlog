@@ -5,15 +5,15 @@ using FilipunkBlog.Infrastructure;
 using FilipunkBlog.Infrastructure.Persistence;
 using FilipunkBlog.Infrastructure.Services;
 using FilipunkBlog.Localization;
+using FilipunkBlog.Security;
+using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
-
-// QuestPDF Community licence – zdarma pro jednotlivce a malé firmy (obrat < 1 mil. USD).
-QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Debug()
@@ -36,12 +36,55 @@ builder.Services.AddLocalization();
 
 builder.Services.AddCascadingAuthenticationState();
 
+// Cookies: HttpOnly + SameSite všude, Secure v produkci (v Development běží na http://localhost).
+var cookieSecurePolicy = builder.Environment.IsDevelopment()
+    ? CookieSecurePolicy.SameAsRequest
+    : CookieSecurePolicy.Always;
+
+builder.Services.AddAntiforgery(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SameSite = SameSiteMode.Strict;
+    options.Cookie.SecurePolicy = cookieSecurePolicy;
+});
+
+// Antiforgery cookie se nesmí zapisovat anonymním návštěvníkům veřejných stránek (viz třída).
+{
+    var antiforgery = builder.Services.Last(d => d.ServiceType == typeof(IAntiforgery));
+    builder.Services.Remove(antiforgery);
+    builder.Services.AddSingleton<IAntiforgery>(sp => new CookielessPublicAntiforgery(
+        antiforgery.ImplementationType is { } type
+            ? (IAntiforgery)ActivatorUtilities.CreateInstance(sp, type)
+            : antiforgery.ImplementationFactory!(sp) as IAntiforgery
+              ?? throw new InvalidOperationException("IAntiforgery nelze vytvořit.")));
+}
+
+// HSTS: půl roku bylo minimum podle auditu; rok je běžný standard (výchozí je jen 30 dní).
+builder.Services.AddHsts(options =>
+{
+    options.MaxAge = TimeSpan.FromDays(365);
+});
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = IdentityConstants.ApplicationScheme;
     options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
 })
-    .AddIdentityCookies();
+    .AddIdentityCookies(cookies =>
+    {
+        cookies.ApplicationCookie?.Configure(o =>
+        {
+            o.Cookie.HttpOnly = true;
+            o.Cookie.SameSite = SameSiteMode.Lax;
+            o.Cookie.SecurePolicy = cookieSecurePolicy;
+        });
+        cookies.ExternalCookie?.Configure(o =>
+        {
+            o.Cookie.HttpOnly = true;
+            o.Cookie.SameSite = SameSiteMode.Lax;
+            o.Cookie.SecurePolicy = cookieSecurePolicy;
+        });
+    });
 
 builder.Services.AddIdentityCore<IdentityUser>(options =>
 {
@@ -78,6 +121,39 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Bezpečnostní hlavičky pro všechny odpovědi (audit: chybějící hlavičky + neúplná CSP).
+app.Use(async (context, next) =>
+{
+    context.Response.OnStarting(() =>
+    {
+        var headers = context.Response.Headers;
+        var host = context.Request.Host.Value;
+
+        // Žádné inline skripty ani externí domény. Styly povolují inline (atributy style=""),
+        // obrázky https: kvůli obrázkům vloženým do článků přes Markdown.
+        headers.ContentSecurityPolicy =
+            "default-src 'self'; " +
+            "script-src 'self'; " +
+            "style-src 'self' 'unsafe-inline'; " +
+            "img-src 'self' data: blob: https:; " +
+            "font-src 'self'; " +
+            $"connect-src 'self' ws://{host} wss://{host}; " +
+            "object-src 'none'; " +
+            "base-uri 'self'; " +
+            "form-action 'self'; " +
+            "frame-ancestors 'none'";
+
+        headers.XContentTypeOptions = "nosniff";
+        headers.XFrameOptions = "DENY";
+        headers["Referrer-Policy"] = "strict-origin-when-cross-origin";
+        headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()";
+        headers["Cross-Origin-Opener-Policy"] = "same-origin";
+        return Task.CompletedTask;
+    });
+
+    await next();
+});
 
 // /en prefix → anglická verze; bez prefixu čeština.
 // Musí běžet PŘED routingem – explicitní UseRouting níže potlačí automatické vložení na začátek pipeline.
@@ -206,6 +282,7 @@ app.MapGet("/sitemap.xml", async (
 
     foreach (var path in new[] { "", "posts", "projects", "setup", "search" })
         Pair(path, path, "weekly");
+    Pair("ochrana-osobnich-udaju", "privacy", "yearly");
 
     foreach (var post in postsCs.Items)
         Pair($"posts/{post.Slug}", $"posts/{enPostSlug.GetValueOrDefault(post.Id, post.Slug)}", "monthly", post.PublishedAt?.ToString("yyyy-MM-dd"));
@@ -217,17 +294,6 @@ app.MapGet("/sitemap.xml", async (
     httpContext.Response.ContentType = "application/xml; charset=utf-8";
     await httpContext.Response.WriteAsync(sb.ToString());
 });
-
-// Životopis – generuje se živě z CMS dat při každém požadavku (žádný „export" krok).
-app.MapGet("/cv.pdf", async (ICvService cv, ICvPdfRenderer renderer) =>
-{
-    var model = await cv.BuildAsync();
-    var bytes = renderer.Render(model);
-    return Results.File(bytes, "application/pdf", "Filip-Lafata-CV.pdf");
-});
-
-// Přesměrování ze starého (rozbitého) odkazu.
-app.MapGet("/files/lafata_cv-cz.pdf", () => Results.Redirect("/cv.pdf"));
 
 try
 {

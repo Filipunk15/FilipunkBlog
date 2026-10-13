@@ -38,7 +38,7 @@
                        class="font-mono text-xs px-3 py-1.5 border border-gray-700 text-gray-400 hover:border-blue-600/50 hover:text-blue-500 transition rounded">
                         @L["Common_Edit"]
                     </a>
-                    <button @onclick="() => DeleteProject(project.Id)"
+                    <button type="button" @onclick="() => DeleteProject(project.Id)"
                             class="font-mono text-xs px-3 py-1.5 border border-gray-700 text-gray-400 hover:border-red-500/50 hover:text-red-400 transition rounded">
                         @L["Common_Delete"]
                     </button>

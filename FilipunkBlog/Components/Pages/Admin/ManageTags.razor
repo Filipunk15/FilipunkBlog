@@ -16,7 +16,7 @@
     <div class="flex gap-4 mb-10">
         <input @bind="_newName" placeholder="@L["Admin_Tags_Placeholder"]"
                class="flex-1 rounded border border-gray-700 bg-gray-900 px-4 py-3 text-sm text-white font-mono focus:border-blue-600/50 focus:outline-none" />
-        <button @onclick="AddTag"
+        <button type="button" @onclick="AddTag"
                 class="rounded font-mono text-sm px-6 py-3 bg-blue-600/20 text-blue-500 border border-blue-600/40 hover:bg-blue-600/30 transition">
             @L["Common_Add"]
         </button>
@@ -35,7 +35,7 @@
                     <input value="@tag.NameEn" @onchange="e => SaveNameEn(tag, e.Value?.ToString())"
                            placeholder="@L["Admin_Field_NameEnPlaceholder"]"
                            class="w-56 rounded border border-gray-700 bg-gray-900 px-3 py-1.5 text-xs text-white font-mono focus:border-blue-600/50 focus:outline-none" />
-                    <button @onclick="() => DeleteTag(tag.Id)"
+                    <button type="button" @onclick="() => DeleteTag(tag.Id)"
                             class="font-mono text-xs px-3 py-1.5 border border-gray-700 text-gray-400 hover:border-red-500/50 hover:text-red-400 transition rounded">
                         @L["Common_Delete"]
                     </button>

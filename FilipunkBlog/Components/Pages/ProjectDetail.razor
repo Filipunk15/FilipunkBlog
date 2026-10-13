@@ -13,7 +13,7 @@
     <meta name="description" content="@_project?.Description" />
     <meta property="og:title" content="@_project?.Title" />
     <meta property="og:description" content="@_project?.Description" />
-    <meta property="og:image" content="@_project?.MainImage" />
+    <meta property="og:image" content="@OgImage(_project?.MainImage)" />
     <meta property="og:type" content="article" />
     <meta name="twitter:card" content="summary_large_image" />
     @if (_project != null)
@@ -110,6 +110,9 @@ else
 }
 
 @code {
+    private string OgImage(string? image) =>
+        Navigation.ToAbsoluteUri(string.IsNullOrWhiteSpace(image) ? "/og-image.svg" : image).ToString();
+
     [Parameter] public string Slug { get; set; } = string.Empty;
 
     private ProjectViewModel? _project;

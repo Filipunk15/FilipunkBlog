@@ -8,13 +8,11 @@
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <ResourcePreloader />
     <link rel="stylesheet" href="@Assets["app.css"]" />
-    <link rel="stylesheet" href="@Assets["FilipunkBlog.styles.css"]" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" />
-    <script src="https://kit.fontawesome.com/befdd96ac7.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="/lib/hljs/github-dark.min.css" />
+    @* Písma i ikony se servírují z vlastní domény (žádný Google Fonts / FontAwesome kit). *@
+    <link rel="preload" as="font" type="font/woff2" href="/lib/fonts/inter-latin-wght-normal.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/lib/fonts/space-mono-latin-400-normal.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/lib/fonts/space-mono-latin-700-normal.woff2" crossorigin />
+    <link rel="stylesheet" href="/lib/fontawesome/css/all.min.css" />
     <link rel="canonical" href="@CanonicalUrl" />
     @if (!HasLocalizedSlug)
     {
@@ -25,8 +23,12 @@
     <meta property="og:url" content="@CanonicalUrl" />
     <meta property="og:site_name" content="filipunk.cz" />
     <meta property="og:locale" content="@(IsEn ? "en_US" : "cs_CZ")" />
-    @* Pro plnou podporu Facebooku/X nahraď za PNG 1200×630 a uprav cestu. *@
-    <meta property="og:image" content="/og-image.svg" />
+    @* Výchozí náhled pro sdílení – úplná URL (relativní adresu sítě nenačtou).
+       Detail článku/projektu si og:image dodává sám. Pro plnou podporu Facebooku/X nahraď za PNG 1200×630. *@
+    @if (!HasLocalizedSlug)
+    {
+        <meta property="og:image" content="@DefaultOgImage" />
+    }
     <meta name="twitter:card" content="summary_large_image" />
     <ImportMap />
     <HeadOutlet @rendermode="PageRenderMode" />
@@ -38,8 +40,6 @@
     <ReconnectModal />
     <script src="@Assets["_framework/blazor.web.js"]"></script>
     <script src="./app.js"></script>
-    <script src="/lib/hljs/highlight.min.js"></script>
-    <script src="./js/blog.js"></script>
 </body>
 
 </html>
@@ -89,6 +89,9 @@
             return segs.Length >= 2 && segs[0] is "posts" or "project";
         }
     }
+
+    private string DefaultOgImage
+        => $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/og-image.svg";
 
     /// <summary>Alternativní URL pro daný jazyk (stejná cesta, prohozený prefix).</summary>
     private string AltUrl(string culture)

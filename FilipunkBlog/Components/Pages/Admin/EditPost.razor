@@ -116,7 +116,7 @@
                 {
                     <div class="mb-3">
                         <img src="@_post.Image" class="h-32 rounded border border-gray-700 object-cover" />
-                        <button @onclick="RemoveImage" class="mt-2 font-mono text-xs text-red-400 hover:text-red-300 transition">@L["Common_Remove"]</button>
+                        <button type="button" @onclick="RemoveImage" class="mt-2 font-mono text-xs text-red-400 hover:text-red-300 transition">@L["Common_Remove"]</button>
                     </div>
                 }
                 <InputFile OnChange="UploadImage" accept="image/*"
@@ -138,7 +138,7 @@
         }
 
         <div class="flex gap-4">
-            <button @onclick="Save"
+            <button type="button" @onclick="Save"
                     class="rounded font-mono text-sm px-6 py-3 bg-blue-600/20 text-blue-500 border border-blue-600/40 hover:bg-blue-600/30 transition">
                 @(_isNew ? L["Common_Create"] : L["Common_Save"])
             </button>

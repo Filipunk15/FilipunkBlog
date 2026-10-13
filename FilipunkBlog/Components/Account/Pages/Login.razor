@@ -30,13 +30,13 @@
                 <AntiforgeryToken />
                 <div class="flex flex-col gap-5">
                     <div>
-                        <label class="font-mono text-xs text-gray-400 uppercase tracking-wider mb-2 block">@L["Login_Email"]</label>
-                        <input name="email" type="email"
+                        <label for="login-email" class="font-mono text-xs text-gray-400 uppercase tracking-wider mb-2 block">@L["Login_Email"]</label>
+                        <input id="login-email" name="email" type="email" autocomplete="username" required
                                class="w-full rounded border border-gray-700 bg-gray-950 px-4 py-3 text-sm text-white font-mono focus:border-blue-600/50 focus:outline-none" />
                     </div>
                     <div>
-                        <label class="font-mono text-xs text-gray-400 uppercase tracking-wider mb-2 block">@L["Login_Password"]</label>
-                        <input name="password" type="password"
+                        <label for="login-password" class="font-mono text-xs text-gray-400 uppercase tracking-wider mb-2 block">@L["Login_Password"]</label>
+                        <input id="login-password" name="password" type="password" autocomplete="current-password" required
                                class="w-full rounded border border-gray-700 bg-gray-950 px-4 py-3 text-sm text-white font-mono focus:border-blue-600/50 focus:outline-none" />
                     </div>
                     <button type="submit"

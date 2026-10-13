@@ -378,4 +378,15 @@
   <data name="Admin_Tr_AutoTranslate" xml:space="preserve"><value>⚡ Přeložit z češtiny</value></data>
   <data name="Admin_Tr_Translating" xml:space="preserve"><value>// překládám…</value></data>
   <data name="Admin_Tr_TranslateError" xml:space="preserve"><value>Automatický překlad se nezdařil: {0}</value></data>
+
+  <!-- ===== Ochrana soukromí / Privacy ===== -->
+  <data name="Privacy_Title" xml:space="preserve"><value>Zásady zpracování osobních údajů</value></data>
+  <data name="Privacy_Eyebrow" xml:space="preserve"><value>OCHRANA SOUKROMÍ</value></data>
+  <data name="Privacy_Updated" xml:space="preserve"><value>Poslední aktualizace: 13. 10. 2026</value></data>
+  <data name="Privacy_MetaDescription" xml:space="preserve"><value>Jaké osobní údaje tento web zpracovává, proč a jaká máte práva. Web nepoužívá cookies ani sledovací nástroje třetích stran.</value></data>
+  <data name="Footer_Privacy" xml:space="preserve"><value>Ochrana osobních údajů</value></data>
+  <data name="Contact_PrivacyNote" xml:space="preserve"><value>Odesláním zprávy beru na vědomí, že vaše údaje použiji jen k odpovědi. Více v</value></data>
+  <data name="Nav_Aria_Main" xml:space="preserve"><value>Hlavní navigace</value></data>
+  <data name="Nav_Aria_Mobile" xml:space="preserve"><value>Mobilní navigace</value></data>
+  <data name="Footer_Aria" xml:space="preserve"><value>Patička webu</value></data>
 </root>

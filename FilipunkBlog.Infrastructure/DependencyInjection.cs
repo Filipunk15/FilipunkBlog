@@ -33,9 +33,6 @@ public static class DependencyInjection
         services.AddScoped<CommentRepository>();
         services.AddScoped<ProjectRepository>();
         services.AddScoped<SiteSettingsRepository>();
-        services.AddScoped<CvProfileRepository>();
-        services.AddScoped<ExperienceRepository>();
-        services.AddScoped<CertificationRepository>();
 
 
         services.AddScoped<IBlogPostService, BlogPostService>();
@@ -46,11 +43,6 @@ public static class DependencyInjection
         services.AddScoped<ICommentService, CommentService>();
         services.AddScoped<IProjectService, ProjectService>();
         services.AddScoped<ISiteSettingsService, SiteSettingsService>();
-        services.AddScoped<ICvProfileService, CvProfileService>();
-        services.AddScoped<IExperienceService, ExperienceService>();
-        services.AddScoped<ICertificationService, CertificationService>();
-        services.AddScoped<ICvService, CvService>();
-        services.AddScoped<ICvPdfRenderer, CvPdfRenderer>();
 
         services.Configure<SmtpOptions>(configuration.GetSection(SmtpOptions.SectionName));
         services.Configure<DiscordOptions>(configuration.GetSection(DiscordOptions.SectionName));
